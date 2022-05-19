@@ -80,7 +80,7 @@ public class Home extends JFrame {
 		navigationPanel.add(panelTicketMNM);
 		panelTicketMNM.setLayout(null);
 		
-		ImageIcon iconTicket = new ImageIcon("..//AirTicketManagementSoftware//src//main//resources//Icon//ticket.png");
+		ImageIcon iconTicket = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//ticket.png");
 		JLabel iconTicketJLabel = new JLabel(iconTicket);
 		iconTicketJLabel.setBounds(20, 25, 36, 32);
 		panelTicketMNM.add(iconTicketJLabel);
@@ -116,7 +116,7 @@ public class Home extends JFrame {
 		JLabel iconFlightMNMJLabel = new JLabel("");
 		iconFlightMNMJLabel.setBounds(20, 25, 36, 32);
 		panelFlightMNM.add(iconFlightMNMJLabel);
-		ImageIcon iconFlight = new ImageIcon("..//AirTicketManagementSoftware//src//main//resources//Icon//plane.png");
+		ImageIcon iconFlight = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//plane.png");
 		Image imgFlight = iconFlight.getImage();
         Image imgFlightScale = imgFlight.getScaledInstance(iconFlightMNMJLabel.getWidth(), iconFlightMNMJLabel.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon scaledIconFlight = new ImageIcon(imgFlightScale);
@@ -135,7 +135,7 @@ public class Home extends JFrame {
 		JLabel iconEmployeeMNMJLabel = new JLabel("");
 		iconEmployeeMNMJLabel.setBounds(20, 25, 36, 32);
 		panelEmplopyeeMNM.add(iconEmployeeMNMJLabel);
-		ImageIcon iconEmployee = new ImageIcon("..//AirTicketManagementSoftware//src//main//resources//Icon//nameIcon.png");
+		ImageIcon iconEmployee = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//nameIcon.png");
 		Image imgEmployee = iconEmployee.getImage();
         Image imgEmployeeScale = imgEmployee.getScaledInstance(iconEmployeeMNMJLabel.getWidth(), iconEmployeeMNMJLabel.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon scaledIconEmployee = new ImageIcon(imgEmployeeScale);
@@ -188,7 +188,7 @@ public class Home extends JFrame {
 		JLabel iconInvoiceMNMJLabel = new JLabel("");
 		iconInvoiceMNMJLabel.setBounds(20, 25, 36, 32);
 		panelInvoiceMNM.add(iconInvoiceMNMJLabel);
-		ImageIcon iconInvoice = new ImageIcon("..//AirTicketManagementSoftware//src//main//resources//Icon//invoiceIcon.png");
+		ImageIcon iconInvoice = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//invoiceIcon.png");
 		Image imgInvoice = iconInvoice.getImage();
         Image imgInvoiceScale = imgInvoice.getScaledInstance(iconInvoiceMNMJLabel.getWidth(), iconInvoiceMNMJLabel.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon scaledIconInvoice = new ImageIcon(imgInvoiceScale);
@@ -197,7 +197,7 @@ public class Home extends JFrame {
 		JLabel iconStatisticJLabel = new JLabel("");
 		iconStatisticJLabel.setBounds(20, 25, 36, 32);
 		panelStatisticMNM.add(iconStatisticJLabel);
-		ImageIcon iconStatistic = new ImageIcon("..//AirTicketManagementSoftware//src//main//resources//Icon//statisticIcon.png");
+		ImageIcon iconStatistic = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//statisticIcon.png");
 		Image imgStatistic = iconStatistic.getImage();
         Image imgStatisticScale = imgStatistic.getScaledInstance(iconStatisticJLabel.getWidth(), iconStatisticJLabel.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon scaledIconStatistic = new ImageIcon(imgStatisticScale);
@@ -213,7 +213,7 @@ public class Home extends JFrame {
 		JLabel iconSearchJLabel = new JLabel("");
 		iconSearchJLabel.setBounds(912, 16, 37, 31);
 		toolPanel.add(iconSearchJLabel);
-		ImageIcon iconSearch = new ImageIcon("..//AirTicketManagementSoftware//src//main//resources//Icon//searchIcon.png");
+		ImageIcon iconSearch = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//searchIcon.png");
 		Image imgSearch = iconSearch.getImage();
         Image imgSearchScale = imgSearch.getScaledInstance(iconSearchJLabel.getWidth(), iconSearchJLabel.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon scaledIconSearch = new ImageIcon(imgSearchScale);
@@ -230,7 +230,7 @@ public class Home extends JFrame {
 		JButton btnAdd = new JButton("");
 		btnAdd.setBounds(18, 1, 64, 57);
 		toolPanel.add(btnAdd);
-		ImageIcon iconAdd = new ImageIcon("..//AirTicketManagementSoftware//src//main//resources//Icon//addIcon.png");
+		ImageIcon iconAdd = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//addIcon.png");
 		Image imgAdd = iconAdd.getImage();
         Image imgAddScale = imgAdd.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         ImageIcon scaledIconAdd = new ImageIcon(imgAddScale);
@@ -240,7 +240,7 @@ public class Home extends JFrame {
 		JButton btnDelete = new JButton("");
 		btnDelete.setBounds(94, 1, 64, 57);
 		toolPanel.add(btnDelete);
-		ImageIcon iconDelete = new ImageIcon("..//AirTicketManagementSoftware//src//main//resources//Icon//deleteIcon.png");
+		ImageIcon iconDelete = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//deleteIcon.png");
 		Image imgDelete = iconDelete.getImage();
         Image imgDeleteScale = imgDelete.getScaledInstance(46, 38, Image.SCALE_SMOOTH);
         ImageIcon scaledIconDelete = new ImageIcon(imgDeleteScale);
@@ -250,7 +250,7 @@ public class Home extends JFrame {
 		JButton btnModify = new JButton("");
 		btnModify.setBounds(170, 1, 64, 57);
 		toolPanel.add(btnModify);
-		ImageIcon iconModify = new ImageIcon("..//AirTicketManagementSoftware//src//main//resources//Icon//settingIcon.png");
+		ImageIcon iconModify = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//settingIcon.png");
 		Image imgModify = iconModify.getImage();
         Image imgModifyScale = imgModify.getScaledInstance(27, 27, Image.SCALE_SMOOTH);
         ImageIcon scaledIconModify = new ImageIcon(imgModifyScale);
