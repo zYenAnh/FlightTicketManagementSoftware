@@ -31,7 +31,7 @@ public class Home extends JFrame {
 	private JTable tableTicket;
 
 	/**
-	 * Launch the application.
+	 * Launch the application...
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
