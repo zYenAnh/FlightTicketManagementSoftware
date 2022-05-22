@@ -104,13 +104,13 @@ public class HomeView extends JFrame {
 		addFlightLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		addFlightLabel.setFont(new Font("Poppins", Font.BOLD, 10));
 		addFlightLabel.setBounds(18, 58, 61, 16);
-		toolFlightPanel.add(addFlightBtn);
+		toolFlightPanel.add(addFlightLabel);
 		
 		JLabel deleteFlightLabel = new JLabel("DELETE");
 		deleteFlightLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		deleteFlightLabel.setFont(new Font("Poppins", Font.BOLD, 10));
 		deleteFlightLabel.setBounds(94, 58, 61, 16);
-		toolFlightPanel.add(deleteFlightBtn);
+		toolFlightPanel.add(deleteFlightLabel);
 		
 		JLabel modifyFlightLabel = new JLabel("MODIFY");
 		modifyFlightLabel.setHorizontalAlignment(SwingConstants.CENTER);
