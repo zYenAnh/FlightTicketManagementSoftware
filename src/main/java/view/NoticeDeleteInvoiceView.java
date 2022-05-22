@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 
-public class NoticeDeleteInvoice extends JFrame {
+public class NoticeDeleteInvoiceView extends JFrame {
 
 	private JPanel contentPane;
 
@@ -25,7 +25,7 @@ public class NoticeDeleteInvoice extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					NoticeDeleteInvoice frame = new NoticeDeleteInvoice();
+					NoticeDeleteInvoiceView frame = new NoticeDeleteInvoiceView();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -37,7 +37,7 @@ public class NoticeDeleteInvoice extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public NoticeDeleteInvoice() {
+	public NoticeDeleteInvoiceView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500,250);
 		setResizable(false);

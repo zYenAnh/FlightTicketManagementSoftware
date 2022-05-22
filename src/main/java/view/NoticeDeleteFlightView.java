@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 
-public class NoticeDeleteFlight extends JFrame {
+public class NoticeDeleteFlightView extends JFrame {
 
 	private JPanel contentPane;
 
@@ -25,7 +25,7 @@ public class NoticeDeleteFlight extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					NoticeDeleteFlight frame = new NoticeDeleteFlight();
+					NoticeDeleteFlightView frame = new NoticeDeleteFlightView();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -37,7 +37,7 @@ public class NoticeDeleteFlight extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public NoticeDeleteFlight() {
+	public NoticeDeleteFlightView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500,250);
 		setResizable(false);

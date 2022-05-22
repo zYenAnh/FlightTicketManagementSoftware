@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
-public class InputFlight extends JFrame {
+public class InputFlightView extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField inputFlightID;
@@ -26,7 +26,7 @@ public class InputFlight extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					InputFlight frame = new InputFlight();
+					InputFlightView frame = new InputFlightView();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,7 +38,7 @@ public class InputFlight extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public InputFlight() {
+	public InputFlightView() {
 		int Location_jtx = 185;
 		Font font_LucidaFont_18 = new Font("Lucida Grande", Font.BOLD, 18);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
-public class InputTicket extends JFrame {
+public class InputTicketView extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField inputTicketID;
@@ -28,7 +28,7 @@ public class InputTicket extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					InputTicket frame = new InputTicket();
+					InputTicketView frame = new InputTicketView();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -40,7 +40,7 @@ public class InputTicket extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public InputTicket() {
+	public InputTicketView() {
 		int Location_jtx = 185;
 		Font font_LucidaFont_18 = new Font("Lucida Grande", Font.BOLD, 18);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -18,7 +18,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 
-public class Login extends JFrame {
+public class LoginView extends JFrame {
 
 	private JPanel contentPane;
 
@@ -29,7 +29,7 @@ public class Login extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Login frame = new Login();
+					LoginView frame = new LoginView();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,7 +41,7 @@ public class Login extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Login() {
+	public LoginView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(700,500);
 		setResizable(false);

@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 
-public class NoticeDeleteEmployee extends JFrame {
+public class NoticeDeleteEmployeeView extends JFrame {
 
 	private JPanel contentPane;
 
@@ -25,7 +25,7 @@ public class NoticeDeleteEmployee extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					NoticeDeleteEmployee frame = new NoticeDeleteEmployee();
+					NoticeDeleteEmployeeView frame = new NoticeDeleteEmployeeView();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -37,7 +37,7 @@ public class NoticeDeleteEmployee extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public NoticeDeleteEmployee() {
+	public NoticeDeleteEmployeeView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500,250);
 		setResizable(false);
