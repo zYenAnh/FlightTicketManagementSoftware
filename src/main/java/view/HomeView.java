@@ -8,7 +8,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
@@ -17,6 +19,8 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 
 import controller.NavigationController;
+import dataAccessObject.EmployeeDAO;
+import entities.Employee;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -25,13 +29,16 @@ import javax.swing.UIManager;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Properties;
 
 import javax.swing.ImageIcon;
@@ -45,6 +52,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import java.awt.SystemColor;
 import java.awt.FlowLayout;
+import javax.swing.JSeparator;
 
 public class HomeView extends JFrame {
 
@@ -88,6 +96,10 @@ public class HomeView extends JFrame {
 		createTabTicketManagement();
 		createTabFlightManagement();
 		createTabEmployeeManagement();
+		
+		ticketManagementPanel.setVisible(true);
+		FlightManagement.setVisible(false);
+		employeeManagerPanel.setVisible(false);
 		PREBUTTON = this.btnTicketMNM;
 		this.setVisible(true);
 	}
@@ -95,18 +107,16 @@ public class HomeView extends JFrame {
 	public void createTabFlightManagement() {
 		FlightManagement = new JPanel();
 		FlightManagement.setLayout(null);
-		FlightManagement.setBounds(251, 0, 1023, 683);
+		FlightManagement.setBounds(230, 0, 1023, 683);
 		mainPanel.add(FlightManagement);
 		
 // Tool
 		JPanel toolFlightPanel = new JPanel();
 		toolFlightPanel.setLayout(null);
-		toolFlightPanel.setBounds(0, 11, 1017, 80);
+		toolFlightPanel.setBounds(10, 11, 1017, 80);
 		FlightManagement.add(toolFlightPanel);
 		
 	// Add
-		
-        
 		JButton addFlightBtn = new JButton();
 		addFlightBtn.setBounds(18, 1, 64, 57);
 		toolFlightPanel.add(addFlightBtn);
@@ -247,7 +257,7 @@ public class HomeView extends JFrame {
 						"Flight ID", " AirCraft ", "Departure", "Destination", "Business ticket", "General ticket", "Take-Off Time", "Landing Time", "Price business", "Price general"
 				}));
 		JScrollPane scrollTableFight = new JScrollPane(tableFlight);
-		scrollTableFight.setBounds(0, 91, 1014, 640);
+		scrollTableFight.setBounds(30, 91, 985, 590);
 		JTableHeader tableFlightHeader = tableFlight.getTableHeader();
 		tableFlightHeader.setFont(font_12_Thin);
 		
@@ -261,11 +271,11 @@ public class HomeView extends JFrame {
 	public void createTabTicketManagement() {
 		
 		ticketManagementPanel = new JPanel();
-		ticketManagementPanel.setBounds(251, 0, 1023, 683);
+		ticketManagementPanel.setBounds(230, 0, 1023, 683);
 		ticketManagementPanel.setLayout(null);
 		
 		JPanel toolTabTicketPanel = new JPanel();
-		toolTabTicketPanel.setBounds(0, 11, 1017, 80);
+		toolTabTicketPanel.setBounds(10, 11, 1017, 80);
 		toolTabTicketPanel.setLayout(null);
 		
 // Create search		
@@ -274,11 +284,23 @@ public class HomeView extends JFrame {
 		toolTabTicketPanel.add(iconSearchJLabel);
 		
 		searchTextField = new JTextField();
-		searchTextField.setBackground(Color.LIGHT_GRAY);
-		searchTextField.setFont(font_16);
-		searchTextField.setBounds(318, 6, 686, 52);
+		searchTextField.setMargin(new Insets(0,12,0,0));
+		searchTextField.setBackground(Color.WHITE);
+		searchTextField.setFont(new Font("Poppins", Font.PLAIN, 20));
+		searchTextField.setBounds(318, 1, 615, 57);
 		toolTabTicketPanel.add(searchTextField);
 		searchTextField.setColumns(10);
+		
+		JButton searchTicketBtn = new JButton("");
+		searchTicketBtn.setBounds(940, 1, 64, 57);
+		toolTabTicketPanel.add(searchTicketBtn);
+		ImageIcon searchIcon = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//searchIcon.png");
+		Image searchImg = searchIcon.getImage();
+        Image imgSearchScale = searchImg.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+        ImageIcon scaledSearchIcon = new ImageIcon(imgSearchScale);
+        searchTicketBtn.setIcon(scaledSearchIcon);
+        
+        toolTabTicketPanel.add(searchTicketBtn);
 		
 // Create button Add
 		JButton addBtn = new JButton("");
@@ -355,7 +377,7 @@ public class HomeView extends JFrame {
 						"Ticket ID", "Flight ", "Customer Name", "Employee Name", "Ticket Type", "Passenger Name", "Boarding Time", "Flight Date"
 				}));
 		JScrollPane tableTicketScrollPane = new JScrollPane(tableTicket);
-		tableTicketScrollPane.setBounds(0, 91, 1014, 640);
+		tableTicketScrollPane.setBounds(30, 91, 985, 590);
 		JTableHeader tableTicketHeader = tableTicket.getTableHeader();
 		tableTicketHeader.setFont(font_12_Thin);
 		
@@ -368,11 +390,11 @@ public class HomeView extends JFrame {
 	public void createTabEmployeeManagement() {
 		
 		employeeManagerPanel = new JPanel();
-		employeeManagerPanel.setBounds(251, 0, 1023, 683);
+		employeeManagerPanel.setBounds(230, 0, 1023, 683);
 		employeeManagerPanel.setLayout(null);
 		
 		JPanel toolTabEmployeePanel = new JPanel();
-		toolTabEmployeePanel.setBounds(0, 11, 1017, 80);
+		toolTabEmployeePanel.setBounds(10, 11, 1017, 80);
 		toolTabEmployeePanel.setLayout(null);
 		
 // Create search		
@@ -381,12 +403,21 @@ public class HomeView extends JFrame {
 		toolTabEmployeePanel.add(iconSearchJLabel);
 		
 		searchEmpTextField = new JTextField();
-		searchEmpTextField.setBackground(Color.LIGHT_GRAY);
+		searchEmpTextField.setBackground(Color.WHITE);
 		searchEmpTextField.setFont(font_16);
-		searchEmpTextField.setBounds(318, 6, 686, 52);
+		searchEmpTextField.setBounds(318, 1, 615, 57);
 		toolTabEmployeePanel.add(searchEmpTextField);
 		searchEmpTextField.setColumns(10);
 		
+		JButton searchEmpBtn = new JButton("");
+		searchEmpBtn.setBounds(940, 1, 64, 57);
+		toolTabEmployeePanel.add(searchEmpBtn);
+		ImageIcon searchIcon = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//searchIcon.png");
+		Image searchImg = searchIcon.getImage();
+        Image imgSearchScale = searchImg.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+        ImageIcon scaledSearchIcon = new ImageIcon(imgSearchScale);
+        searchEmpBtn.setIcon(scaledSearchIcon);
+        
 // Create button Add
 		JButton addEmpBtn = new JButton("");
 		addEmpBtn.setBounds(18, 1, 64, 57);
@@ -453,18 +484,28 @@ public class HomeView extends JFrame {
 		toolTabEmployeePanel.add(refreshLable);
 				
 // Create Table
+		DefaultTableCellRenderer centeRenderer = new DefaultTableCellRenderer();
+		centeRenderer.setHorizontalAlignment(JLabel.CENTER);
 		tableEmployee = new JTable();
-		tableEmployee.setBackground(Color.LIGHT_GRAY);
+		tableEmployee.setFont(font_12_Thin);
+		tableEmployee.setDefaultEditor(Object.class, null);
 		tableEmployee.setBounds(23, 0, 933, 597);
 		tableEmployee.setModel(new DefaultTableModel(
 				new Object [][] {},
 				new String[] { 
-						"Employee ID", "Employee Name", "Role", "Gender", "Date of birth", "Phone", "Address", "CitizenIdentify"
+						"ID", "Name", "Role", "Gender", "Date of birth", "Phone", "Address", "CitizenIdentify"
 				}));
+		
+		//Set size column and row table
+		tableEmployee.setRowHeight(30);
+		
 		JScrollPane tableEmpScrollPane = new JScrollPane(tableEmployee);
-		tableEmpScrollPane.setBounds(0, 91, 1014, 640);
+		tableEmpScrollPane.setBounds(30, 91, 985, 590);
 		JTableHeader tableEmpHeader = tableEmployee.getTableHeader();
 		tableEmpHeader.setFont(font_12_Thin);
+		
+		loadDataTableEmployee();
+		tableEmployee.setDefaultRenderer(String.class, centeRenderer);
 		
 		employeeManagerPanel.add(toolTabEmployeePanel,BorderLayout.NORTH);
 		employeeManagerPanel.add(tableEmpScrollPane, BorderLayout.CENTER);
@@ -474,35 +515,39 @@ public class HomeView extends JFrame {
 	
 	public void createNavigation() {
 		JPanel navigationPanel = new JPanel();
-		navigationPanel.setBounds(0,0,251,452);
+		navigationPanel.setBorder(new LineBorder(Color.black));
+		navigationPanel.setBounds(0,90,230,300);
 		mainPanel.add(navigationPanel);
 		navigationPanel.setLayout(null);
-		navigationPanel.setLayout(new GridLayout(6,1));
+		navigationPanel.setLayout(new GridLayout(5,1));
 		
 // Create title
 		
 		JPanel panelTitle = new JPanel();
         panelTitle.setBorder(new LineBorder(UIManager.getColor("CheckBox.disabledText")));
-        panelTitle.setBounds(0, 0, 245, 80);
-        navigationPanel.add(panelTitle);
+        panelTitle.setBounds(0, 0, 230, 90);
+//        navigationPanel.add(panelTitle);
         panelTitle.setLayout(null);
         
         JLabel lblNewLabel_1 = new JLabel("AIRCRAFT TICKET");
         lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel_1.setBounds(32, 17, 173, 16);
+        lblNewLabel_1.setBounds(0, 20, 230, 30);
         panelTitle.add(lblNewLabel_1);
-        lblNewLabel_1.setFont(font_20);
+        lblNewLabel_1.setFont(new Font("Poppins", Font.BOLD, 24));
         
         JLabel lblNewLabel = new JLabel("MANAGEMENT");
         lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel.setBounds(19, 45, 200, 16);
+        lblNewLabel.setBounds(31, 55, 173, 16);
         panelTitle.add(lblNewLabel);
         lblNewLabel.setFont(font_20);
+        
+        mainPanel.add(panelTitle);
 // Create Button TicketManagement
 		
         btnTicketMNM = new JButton("TICKET MANAGEMENT");
         btnTicketMNM.setOpaque(true);
 		btnTicketMNM.setBorderPainted(false);
+		btnTicketMNM.setBackground(Color.LIGHT_GRAY);
         btnTicketMNM.addActionListener(acNavigation);
         
         btnTicketMNM.setHorizontalAlignment(SwingConstants.LEFT);
@@ -557,7 +602,7 @@ public class HomeView extends JFrame {
         
         btnInvoiceMNM = new JButton("INVOICE MANAGEMENT");
         btnInvoiceMNM.setOpaque(true);
-        btnEmployeeMNM.setBorderPainted(false);
+        btnInvoiceMNM.setBorderPainted(false);
         
         btnInvoiceMNM.setHorizontalAlignment(SwingConstants.LEFT);
         btnInvoiceMNM.setFont(font_12);
@@ -612,5 +657,22 @@ public class HomeView extends JFrame {
 
 	public void setEmployeeManagerPanel(JPanel employeeManagerPanel) {
 		this.employeeManagerPanel = employeeManagerPanel;
+	}
+	
+	public void loadDataTableEmployee() {
+		List<Employee> employees = EmployeeDAO.getInstance().selectAll();
+		DefaultTableModel tableModel = (DefaultTableModel) tableEmployee.getModel();
+		for(Employee employee: employees) {
+			tableModel.addRow(new Object[] {
+					employee.getEmployeeId(),
+					employee.getEmployeeName(),
+					employee.getRole(),
+					employee.getGender(),
+					employee.getDateOfBirth(),
+					employee.getPhone(),
+					employee.getAddress(),
+					employee.getCitizenIdentify()
+			});
+		}
 	}
 }

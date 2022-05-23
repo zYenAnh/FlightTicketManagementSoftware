@@ -25,6 +25,9 @@ import javassist.expr.Instanceof;
 
 import java.awt.Color;
 import javax.swing.border.LineBorder;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
 
 public class LoginView extends JFrame {
 
@@ -95,10 +98,10 @@ public class LoginView extends JFrame {
         loginBtn.setBounds(214, 361, 263, 49);
         centerJPanel.add(loginBtn);
           
-        JLabel titleLable = new JLabel("AIRLINE TICKET MANAGEMENT SYSTEM");
-        titleLable.setBorder(new LineBorder(new Color(0, 0, 0)));
-        titleLable.setFont(font_32_Thin);
-        titleLable.setBounds(32, 23, 631, 63);
+        JLabel titleLable = new JLabel("AIRCRAFT TICKET MANAGEMENT SYSTEM");
+        titleLable.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+        titleLable.setFont(new Font("Poppins", Font.BOLD | Font.ITALIC, 32));
+        titleLable.setBounds(0, 23, 689, 63);
         centerJPanel.add(titleLable);
         titleLable.setHorizontalAlignment(SwingConstants.CENTER);
         
@@ -112,7 +115,8 @@ public class LoginView extends JFrame {
         passwordLable.setBounds(157, 259, 96, 14);
         centerJPanel.add(passwordLable);
         
-        JLabel loginLabel = new JLabel("Enter Account Information");
+        JLabel loginLabel = new JLabel("Login");
+        loginLabel.setHorizontalAlignment(SwingConstants.CENTER);
         loginLabel.setFont(new Font("Poppins", Font.PLAIN, 30));
         loginLabel.setBounds(140, 108, 391, 38);
         centerJPanel.add(loginLabel);

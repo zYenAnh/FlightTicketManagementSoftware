@@ -26,25 +26,23 @@ public class NavigationController implements ActionListener{
 			this.viewHome.getFlightManagement().setVisible(false);
 			this.viewHome.getEmployeeManagerPanel().setVisible(false);
 			this.viewHome.getTicketManagementPanel().setVisible(true);
-			this.viewHome.PREBUTTON.setBackground(Color.WHITE);
-			this.viewHome.PREBUTTON = this.viewHome.btnTicketMNM;
-			this.viewHome.btnTicketMNM.setBackground(Color.LIGHT_GRAY);
+			changeColor(this.viewHome.btnTicketMNM);
 		} else if(src.equals("FLIGHT MANAGEMENT")) {
 			this.viewHome.getTicketManagementPanel().setVisible(false);
 			this.viewHome.getEmployeeManagerPanel().setVisible(false);
 			this.viewHome.getFlightManagement().setVisible(true);
-			this.viewHome.PREBUTTON.setBackground(Color.WHITE);
-			this.viewHome.PREBUTTON = this.viewHome.btnFlightMNM;
-			this.viewHome.btnFlightMNM.setBackground(Color.LIGHT_GRAY);
+			changeColor(this.viewHome.btnFlightMNM);
 		} else if(src.equals("EMPLOYEE MANAGEMENT")) {
 			this.viewHome.getTicketManagementPanel().setVisible(false);
 			this.viewHome.getFlightManagement().setVisible(false);
 			this.viewHome.getEmployeeManagerPanel().setVisible(true);
-			this.viewHome.PREBUTTON.setBackground(Color.WHITE);
-			this.viewHome.PREBUTTON = this.viewHome.btnEmployeeMNM;
-			this.viewHome.btnEmployeeMNM.setBackground(Color.LIGHT_GRAY);
+			changeColor(this.viewHome.btnEmployeeMNM);
 		}
 	}
 	
-	
+	public void changeColor(JButton jb) {
+		this.viewHome.PREBUTTON.setBackground(Color.WHITE);
+		this.viewHome.PREBUTTON = jb;
+		jb.setBackground(Color.LIGHT_GRAY);
+	}
 }
