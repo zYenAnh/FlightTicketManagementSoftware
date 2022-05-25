@@ -7,13 +7,15 @@ import java.util.List;
 public interface DAOInterface<T> {
 	public int add(T t);
 	
-	public int update(T t);
+	public void update(T t);
 	
-	public int delele(T t);
+	public void delele(T t);
+	
+	public int saveOrUpdate(T t);
 	
 	public List<T> selectAll();
 	
 	public T selectById(T t);
 	
-	public ArrayList<T> selectByCondition(String condition);
+	public List<T> selectByCondition(String condition);
 }

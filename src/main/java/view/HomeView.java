@@ -19,10 +19,14 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 
 import controller.NavigationController;
+import controller.TabEmployeeManagementController;
+import dataAccessObject.AccountDAO;
 import dataAccessObject.EmployeeDAO;
+import entities.Account;
 import entities.Employee;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
@@ -72,8 +76,11 @@ public class HomeView extends JFrame {
 	public JButton btnInvoiceMNM;
 
 	public JButton PREBUTTON;
+	public String selectedKey = "";
 	
 	ActionListener acNavigation = new NavigationController(this);
+	ActionListener acTabEmployee = new TabEmployeeManagementController(this);
+	
 	Font font_20 = new Font("Poppins", Font.BOLD, 18);
 	Font font_16 = new Font("Poppins", Font.BOLD, 16);
 	Font font_12 = new Font("Poppins", Font.BOLD, 12);
@@ -220,7 +227,6 @@ public class HomeView extends JFrame {
 		properties.put("text.year", "Year");
 		JDatePanelImpl panle = new JDatePanelImpl(modelSQLDate, properties);
 		dateDeparturePicker = new JDatePickerImpl(panle, new AbstractFormatter() {
-			
 			@Override
 			public String valueToString(Object value) throws ParseException {
 				if(value!=null) {
@@ -419,7 +425,9 @@ public class HomeView extends JFrame {
         searchEmpBtn.setIcon(scaledSearchIcon);
         
 // Create button Add
-		JButton addEmpBtn = new JButton("");
+		JButton addEmpBtn = new JButton("Add");
+		addEmpBtn.addActionListener(acTabEmployee);
+		
 		addEmpBtn.setBounds(18, 1, 64, 57);
 		toolTabEmployeePanel.add(addEmpBtn);
 		ImageIcon iconAdd = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//addIcon.png");
@@ -436,7 +444,9 @@ public class HomeView extends JFrame {
         toolTabEmployeePanel.add(addLabel);
 		
 // Create button Delete
-		JButton deleteEmpBtn = new JButton("");
+		JButton deleteEmpBtn = new JButton("Delete");
+		deleteEmpBtn.addActionListener(acTabEmployee);
+		
 		deleteEmpBtn.setBounds(94, 1, 64, 57);
 		toolTabEmployeePanel.add(deleteEmpBtn);
 		ImageIcon deleteIcon = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//deleteIcon.png");
@@ -452,7 +462,9 @@ public class HomeView extends JFrame {
         toolTabEmployeePanel.add(deleteLabel);
 		
 // Create button Modify
-		JButton modifyEmpBtn = new JButton("");
+		JButton modifyEmpBtn = new JButton("Modify");
+		modifyEmpBtn.addActionListener(acTabEmployee);
+		
 		modifyEmpBtn.setBounds(170, 1, 64, 57);
 		toolTabEmployeePanel.add(modifyEmpBtn);
 		ImageIcon modifyIcon = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//settingIcon.png");
@@ -468,7 +480,9 @@ public class HomeView extends JFrame {
 		toolTabEmployeePanel.add(modifyLabel);
 		
 // Create button reload 		
-		JButton refreshEmpTableBtn = new JButton("");
+		JButton refreshEmpTableBtn = new JButton("Refresh");
+		refreshEmpTableBtn.addActionListener(acTabEmployee);
+		
 		refreshEmpTableBtn.setBounds(244, 1, 64, 57);
 		toolTabEmployeePanel.add(refreshEmpTableBtn);
 		ImageIcon iconRefresh = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//refresh_reload_icon.png");
@@ -485,7 +499,7 @@ public class HomeView extends JFrame {
 				
 // Create Table
 		DefaultTableCellRenderer centeRenderer = new DefaultTableCellRenderer();
-		centeRenderer.setHorizontalAlignment(JLabel.CENTER);
+		centeRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 		tableEmployee = new JTable();
 		tableEmployee.setFont(font_12_Thin);
 		tableEmployee.setDefaultEditor(Object.class, null);
@@ -506,6 +520,7 @@ public class HomeView extends JFrame {
 		
 		loadDataTableEmployee();
 		tableEmployee.setDefaultRenderer(String.class, centeRenderer);
+		
 		
 		employeeManagerPanel.add(toolTabEmployeePanel,BorderLayout.NORTH);
 		employeeManagerPanel.add(tableEmpScrollPane, BorderLayout.CENTER);
@@ -659,6 +674,30 @@ public class HomeView extends JFrame {
 		this.employeeManagerPanel = employeeManagerPanel;
 	}
 	
+	public JTable getTableTicket() {
+		return tableTicket;
+	}
+
+	public void setTableTicket(JTable tableTicket) {
+		this.tableTicket = tableTicket;
+	}
+
+	public JTable getTableFlight() {
+		return tableFlight;
+	}
+
+	public void setTableFlight(JTable tableFlight) {
+		this.tableFlight = tableFlight;
+	}
+
+	public JTable getTableEmployee() {
+		return tableEmployee;
+	}
+
+	public void setTableEmployee(JTable tableEmployee) {
+		this.tableEmployee = tableEmployee;
+	}
+
 	public void loadDataTableEmployee() {
 		List<Employee> employees = EmployeeDAO.getInstance().selectAll();
 		DefaultTableModel tableModel = (DefaultTableModel) tableEmployee.getModel();
@@ -674,5 +713,32 @@ public class HomeView extends JFrame {
 					employee.getCitizenIdentify()
 			});
 		}
+	}
+	
+	public void deleteEmp() {
+		int rowIndex = this.getTableEmployee().getSelectedRow();
+		DefaultTableModel tableModel = (DefaultTableModel) this.getTableEmployee().getModel();
+		Employee employee = new Employee();
+		employee.setEmployeeId(Integer.valueOf(tableModel.getValueAt(rowIndex, 0)+""));
+		Employee result = EmployeeDAO.getInstance().selectById(employee);
+		EmployeeDAO.getInstance().delele(employee);
+		this.getTableEmployee().remove(rowIndex);
+		JOptionPane.showMessageDialog(FlightManagement, "Delete successfully");
+//		System.out.println(result.getEmployeeName());
+//		for(Account ac: result.getAccounts()) {
+//			System.out.println(ac.getUsername());
+//		}
+//		if(result.getAccounts().size()==0) {
+//			EmployeeDAO.getInstance().delele(employee);
+//			this.getTableEmployee().remove(rowIndex);
+//			JOptionPane.showMessageDialog(FlightManagement, "Delete successfully");
+//		} else {
+//			for(Account ac: result.getAccounts()) {
+//				AccountDAO.getInstance().delele(ac);
+//			}
+//			EmployeeDAO.getInstance().delele(employee);
+//			this.getTableEmployee().remove(rowIndex);
+//			JOptionPane.showMessageDialog(FlightManagement, "Delete successfully");
+//		}
 	}
 }

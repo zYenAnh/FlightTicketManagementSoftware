@@ -10,15 +10,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
 import java.lang.invoke.StringConcatFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import javassist.expr.Instanceof;
@@ -26,12 +30,21 @@ import javassist.expr.Instanceof;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 import javax.swing.border.SoftBevelBorder;
+
+import controller.LoginController;
+import dataAccessObject.AccountDAO;
+import entities.Account;
+
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 
 public class LoginView extends JFrame {
 
 	private JPanel contentPane;
+	private JTextField usernameTextField;
+	private JPasswordField passwordTextField;
+	private ActionListener acLoginController;
+	private JLabel messageLogin;
 	
 	Font font_20 = new Font("Poppins", Font.BOLD, 18);
 	Font font_16 = new Font("Poppins", Font.BOLD, 16);
@@ -42,28 +55,12 @@ public class LoginView extends JFrame {
 	Font font_20_Thin = new Font("Poppins", Font.PLAIN, 20);
 	Font font_32_Thin = new Font("Poppins", Font.PLAIN, 32);
 	Font font_10 = new Font("Poppins", Font.BOLD, 10);
-	
-	JPasswordField inputPassword;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginView frame = new LoginView();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
 	public LoginView() {
+		acLoginController = new LoginController(this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(700,500);
 		setResizable(false);
@@ -78,25 +75,26 @@ public class LoginView extends JFrame {
 		getContentPane().add(centerJPanel);
 		centerJPanel.setLayout(null);
 		
-		JTextField inputUserName = new JTextField();
-		inputUserName.setFont(font_12_Thin);
-		inputUserName.setMargin(new Insets(0,12,0,0));
-		inputUserName.setForeground(Color.BLACK);
-		inputUserName.setBounds(157, 200, 357, 38);
-		centerJPanel.add(inputUserName);
-		inputUserName.setColumns(10);
+		usernameTextField = new JTextField();
+		usernameTextField.setFont(font_12_Thin);
+		usernameTextField.setMargin(new Insets(0,12,0,0));
+		usernameTextField.setForeground(Color.BLACK);
+		usernameTextField.setBounds(157, 200, 357, 38);
+		centerJPanel.add(usernameTextField);
+		usernameTextField.setColumns(10);
 		
-		inputPassword = new JPasswordField();
-		inputPassword.setFont(font_12_Thin);
-		inputPassword.setMargin(new Insets(0,12,0,0));
-		inputPassword.setToolTipText("");
-		inputPassword.setBounds(157, 284, 357, 38);
-		centerJPanel.add(inputPassword);
+		passwordTextField = new JPasswordField();
+		passwordTextField.setFont(font_12_Thin);
+		passwordTextField.setMargin(new Insets(0,12,0,0));
+		passwordTextField.setToolTipText("");
+		passwordTextField.setBounds(157, 284, 357, 38);
+		centerJPanel.add(passwordTextField);
 		        
         JButton loginBtn = new JButton("LOGIN");
         loginBtn.setFont(font_20_Thin);
         loginBtn.setBounds(214, 361, 263, 49);
         centerJPanel.add(loginBtn);
+        loginBtn.addActionListener(acLoginController);
           
         JLabel titleLable = new JLabel("AIRCRAFT TICKET MANAGEMENT SYSTEM");
         titleLable.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -121,10 +119,41 @@ public class LoginView extends JFrame {
         loginLabel.setBounds(140, 108, 391, 38);
         centerJPanel.add(loginLabel);
         
-        JLabel messageLogin = new JLabel("");
-        messageLogin.setBounds(465, 336, 49, 14);
+        messageLogin = new JLabel("");
+        messageLogin.setHorizontalAlignment(SwingConstants.RIGHT);
+        messageLogin.setForeground(Color.RED);
+        messageLogin.setFont(new Font("Poppins", Font.ITALIC, 11));
+        messageLogin.setBounds(157, 336, 357, 14);
         centerJPanel.add(messageLogin);
 	}
+	
+	public void handleLogin() 
+	{
+		String username = this.usernameTextField.getText();
+		String password = this.passwordTextField.getText();
+		if(username.equals("") || password.equals("")) {
+			JOptionPane.showMessageDialog(contentPane, "Bạn chưa nhập tài khoản hoặc mật khẩu! Vui lòng nhập lại.");
+		} else {
+			String condition = "Username = " + "'" +username+ "'" + " AND Password = " + password;
+			List<Account> accounts = AccountDAO.getInstance().selectByCondition(condition);
+			if(!accounts.isEmpty()) {
+				if(accounts.get(0).getRole().equals("ADMIN")) {
+					try {
+						UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+						new HomeView();
+						this.setVisible(false);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			} else {
+				this.messageLogin.setText("Tài khoản hoặc mật khẩu không đúng! Vui lòng nhập lại");
+			}
+		}
+		
+	}
 }
+
+
 
 
