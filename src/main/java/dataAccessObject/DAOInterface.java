@@ -13,9 +13,9 @@ public interface DAOInterface<T> {
 	
 	public int saveOrUpdate(T t);
 	
-	public List<T> selectAll();
+	public ArrayList<T> selectAll();
 	
 	public T selectById(T t);
 	
-	public List<T> selectByCondition(String condition);
+	public ArrayList<T> selectByCondition(String condition);
 }

@@ -35,7 +35,6 @@ public class EmployeeDAO implements DAOInterface<Employee>{
 	public void update(Employee t) {
 		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
-            System.out.println("toi dayyyyyyyyy");
             session.update(t);
             session.getTransaction().commit();
             session.close();
@@ -48,7 +47,6 @@ public class EmployeeDAO implements DAOInterface<Employee>{
 	public void delele(Employee t) {
 		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
-            session.delete(t.getAccounts());
             session.delete(t);
             session.getTransaction().commit();
             session.close();
@@ -58,10 +56,10 @@ public class EmployeeDAO implements DAOInterface<Employee>{
 	}
 
 	@Override
-	public java.util.List<Employee> selectAll() {
+	public ArrayList<Employee> selectAll() {
 		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
-            java.util.List<Employee> resultSelect = session.createQuery("FROM Employee",Employee.class)
+            ArrayList<Employee> resultSelect = (ArrayList<Employee>) session.createQuery("FROM Employee",Employee.class)
             		.list();
             session.close();
             return resultSelect;

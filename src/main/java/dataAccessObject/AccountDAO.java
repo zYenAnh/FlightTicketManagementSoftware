@@ -28,7 +28,7 @@ public class AccountDAO implements DAOInterface<Account>{
 	}
 
 	@Override
-	public List<Account> selectAll() {
+	public ArrayList<Account> selectAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -40,11 +40,11 @@ public class AccountDAO implements DAOInterface<Account>{
 	}
 
 	@Override
-	public List<Account> selectByCondition(String condition) {
+	public ArrayList<Account> selectByCondition(String condition) {
 		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
             String hql = "FROM Account WHERE " +condition;
-            List<Account> resultSelect = session.createQuery(hql).list();
+            ArrayList<Account> resultSelect =  (ArrayList<Account>) session.createQuery(hql).list();
             session.getTransaction().commit();
             session.close();
             return resultSelect;

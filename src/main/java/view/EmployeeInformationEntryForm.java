@@ -3,10 +3,12 @@ package view;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Properties;
 
@@ -200,6 +202,13 @@ public class EmployeeInformationEntryForm extends JFrame {
 	public void updateEmp(Employee e, int rowIndex) {
 		EmployeeDAO.getInstance().update(e);
 		DefaultTableModel tableModel = (DefaultTableModel) this.homeView.getTableEmployee().getModel();
+		ArrayList<Employee> employees = this.homeView.getEmployeeModel().getEmployees();
+		for(int i=0;i<employees.size();i++) {
+			if(e.getEmployeeId().equals(employees.get(i).getEmployeeId())) {
+				this.homeView.getEmployeeModel().getEmployees().set(i, e);
+				break;
+			}
+		}
 		tableModel.setValueAt(e.getEmployeeName(), rowIndex, 1);
 		tableModel.setValueAt(e.getRole(), rowIndex, 2);
 		tableModel.setValueAt(e.getGender(), rowIndex, 3);
@@ -210,22 +219,14 @@ public class EmployeeInformationEntryForm extends JFrame {
 	}
 	
 	public int addEmp(Employee e) {
-		int checkAddEmp = EmployeeDAO.getInstance().add(e);
+		int checkAddEmp =0;
+		checkAddEmp = EmployeeDAO.getInstance().add(e);
 		if(checkAddEmp!=0) {
-			DefaultTableModel tableModel = (DefaultTableModel) this.homeView.getTableEmployee().getModel();
-			tableModel.addRow(new Object[] {
-					e.getEmployeeId(),
-					e.getEmployeeName(),
-					e.getRole(),
-					e.getGender(),
-					e.getDateOfBirth(),
-					e.getPhone(),
-					e.getAddress(),
-					e.getCitizenIdentify()
-			});
+			this.homeView.getEmployeeModel().insert(e);
+			this.homeView.reloadTable();
 			return checkAddEmp;
 		} else {
-			JOptionPane.showMessageDialog(addressTextField, "Employee already exists, please re-enter");
+				JOptionPane.showMessageDialog(addressTextField, "Employee already exists, please re-enter");
 		}
 		return checkAddEmp;
 	}

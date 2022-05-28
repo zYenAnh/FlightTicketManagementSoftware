@@ -1,9 +1,11 @@
 package entities;
-// Generated May 23, 2022, 10:30:36 PM by Hibernate Tools 4.3.6.Final
+// Generated May 25, 2022, 10:24:12 AM by Hibernate Tools 4.3.6.Final
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -128,7 +130,7 @@ public class Employee implements java.io.Serializable {
 		this.role = role;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee", cascade = {CascadeType.ALL})
 	public Set<Invoice> getInvoices() {
 		return this.invoices;
 	}
@@ -137,7 +139,7 @@ public class Employee implements java.io.Serializable {
 		this.invoices = invoices;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee", cascade = {CascadeType.ALL})
 	public Set<Account> getAccounts() {
 		return this.accounts;
 	}
@@ -146,7 +148,7 @@ public class Employee implements java.io.Serializable {
 		this.accounts = accounts;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee", cascade = {CascadeType.ALL})
 	public Set<Ticket> getTickets() {
 		return this.tickets;
 	}

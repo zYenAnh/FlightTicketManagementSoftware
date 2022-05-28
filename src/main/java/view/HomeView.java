@@ -24,6 +24,8 @@ import dataAccessObject.AccountDAO;
 import dataAccessObject.EmployeeDAO;
 import entities.Account;
 import entities.Employee;
+import entities.EmployeeModel;
+import net.bytebuddy.asm.Advice.This;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -60,6 +62,7 @@ import javax.swing.JSeparator;
 
 public class HomeView extends JFrame {
 
+	private EmployeeModel employeeModel;
 	private JPanel mainPanel;
 	private JTextField searchTextField;
 	private JTextField searchEmpTextField;
@@ -89,6 +92,7 @@ public class HomeView extends JFrame {
 	Font font_10 = new Font("Poppins", Font.BOLD, 10);
 
 	public HomeView() {
+		this.employeeModel = new EmployeeModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1280,720);
 		setResizable(false);
@@ -697,20 +701,27 @@ public class HomeView extends JFrame {
 	public void setTableEmployee(JTable tableEmployee) {
 		this.tableEmployee = tableEmployee;
 	}
+	
+	public EmployeeModel getEmployeeModel() {
+		return employeeModel;
+	}
+
+	public void setEmployeeModel(EmployeeModel employeeModel) {
+		this.employeeModel = employeeModel;
+	}
 
 	public void loadDataTableEmployee() {
-		List<Employee> employees = EmployeeDAO.getInstance().selectAll();
 		DefaultTableModel tableModel = (DefaultTableModel) tableEmployee.getModel();
-		for(Employee employee: employees) {
+		for(Employee e: this.employeeModel.getEmployees()) {
 			tableModel.addRow(new Object[] {
-					employee.getEmployeeId(),
-					employee.getEmployeeName(),
-					employee.getRole(),
-					employee.getGender(),
-					employee.getDateOfBirth(),
-					employee.getPhone(),
-					employee.getAddress(),
-					employee.getCitizenIdentify()
+					e.getEmployeeId(),
+					e.getEmployeeName(),
+					e.getRole(),
+					e.getGender(),
+					e.getDateOfBirth(),
+					e.getPhone(),
+					e.getAddress(),
+					e.getCitizenIdentify()
 			});
 		}
 	}
@@ -718,27 +729,21 @@ public class HomeView extends JFrame {
 	public void deleteEmp() {
 		int rowIndex = this.getTableEmployee().getSelectedRow();
 		DefaultTableModel tableModel = (DefaultTableModel) this.getTableEmployee().getModel();
-		Employee employee = new Employee();
-		employee.setEmployeeId(Integer.valueOf(tableModel.getValueAt(rowIndex, 0)+""));
-		Employee result = EmployeeDAO.getInstance().selectById(employee);
-		EmployeeDAO.getInstance().delele(employee);
-		this.getTableEmployee().remove(rowIndex);
-		JOptionPane.showMessageDialog(FlightManagement, "Delete successfully");
-//		System.out.println(result.getEmployeeName());
-//		for(Account ac: result.getAccounts()) {
-//			System.out.println(ac.getUsername());
-//		}
-//		if(result.getAccounts().size()==0) {
-//			EmployeeDAO.getInstance().delele(employee);
-//			this.getTableEmployee().remove(rowIndex);
-//			JOptionPane.showMessageDialog(FlightManagement, "Delete successfully");
-//		} else {
-//			for(Account ac: result.getAccounts()) {
-//				AccountDAO.getInstance().delele(ac);
-//			}
-//			EmployeeDAO.getInstance().delele(employee);
-//			this.getTableEmployee().remove(rowIndex);
-//			JOptionPane.showMessageDialog(FlightManagement, "Delete successfully");
-//		}
+		int idSelect = Integer.valueOf(tableModel.getValueAt(rowIndex, 0)+"");
+		ArrayList<Employee> employees = this.employeeModel.getEmployees();
+		for(Employee e : employees) {
+			if(e.getEmployeeId()==idSelect) {
+				EmployeeDAO.getInstance().delele(e);
+				this.employeeModel.remove(e);
+				reloadTable();
+				return;
+			}	
+		}
+	}
+	
+	public void reloadTable() {
+		DefaultTableModel tableModel = (DefaultTableModel) this.getTableEmployee().getModel();
+		tableModel.getDataVector().removeAllElements();
+		loadDataTableEmployee();
 	}
 }

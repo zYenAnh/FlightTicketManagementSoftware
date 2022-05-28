@@ -24,7 +24,6 @@ public class InployeeInformationEntryFormController implements ActionListener{
 			this.empIEFView.closeForm();
 		} else if(src.equals("Save")) {
 			Employee empSave = this.empIEFView.getDataFromEmployeeInput();
-			
 			int choose = JOptionPane.showConfirmDialog(empIEFView,"Are you sure to add/edit this employee");
 			if(choose == 0) {
 				int checkAdd = 0;
@@ -32,6 +31,7 @@ public class InployeeInformationEntryFormController implements ActionListener{
 					checkAdd = this.empIEFView.addEmp(empSave);		
 				} else {
 					this.empIEFView.updateEmp(empSave, this.empIEFView.rowSelectedIndex);
+					this.empIEFView.setVisible(false);
 				}
 				if(checkAdd!=0) {
 					JOptionPane.showMessageDialog(empIEFView, "Successfully");
@@ -41,7 +41,4 @@ public class InployeeInformationEntryFormController implements ActionListener{
 		}
 		
 	}
-	
-	
-
 }

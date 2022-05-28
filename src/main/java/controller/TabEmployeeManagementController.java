@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import entities.Employee;
 import view.HomeView;
 import view.EmployeeInformationEntryForm;
 
@@ -31,6 +32,7 @@ public class TabEmployeeManagementController implements ActionListener {
 			}
 		} else if(src.equals("Delete")) {
 			this.homeView.deleteEmp();
+			this.homeView.getTableEmployee().clearSelection();
 		} else if(src.equals("Modify")) {
 			if(this.homeView.getTableEmployee().getSelectedRow()!=-1) {
 				try {
@@ -44,7 +46,7 @@ public class TabEmployeeManagementController implements ActionListener {
 				JOptionPane.showMessageDialog(homeView, "Vui lòng chọn đối tượng cần sửa");
 			}
 		} else if(src.equals("Refresh")) {
-			
+			this.homeView.reloadTable();
 		}
 		
 	}
