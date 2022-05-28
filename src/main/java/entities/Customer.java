@@ -1,5 +1,5 @@
 package entities;
-// Generated May 25, 2022, 10:24:12 AM by Hibernate Tools 4.3.6.Final
+// Generated May 28, 2022, 3:41:14 PM by Hibernate Tools 4.3.6.Final
 
 import java.util.Date;
 import java.util.HashSet;
@@ -30,6 +30,7 @@ public class Customer implements java.io.Serializable {
 	private String gender;
 	private String address;
 	private String phone;
+	private Integer isActive;
 	private Set<Invoice> invoices = new HashSet<Invoice>(0);
 	private Set<Ticket> tickets = new HashSet<Ticket>(0);
 
@@ -37,13 +38,14 @@ public class Customer implements java.io.Serializable {
 	}
 
 	public Customer(String customerName, String citizenIdentify, Date dateOfBirth, String gender, String address,
-			String phone, Set<Invoice> invoices, Set<Ticket> tickets) {
+			String phone, Integer isActive, Set<Invoice> invoices, Set<Ticket> tickets) {
 		this.customerName = customerName;
 		this.citizenIdentify = citizenIdentify;
 		this.dateOfBirth = dateOfBirth;
 		this.gender = gender;
 		this.address = address;
 		this.phone = phone;
+		this.isActive = isActive;
 		this.invoices = invoices;
 		this.tickets = tickets;
 	}
@@ -113,6 +115,15 @@ public class Customer implements java.io.Serializable {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	@Column(name = "isActive")
+	public Integer getIsActive() {
+		return this.isActive;
+	}
+
+	public void setIsActive(Integer isActive) {
+		this.isActive = isActive;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")

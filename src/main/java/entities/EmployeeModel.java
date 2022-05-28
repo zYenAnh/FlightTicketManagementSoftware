@@ -9,7 +9,7 @@ public class EmployeeModel {
 	
 	public EmployeeModel() {
 		this.employees = new ArrayList<Employee>();
-		this.employees = EmployeeDAO.getInstance().selectAll();
+		this.employees = EmployeeDAO.getInstance().selectIsActive();
 	}
 	
 	public EmployeeModel(ArrayList<Employee> listEmp) {

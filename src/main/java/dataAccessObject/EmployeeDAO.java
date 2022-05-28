@@ -85,9 +85,32 @@ public class EmployeeDAO implements DAOInterface<Employee>{
 
 	@Override
 	public ArrayList<Employee> selectByCondition(String condition) {
+//		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+//            session.beginTransaction();
+//            ArrayList<Employee> resultSelect = (ArrayList<Employee>) session.createQuery("FROM Employee WHERE Employee.isActive = 1",Employee.class)
+//            		.list();
+//            session.close();
+//            return resultSelect;
+//        } catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		return null;
 	}
 
+	public ArrayList<Employee> selectIsActive() {
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            ArrayList<Employee> resultSelect = (ArrayList<Employee>) session.createQuery("FROM Employee E WHERE E.isActive = 1")
+            		.list();
+            session.close();
+            return resultSelect;
+        } catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	
 	@Override
 	public int saveOrUpdate(Employee t) {
 		return 0;

@@ -46,6 +46,7 @@ public class LoginView extends JFrame {
 	private ActionListener acLoginController;
 	private JLabel messageLogin;
 	
+	
 	Font font_20 = new Font("Poppins", Font.BOLD, 18);
 	Font font_16 = new Font("Poppins", Font.BOLD, 16);
 	Font font_12 = new Font("Poppins", Font.BOLD, 12);
@@ -55,6 +56,7 @@ public class LoginView extends JFrame {
 	Font font_20_Thin = new Font("Poppins", Font.PLAIN, 20);
 	Font font_32_Thin = new Font("Poppins", Font.PLAIN, 32);
 	Font font_10 = new Font("Poppins", Font.BOLD, 10);
+	public JButton loginBtn;
 
 	/**
 	 * Create the frame.
@@ -90,7 +92,7 @@ public class LoginView extends JFrame {
 		passwordTextField.setBounds(157, 284, 357, 38);
 		centerJPanel.add(passwordTextField);
 		        
-        JButton loginBtn = new JButton("LOGIN");
+        loginBtn = new JButton("LOGIN");
         loginBtn.setFont(font_20_Thin);
         loginBtn.setBounds(214, 361, 263, 49);
         centerJPanel.add(loginBtn);

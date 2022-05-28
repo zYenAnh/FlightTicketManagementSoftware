@@ -1,5 +1,5 @@
 package entities;
-// Generated May 25, 2022, 10:24:12 AM by Hibernate Tools 4.3.6.Final
+// Generated May 28, 2022, 3:41:14 PM by Hibernate Tools 4.3.6.Final
 
 import java.util.Date;
 import java.util.HashSet;
@@ -33,6 +33,7 @@ public class Flight implements java.io.Serializable {
 	private Integer numberOfBusinessSeats;
 	private String status;
 	private String basicPrice;
+	private Integer isActive;
 	private Set<Ticket> tickets = new HashSet<Ticket>(0);
 
 	public Flight() {
@@ -46,7 +47,7 @@ public class Flight implements java.io.Serializable {
 
 	public Flight(String flightId, Aircraft aircraft, Airport airport, Date takeOffTime, String destinationId,
 			Date landingTime, Date flightDate, Integer numberOfEconomySeats, Integer numberOfBusinessSeats,
-			String status, String basicPrice, Set<Ticket> tickets) {
+			String status, String basicPrice, Integer isActive, Set<Ticket> tickets) {
 		this.flightId = flightId;
 		this.aircraft = aircraft;
 		this.airport = airport;
@@ -58,6 +59,7 @@ public class Flight implements java.io.Serializable {
 		this.numberOfBusinessSeats = numberOfBusinessSeats;
 		this.status = status;
 		this.basicPrice = basicPrice;
+		this.isActive = isActive;
 		this.tickets = tickets;
 	}
 
@@ -165,6 +167,15 @@ public class Flight implements java.io.Serializable {
 
 	public void setBasicPrice(String basicPrice) {
 		this.basicPrice = basicPrice;
+	}
+
+	@Column(name = "isActive")
+	public Integer getIsActive() {
+		return this.isActive;
+	}
+
+	public void setIsActive(Integer isActive) {
+		this.isActive = isActive;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "flight")

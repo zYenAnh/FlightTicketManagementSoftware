@@ -1,11 +1,9 @@
 package entities;
-// Generated May 25, 2022, 10:24:12 AM by Hibernate Tools 4.3.6.Final
+// Generated May 28, 2022, 3:41:14 PM by Hibernate Tools 4.3.6.Final
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,15 +31,18 @@ public class Employee implements java.io.Serializable {
 	private String address;
 	private String phone;
 	private String role;
+	private Integer isActive;
 	private Set<Invoice> invoices = new HashSet<Invoice>(0);
 	private Set<Account> accounts = new HashSet<Account>(0);
 	private Set<Ticket> tickets = new HashSet<Ticket>(0);
 
 	public Employee() {
+		this.isActive = 1;
 	}
 
 	public Employee(String employeeName, String citizenIdentify, Date dateOfBirth, String gender, String address,
-			String phone, String role, Set<Invoice> invoices, Set<Account> accounts, Set<Ticket> tickets) {
+			String phone, String role, Integer isActive, Set<Invoice> invoices, Set<Account> accounts,
+			Set<Ticket> tickets) {
 		this.employeeName = employeeName;
 		this.citizenIdentify = citizenIdentify;
 		this.dateOfBirth = dateOfBirth;
@@ -49,6 +50,7 @@ public class Employee implements java.io.Serializable {
 		this.address = address;
 		this.phone = phone;
 		this.role = role;
+		this.isActive = isActive;
 		this.invoices = invoices;
 		this.accounts = accounts;
 		this.tickets = tickets;
@@ -130,7 +132,16 @@ public class Employee implements java.io.Serializable {
 		this.role = role;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee", cascade = {CascadeType.ALL})
+	@Column(name = "isActive")
+	public Integer getIsActive() {
+		return this.isActive;
+	}
+
+	public void setIsActive(Integer isActive) {
+		this.isActive = isActive;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
 	public Set<Invoice> getInvoices() {
 		return this.invoices;
 	}
@@ -139,7 +150,7 @@ public class Employee implements java.io.Serializable {
 		this.invoices = invoices;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee", cascade = {CascadeType.ALL})
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
 	public Set<Account> getAccounts() {
 		return this.accounts;
 	}
@@ -148,7 +159,7 @@ public class Employee implements java.io.Serializable {
 		this.accounts = accounts;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee", cascade = {CascadeType.ALL})
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
 	public Set<Ticket> getTickets() {
 		return this.tickets;
 	}

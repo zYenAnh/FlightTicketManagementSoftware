@@ -1,5 +1,5 @@
 package entities;
-// Generated May 25, 2022, 10:24:12 AM by Hibernate Tools 4.3.6.Final
+// Generated May 28, 2022, 3:41:14 PM by Hibernate Tools 4.3.6.Final
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

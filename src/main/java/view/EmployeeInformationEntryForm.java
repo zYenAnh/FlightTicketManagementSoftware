@@ -68,7 +68,6 @@ public class EmployeeInformationEntryForm extends JFrame {
 		empIEFController = new InployeeInformationEntryFormController(this);
 		this.homeView = homeView;
 		rowSelectedIndex = homeView.getTableEmployee().getSelectedRow();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(450, 550);
 		setLocationRelativeTo(null);	
 		contentPane = new JPanel();
