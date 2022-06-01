@@ -90,6 +90,7 @@ public class HomeView extends JFrame {
 	ActionListener acNavigation = new NavigationController(this);
 	ActionListener acTabEmployee = new TabEmployeeManagementController(this);
 	
+	Font font_JetBrains = new Font("JetBrains Mono", Font.BOLD, 12);
 	Font font_20 = new Font("Poppins", Font.BOLD, 18);
 	Font font_16 = new Font("Poppins", Font.BOLD, 16);
 	Font font_12 = new Font("Poppins", Font.BOLD, 12);
@@ -452,7 +453,7 @@ public class HomeView extends JFrame {
 		DefaultTableCellRenderer centeRenderer = new DefaultTableCellRenderer();
 		centeRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 		tableEmployee = new JTable();
-		tableEmployee.setFont(font_12_Thin);
+		tableEmployee.setFont(font_JetBrains);
 		tableEmployee.setDefaultEditor(Object.class, null);
 		tableEmployee.setBounds(23, 0, 933, 597);
 		tableEmployee.setModel(new DefaultTableModel(
@@ -491,7 +492,6 @@ public class HomeView extends JFrame {
 		    }
 		});
 		
-		//Set size column and row table
 		tableEmployee.setRowHeight(30);
 		
 		JScrollPane tableEmpScrollPane = new JScrollPane(tableEmployee);
@@ -512,7 +512,7 @@ public class HomeView extends JFrame {
 	public void createNavigation() {
 		JPanel navigationPanel = new JPanel();
 		navigationPanel.setBorder(new LineBorder(Color.black));
-		navigationPanel.setBounds(0,90,230,300);
+		navigationPanel.setBounds(0,90,250,300);
 		mainPanel.add(navigationPanel);
 		navigationPanel.setLayout(null);
 		navigationPanel.setLayout(new GridLayout(5,1));
@@ -521,19 +521,19 @@ public class HomeView extends JFrame {
 		
 		JPanel panelTitle = new JPanel();
         panelTitle.setBorder(new LineBorder(UIManager.getColor("CheckBox.disabledText")));
-        panelTitle.setBounds(0, 0, 230, 90);
+        panelTitle.setBounds(0, 0, 250, 90);
 //        navigationPanel.add(panelTitle);
         panelTitle.setLayout(null);
         
         JLabel lblNewLabel_1 = new JLabel("AIRCRAFT TICKET");
         lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel_1.setBounds(0, 20, 230, 30);
+        lblNewLabel_1.setBounds(10, 20, 230, 30);
         panelTitle.add(lblNewLabel_1);
         lblNewLabel_1.setFont(new Font("Poppins", Font.BOLD, 24));
         
         JLabel lblNewLabel = new JLabel("MANAGEMENT");
         lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel.setBounds(31, 55, 173, 16);
+        lblNewLabel.setBounds(40, 55, 173, 16);
         panelTitle.add(lblNewLabel);
         lblNewLabel.setFont(font_20);
         
@@ -745,8 +745,6 @@ public class HomeView extends JFrame {
 			});
 			this.add(edit);
 			this.add(active);
-			this.add(new JSeparator());
-			
 		}
 	}
 }

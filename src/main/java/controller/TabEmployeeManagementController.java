@@ -2,8 +2,12 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JTable;
 import javax.swing.UIManager;
 
 import entities.Employee;
@@ -47,8 +51,7 @@ public class TabEmployeeManagementController implements ActionListener {
 			}
 		} else if(src.equals("Refresh")) {
 			this.homeView.reloadTable();
-		}
-		
+		}		
 	}
 
 }

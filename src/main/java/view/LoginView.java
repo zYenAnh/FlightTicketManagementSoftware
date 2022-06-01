@@ -47,15 +47,12 @@ public class LoginView extends JFrame {
 	private JLabel messageLogin;
 	
 	
-	Font font_20 = new Font("Poppins", Font.BOLD, 18);
-	Font font_16 = new Font("Poppins", Font.BOLD, 16);
+	Font font_JetBrains = new Font("JetBrains Mono", Font.BOLD, 12);
 	Font font_12 = new Font("Poppins", Font.BOLD, 12);
-	Font font_14 = new Font("Poppins", Font.BOLD, 14);
 	Font font_12_Thin = new Font("Poppins", Font.PLAIN, 12);
 	Font font_16_Thin = new Font("Poppins", Font.PLAIN, 16);
 	Font font_20_Thin = new Font("Poppins", Font.PLAIN, 20);
 	Font font_32_Thin = new Font("Poppins", Font.PLAIN, 32);
-	Font font_10 = new Font("Poppins", Font.BOLD, 10);
 	public JButton loginBtn;
 
 	/**
@@ -78,7 +75,7 @@ public class LoginView extends JFrame {
 		centerJPanel.setLayout(null);
 		
 		usernameTextField = new JTextField();
-		usernameTextField.setFont(font_12_Thin);
+		usernameTextField.setFont(font_JetBrains);
 		usernameTextField.setMargin(new Insets(0,12,0,0));
 		usernameTextField.setForeground(Color.BLACK);
 		usernameTextField.setBounds(157, 200, 357, 38);
@@ -86,7 +83,7 @@ public class LoginView extends JFrame {
 		usernameTextField.setColumns(10);
 		
 		passwordTextField = new JPasswordField();
-		passwordTextField.setFont(font_12_Thin);
+		passwordTextField.setFont(font_JetBrains);
 		passwordTextField.setMargin(new Insets(0,12,0,0));
 		passwordTextField.setToolTipText("");
 		passwordTextField.setBounds(157, 284, 357, 38);
@@ -124,7 +121,7 @@ public class LoginView extends JFrame {
         messageLogin = new JLabel("");
         messageLogin.setHorizontalAlignment(SwingConstants.RIGHT);
         messageLogin.setForeground(Color.RED);
-        messageLogin.setFont(new Font("Poppins", Font.ITALIC, 11));
+        messageLogin.setFont(font_JetBrains);
         messageLogin.setBounds(157, 336, 357, 14);
         centerJPanel.add(messageLogin);
 	}

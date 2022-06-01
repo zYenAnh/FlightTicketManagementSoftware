@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import java.awt.Color; 
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -35,12 +36,14 @@ import org.jdatepicker.DateModel;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
+import org.jdatepicker.impl.UtilDateModel;
 
 import controller.InployeeInformationEntryFormController;
 import dataAccessObject.AccountDAO;
 import dataAccessObject.EmployeeDAO;
 import entities.Account;
 import entities.Employee;
+import entities.Province;
 
 public class EmployeeInformationEntryForm extends JFrame {
 
@@ -48,13 +51,13 @@ public class EmployeeInformationEntryForm extends JFrame {
 	private JPanel contentPane;
 	private JTextField nameTextField;
 	private JTextField dateofbirth;
-	private JTextField addressTextField;
 	private JTextField citizenidentifyTextField;
 	private JTextField phoneTextField;
 	private ActionListener empIEFController;
 	private JDatePickerImpl dateDeparturePicker;
 	private JComboBox genderComboBox;
 	private JComboBox roleComboBox;
+	private JComboBox address;
 	
 	public int rowSelectedIndex;
 	
@@ -121,6 +124,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		properties.put("text.day", "Day");
 		properties.put("text.month", "Month");
 		properties.put("text.year", "Year");
+		
 		JDatePanelImpl panle = new JDatePanelImpl(modelSQLDate, properties);
 		dateDeparturePicker = new JDatePickerImpl(panle, new AbstractFormatter() {
 			
@@ -137,17 +141,21 @@ public class EmployeeInformationEntryForm extends JFrame {
 			@Override
 			public Object stringToValue(String text) throws ParseException {return null;}
 		});
+		
 		inputPanel.add(dateDeparturePicker);
 				
 		JLabel addressLable = new JLabel("Address");
 		addressLable.setFont(font_14_Thin);
 		addressLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(addressLable);
+					
+		address = new JComboBox();
+		ArrayList<Province> provinces = Province.getDSTinh();
+		for(Province p: provinces) {
+			address.addItem(p.getTenTinhString());
+		}
 		
-		addressTextField = new JTextField();
-		addressTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		inputPanel.add(addressTextField);
-		addressTextField.setColumns(10);
+		inputPanel.add(address);
 		
 		JLabel citizenIdentifyLable = new JLabel("CitizenIdentify");
 		citizenIdentifyLable.setFont(font_14_Thin);
@@ -225,7 +233,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 			this.homeView.reloadTable();
 			return checkAddEmp;
 		} else {
-				JOptionPane.showMessageDialog(addressTextField, "Employee already exists, please re-enter");
+				JOptionPane.showMessageDialog(null,"Employee already exists, please re-enter");
 		}
 		return checkAddEmp;
 	}
@@ -241,7 +249,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		if(rowIndex!=-1)
 			result.setEmployeeId(Integer.valueOf(tableModel.getValueAt(rowIndex, 0)+""));
 		result.setEmployeeName(this.nameTextField.getText());
-		result.setAddress(this.addressTextField.getText());
+		result.setAddress(this.address.getSelectedItem()+"");
 		result.setCitizenIdentify(this.citizenidentifyTextField.getText());
 		Date dateSelected = (Date) this.dateDeparturePicker.getModel().getValue();
 		result.setDateOfBirth(dateSelected);
@@ -257,15 +265,18 @@ public class EmployeeInformationEntryForm extends JFrame {
 		this.nameTextField.setText(tableModel.getValueAt(rowIndex, 1)+"");
 		this.roleComboBox.setSelectedItem(tableModel.getValueAt(rowIndex, 2));
 		this.genderComboBox.setSelectedItem(tableModel.getValueAt(rowIndex, 3));
-//		Calendar calendar = Calendar.getInstance();
-//		Date dateSelected = (Date) tableModel.getValueAt(rowIndex, 4);
-//		calendar.setTime(dateSelected);
-//		DateModel<Calendar> dateModel = (DateModel<Calendar>) dateDeparturePicker;
-//		dateModel.setValue(calendar);
+		
+//		dateDeparturePicker.getJFormattedTextField().setText(tableModel.getValueAt(rowIndex, 4)+"");
+//		UtilDateModel modelDateUtil = new UtilDateModel();
+//		modelDateUtil.setDate(1999, 10, 10);
+//		modelDateUtil.setSelected(true);
+//		
+		
+//		dateDeparturePicker.getModel().setValue();
+		
 		Date date = (Date) tableModel.getValueAt(rowIndex, 4);
-//		this.dateDeparturePicker.getModel().setDate(date.getYear(), date.getMonth(), date.getDate());
 		this.phoneTextField.setText(tableModel.getValueAt(rowIndex, 5)+"");
-		this.addressTextField.setText(tableModel.getValueAt(rowIndex, 6)+"");
+		this.address.setSelectedItem(tableModel.getValueAt(rowIndex, 6));
 		this.citizenidentifyTextField.setText(tableModel.getValueAt(rowIndex, 7)+"");
 	}
 }
