@@ -1,5 +1,5 @@
 package entities;
-// Generated May 28, 2022, 3:41:14 PM by Hibernate Tools 4.3.6.Final
+// Generated Jun 1, 2022, 11:56:14 AM by Hibernate Tools 4.3.6.Final
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +20,8 @@ public class Airport implements java.io.Serializable {
 	private String departureId;
 	private String airportName;
 	private String cityProvince;
-	private Set<Flight> flights = new HashSet<Flight>(0);
+	private Set<Flight> flightsForDestinationId = new HashSet<Flight>(0);
+	private Set<Flight> flightsForDepartureId = new HashSet<Flight>(0);
 
 	public Airport() {
 	}
@@ -29,11 +30,13 @@ public class Airport implements java.io.Serializable {
 		this.departureId = departureId;
 	}
 
-	public Airport(String departureId, String airportName, String cityProvince, Set<Flight> flights) {
+	public Airport(String departureId, String airportName, String cityProvince, Set<Flight> flightsForDestinationId,
+			Set<Flight> flightsForDepartureId) {
 		this.departureId = departureId;
 		this.airportName = airportName;
 		this.cityProvince = cityProvince;
-		this.flights = flights;
+		this.flightsForDestinationId = flightsForDestinationId;
+		this.flightsForDepartureId = flightsForDepartureId;
 	}
 
 	@Id
@@ -65,13 +68,22 @@ public class Airport implements java.io.Serializable {
 		this.cityProvince = cityProvince;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "airport")
-	public Set<Flight> getFlights() {
-		return this.flights;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "airportByDestinationId")
+	public Set<Flight> getFlightsForDestinationId() {
+		return this.flightsForDestinationId;
 	}
 
-	public void setFlights(Set<Flight> flights) {
-		this.flights = flights;
+	public void setFlightsForDestinationId(Set<Flight> flightsForDestinationId) {
+		this.flightsForDestinationId = flightsForDestinationId;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "airportByDepartureId")
+	public Set<Flight> getFlightsForDepartureId() {
+		return this.flightsForDepartureId;
+	}
+
+	public void setFlightsForDepartureId(Set<Flight> flightsForDepartureId) {
+		this.flightsForDepartureId = flightsForDepartureId;
 	}
 
 }

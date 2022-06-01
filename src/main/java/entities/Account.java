@@ -1,5 +1,5 @@
 package entities;
-// Generated May 28, 2022, 3:41:14 PM by Hibernate Tools 4.3.6.Final
+// Generated Jun 1, 2022, 11:56:14 AM by Hibernate Tools 4.3.6.Final
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +23,6 @@ public class Account implements java.io.Serializable {
 	private Integer isActive;
 
 	public Account() {
-		this.isActive =1;
 	}
 
 	public Account(String username, Employee employee, String password) {

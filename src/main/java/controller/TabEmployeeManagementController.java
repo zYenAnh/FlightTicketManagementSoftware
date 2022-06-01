@@ -50,7 +50,7 @@ public class TabEmployeeManagementController implements ActionListener {
 				JOptionPane.showMessageDialog(homeView, "Vui lòng chọn đối tượng cần sửa");
 			}
 		} else if(src.equals("Refresh")) {
-			this.homeView.reloadTable();
+			this.homeView.reloadTableEmployee();
 		}		
 	}
 

@@ -1,5 +1,5 @@
 package entities;
-// Generated May 28, 2022, 3:41:14 PM by Hibernate Tools 4.3.6.Final
+// Generated Jun 1, 2022, 11:56:14 AM by Hibernate Tools 4.3.6.Final
 
 import java.util.Date;
 import java.util.HashSet;
@@ -37,7 +37,6 @@ public class Employee implements java.io.Serializable {
 	private Set<Ticket> tickets = new HashSet<Ticket>(0);
 
 	public Employee() {
-		this.isActive = 1;
 	}
 
 	public Employee(String employeeName, String citizenIdentify, Date dateOfBirth, String gender, String address,

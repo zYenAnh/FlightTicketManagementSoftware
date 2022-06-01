@@ -26,6 +26,8 @@ import dataAccessObject.EmployeeDAO;
 import entities.Account;
 import entities.Employee;
 import entities.EmployeeModel;
+import entities.Flight;
+import entities.FlightModel;
 import net.bytebuddy.asm.Advice.This;
 
 import javax.swing.JLabel;
@@ -69,6 +71,7 @@ import java.awt.event.ActionEvent;
 public class HomeView extends JFrame {
 
 	private EmployeeModel employeeModel;
+	private FlightModel flightModel;
 	private JPanel mainPanel;
 	private JTextField searchTextField;
 	private JTextField searchEmpTextField;
@@ -255,6 +258,7 @@ public class HomeView extends JFrame {
 		scrollTableFight.setBounds(30, 91, 985, 590);
 		JTableHeader tableFlightHeader = tableFlight.getTableHeader();
 		tableFlightHeader.setFont(font_12_Thin);
+//		loadDataTableFlight();
 		
 		FlightManagement.add(toolFlightPanel);
 		FlightManagement.add(scrollTableFight);
@@ -717,13 +721,13 @@ public class HomeView extends JFrame {
 				updateE.setIsActive(0);
 				EmployeeDAO.getInstance().update(updateE);
 				this.employeeModel.remove(e);
-				reloadTable();
+				reloadTableEmployee();
 				return;
 			}	
 		}
 	}
 	
-	public void reloadTable() {
+	public void reloadTableEmployee() {
 		DefaultTableModel tableModel = (DefaultTableModel) this.getTableEmployee().getModel();
 		tableModel.getDataVector().removeAllElements();
 		loadDataTableEmployee();
@@ -745,6 +749,28 @@ public class HomeView extends JFrame {
 			});
 			this.add(edit);
 			this.add(active);
+		}
+	}
+	
+//	"Flight ID", " AirCraft ", "Departure", "Destination", "Business ticket", "General ticket", "Take-Off Time", "Landing Time", "Status", "Price"
+	public void loadDataTableFlight() {
+		DefaultTableModel tableModel = (DefaultTableModel) tableFlight.getModel();
+		ArrayList<Flight> flights = flightModel.getFlights();
+		if(flights.isEmpty())
+			return;
+		for(Flight f: flights) {
+			tableModel.addRow(new Object[] {
+					f.getFlightId(),
+					f.getAircraft(),
+					f.getAirportByDepartureId().getAirportName(),
+					f.getAirportByDestinationId().getAirportName(),
+					f.getNumberOfBusinessSeats(),
+					f.getNumberOfEconomySeats(),
+					f.getTakeOffTime(),
+					f.getLandingTime(),
+					f.getStatus(),
+					f.getBasicPrice()
+			});
 		}
 	}
 }

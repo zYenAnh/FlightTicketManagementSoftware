@@ -1,5 +1,5 @@
 package entities;
-// Generated May 28, 2022, 3:41:14 PM by Hibernate Tools 4.3.6.Final
+// Generated Jun 1, 2022, 11:56:14 AM by Hibernate Tools 4.3.6.Final
 
 import java.util.Date;
 import java.util.HashSet;
@@ -24,9 +24,9 @@ public class Flight implements java.io.Serializable {
 
 	private String flightId;
 	private Aircraft aircraft;
-	private Airport airport;
+	private Airport airportByDestinationId;
+	private Airport airportByDepartureId;
 	private Date takeOffTime;
-	private String destinationId;
 	private Date landingTime;
 	private Date flightDate;
 	private Integer numberOfEconomySeats;
@@ -39,20 +39,20 @@ public class Flight implements java.io.Serializable {
 	public Flight() {
 	}
 
-	public Flight(String flightId, Aircraft aircraft, Airport airport) {
+	public Flight(String flightId, Aircraft aircraft, Airport airportByDepartureId) {
 		this.flightId = flightId;
 		this.aircraft = aircraft;
-		this.airport = airport;
+		this.airportByDepartureId = airportByDepartureId;
 	}
 
-	public Flight(String flightId, Aircraft aircraft, Airport airport, Date takeOffTime, String destinationId,
-			Date landingTime, Date flightDate, Integer numberOfEconomySeats, Integer numberOfBusinessSeats,
-			String status, String basicPrice, Integer isActive, Set<Ticket> tickets) {
+	public Flight(String flightId, Aircraft aircraft, Airport airportByDestinationId, Airport airportByDepartureId,
+			Date takeOffTime, Date landingTime, Date flightDate, Integer numberOfEconomySeats,
+			Integer numberOfBusinessSeats, String status, String basicPrice, Integer isActive, Set<Ticket> tickets) {
 		this.flightId = flightId;
 		this.aircraft = aircraft;
-		this.airport = airport;
+		this.airportByDestinationId = airportByDestinationId;
+		this.airportByDepartureId = airportByDepartureId;
 		this.takeOffTime = takeOffTime;
-		this.destinationId = destinationId;
 		this.landingTime = landingTime;
 		this.flightDate = flightDate;
 		this.numberOfEconomySeats = numberOfEconomySeats;
@@ -85,13 +85,23 @@ public class Flight implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "Departure_ID", nullable = false)
-	public Airport getAirport() {
-		return this.airport;
+	@JoinColumn(name = "Destination_ID")
+	public Airport getAirportByDestinationId() {
+		return this.airportByDestinationId;
 	}
 
-	public void setAirport(Airport airport) {
-		this.airport = airport;
+	public void setAirportByDestinationId(Airport airportByDestinationId) {
+		this.airportByDestinationId = airportByDestinationId;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "Departure_ID", nullable = false)
+	public Airport getAirportByDepartureId() {
+		return this.airportByDepartureId;
+	}
+
+	public void setAirportByDepartureId(Airport airportByDepartureId) {
+		this.airportByDepartureId = airportByDepartureId;
 	}
 
 	@Temporal(TemporalType.TIME)
@@ -102,15 +112,6 @@ public class Flight implements java.io.Serializable {
 
 	public void setTakeOffTime(Date takeOffTime) {
 		this.takeOffTime = takeOffTime;
-	}
-
-	@Column(name = "Destination_ID", length = 100)
-	public String getDestinationId() {
-		return this.destinationId;
-	}
-
-	public void setDestinationId(String destinationId) {
-		this.destinationId = destinationId;
 	}
 
 	@Temporal(TemporalType.TIME)
