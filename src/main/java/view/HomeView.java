@@ -104,6 +104,7 @@ public class HomeView extends JFrame {
 
 	public HomeView() {
 		this.employeeModel = new EmployeeModel();
+		this.flightModel = new FlightModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1280,720);
 		setResizable(false);
@@ -247,6 +248,7 @@ public class HomeView extends JFrame {
         searchFlightBtn.setIcon(scaledIconSearch);
 		
 		tableFlight = new JTable();
+		tableFlight.setFont(font_JetBrains);
 		tableFlight.setBackground(Color.LIGHT_GRAY);
 		tableFlight.setBounds(23, 0, 933, 597);
 		tableFlight.setModel(new DefaultTableModel(
@@ -258,11 +260,11 @@ public class HomeView extends JFrame {
 		scrollTableFight.setBounds(30, 91, 985, 590);
 		JTableHeader tableFlightHeader = tableFlight.getTableHeader();
 		tableFlightHeader.setFont(font_12_Thin);
-//		loadDataTableFlight();
+		
 		
 		FlightManagement.add(toolFlightPanel);
 		FlightManagement.add(scrollTableFight);
-		
+		loadDataTableFlight();
 		
 		FlightManagement.setVisible(false);
 	}
@@ -759,9 +761,10 @@ public class HomeView extends JFrame {
 		if(flights.isEmpty())
 			return;
 		for(Flight f: flights) {
+			System.out.println(f.getFlightId() + " " +f.getAircraft().getAircraftId() +" " + f.getAirportByDepartureId().getAirportName());
 			tableModel.addRow(new Object[] {
 					f.getFlightId(),
-					f.getAircraft(),
+					f.getAircraft().getAircraftId(),
 					f.getAirportByDepartureId().getAirportName(),
 					f.getAirportByDestinationId().getAirportName(),
 					f.getNumberOfBusinessSeats(),

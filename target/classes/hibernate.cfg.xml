@@ -12,6 +12,7 @@
         <property name="hibernate.hbm2ddl.auto">none</property>
         <property name="hibernate.search.autoregister_listeners">true</property>
         <property name="hibernate.validator.apply_to_ddl">false</property>
+        <property name="hibernate.enable_lazy_load_no_trans">true</property>
         <mapping class="entities.Aircraft" />
         <mapping class="entities.Ticket" />
         <mapping class="entities.Account" />
