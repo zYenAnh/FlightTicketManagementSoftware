@@ -2,23 +2,52 @@ package view;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Properties;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Color; 
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.JFormattedTextField.AbstractFormatter;
+import javax.swing.border.EtchedBorder;
+
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.SqlDateModel;
+
+import entities.Province;
+
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
 public class InputFlightView extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField inputFlightID;
-	private JTextField inputAircraftID;
-	private JTextField inputAirpodID;
-	private JTextField inputDeparture;
+	private JTextField FlightTextField;
+	private JTextField dateofbirth;
+	private JTextField citizenidentifyTextField;
+	private JTextField phoneTextField;
+	private ActionListener empIEFController;
+	private JDatePickerImpl dateDeparturePicker;
+	private JComboBox departureComboBox;
+	private JComboBox roleComboBox;
+	private JComboBox destinationComboBox;
+	
+	
 
+	public int rowSelectedIndex;
+	
+	Font font_16 = new Font("Poppins", Font.BOLD, 16);
+	Font font_14_Thin = new Font("Poppins", Font.PLAIN, 14);
+	private JTextField priceTextField;
 	/**
 	 * Launch the application.
 	 */
@@ -42,115 +71,141 @@ public class InputFlightView extends JFrame {
 		int Location_jtx = 185;
 		Font font_LucidaFont_18 = new Font("Lucida Grande", Font.BOLD, 18);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(450, 550);
+		setSize(456, 569);
 		setLocationRelativeTo(null);	
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		JLabel lblNewLabel = new JLabel("Flight Information");
+		lblNewLabel.setFont(new Font("Poppins", Font.BOLD | Font.ITALIC, 30));
+		lblNewLabel.setBounds(98, 5, 278, 51);
+		contentPane.add(lblNewLabel);
+		
 		JPanel inputPanel = new JPanel();
-		inputPanel.setBackground(Color.LIGHT_GRAY);
-		inputPanel.setBounds(0, 0, 450, 470);
+		inputPanel.setBounds(32, 60, 379, 369);
+		inputPanel.setLayout(new GridLayout(8,2,0,20));
 		contentPane.add(inputPanel);
-		inputPanel.setLayout(null);
 		
-		JLabel lblFlightID = new JLabel("Flight ID");
-		lblFlightID.setFont(font_LucidaFont_18);
-		lblFlightID.setBounds(13, 15, 147, 22);
-		inputPanel.add(lblFlightID);
+		JLabel flightLable = new JLabel("Flight");
+		flightLable.setFont(font_14_Thin);
+		flightLable.setHorizontalAlignment(SwingConstants.CENTER);
+		inputPanel.add(flightLable);
 		
-		JLabel lblAircraftID = new JLabel("Aircraft ID");
-		lblAircraftID.setFont(font_LucidaFont_18);
-		lblAircraftID.setBounds(13, 75, 147, 16);
-		inputPanel.add(lblAircraftID);
+		FlightTextField = new JTextField();
+		FlightTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		inputPanel.add(FlightTextField);
+		FlightTextField.setColumns(10);
 		
-		JLabel lblAirpodID = new JLabel("Airpod ID");
-		lblAirpodID.setFont(font_LucidaFont_18);
-		lblAirpodID.setBounds(13, 135, 147, 29);
-		inputPanel.add(lblAirpodID);
+		JLabel roleLable = new JLabel("Aircraft");
+		roleLable.setFont(font_14_Thin);
+		roleLable.setHorizontalAlignment(SwingConstants.CENTER);
+		inputPanel.add(roleLable);
 		
-		JLabel lblDeparture = new JLabel("Departure");
-		lblDeparture.setFont(font_LucidaFont_18);
-		lblDeparture.setBounds(13, 195, 132, 22);
-		inputPanel.add(lblDeparture);
+		roleComboBox = new JComboBox();
+		roleComboBox.addItem("Management Staff");
+		roleComboBox.addItem("Ticket Seller");
+		inputPanel.add(roleComboBox);
 		
-		JLabel lblTofT = new JLabel("Take Off Time");
-		lblTofT.setFont(font_LucidaFont_18);
-		lblTofT.setBounds(13, 255, 147, 28);
-		inputPanel.add(lblTofT);
+		JLabel genderLable = new JLabel("Departure");
+		genderLable.setFont(font_14_Thin);
+		genderLable.setHorizontalAlignment(SwingConstants.CENTER);
+		inputPanel.add(genderLable);
 		
-		JLabel lblDes = new JLabel("Destination");
-		lblDes.setFont(font_LucidaFont_18);
-		lblDes.setBounds(13, 315, 160, 22);
-		inputPanel.add(lblDes);
+		departureComboBox = new JComboBox();
+		departureComboBox.addItem("Male");
+		departureComboBox.addItem("Female");
+		inputPanel.add(departureComboBox);
 		
-		JLabel lblLandingTime = new JLabel("Landing Time");
-		lblLandingTime.setFont(new Font("Lucida Grande", Font.BOLD, 18));
-		lblLandingTime.setBounds(13, 375, 160, 22);
-		inputPanel.add(lblLandingTime);
+		JLabel destinationLable = new JLabel("Destination");
+		destinationLable.setFont(font_14_Thin);
+		destinationLable.setHorizontalAlignment(SwingConstants.CENTER);
+		inputPanel.add(destinationLable);
 		
-		JLabel lblStatus = new JLabel("Status");
-		lblStatus.setFont(new Font("Lucida Grande", Font.BOLD, 18));
-		lblStatus.setBounds(13, 435, 160, 22);
-		inputPanel.add(lblStatus);
+		destinationComboBox = new JComboBox();
 		
-		inputFlightID = new JTextField();
-		inputFlightID.setColumns(10);
-		inputFlightID.setBounds(Location_jtx, 15, 247, 22);
-		inputPanel.add(inputFlightID);
+		inputPanel.add(destinationComboBox);
 		
-		inputAircraftID = new JTextField();
-		inputAircraftID.setColumns(10);
-		inputAircraftID.setBounds(Location_jtx, 75, 247, 22);
-		inputPanel.add(inputAircraftID);
+		JLabel flightDateLable = new JLabel("flightDate");
+		flightDateLable.setFont(font_14_Thin);
+		flightDateLable.setHorizontalAlignment(SwingConstants.CENTER);
+		inputPanel.add(flightDateLable);
 		
-		inputAirpodID = new JTextField();
-		inputAirpodID.setColumns(10);
-		inputAirpodID.setBounds(Location_jtx, 135, 247, 22);
-		inputPanel.add(inputAirpodID);
+		SqlDateModel modelSQLDate = new SqlDateModel();
+		Properties properties = new Properties();
+		properties.put("text.day", "Day");
+		properties.put("text.month", "Month");
+		properties.put("text.year", "Year");
 		
-		inputDeparture = new JTextField();
-		inputDeparture.setColumns(10);
-		inputDeparture.setBounds(Location_jtx, 195, 247, 22);
-		inputPanel.add(inputDeparture);
+		JDatePanelImpl panle = new JDatePanelImpl(modelSQLDate, properties);
+		dateDeparturePicker = new JDatePickerImpl(panle, new AbstractFormatter() {
+			
+			@Override
+			public String valueToString(Object value) throws ParseException {
+				if(value!=null) {
+					Calendar calendar = (Calendar) value;
+					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+					String dateString = format.format(calendar.getTime());
+					return dateString;
+				}				
+				return "";
+			}
+			@Override
+			public Object stringToValue(String text) throws ParseException {return null;}
+		});
 		
-		JComboBox cbboxTakeOffTime = new JComboBox();
-		cbboxTakeOffTime.setBackground(Color.WHITE);
-		cbboxTakeOffTime.setBounds(Location_jtx, 255, 250, 22);
-		inputPanel.add(cbboxTakeOffTime);
+		inputPanel.add(dateDeparturePicker);
+		ArrayList<Province> provinces = Province.getDSTinh();
+		for(Province p: provinces) {
+			destinationComboBox.addItem(p.getTenTinhString());
+		}
 		
-		JComboBox cbboxDestination = new JComboBox();
-		cbboxDestination.setBackground(Color.WHITE);
-		cbboxDestination.setBounds(185, 315, 250, 22);
-		inputPanel.add(cbboxDestination);
+		JLabel takeOfTimeLable = new JLabel("TakeOfTime");
+		takeOfTimeLable.setFont(font_14_Thin);
+		takeOfTimeLable.setHorizontalAlignment(SwingConstants.CENTER);
+		inputPanel.add(takeOfTimeLable);
 		
-		JComboBox cbboxLandingTime = new JComboBox();
-		cbboxLandingTime.setBackground(Color.WHITE);
-		cbboxLandingTime.setBounds(Location_jtx, 375, 250, 22);
-		inputPanel.add(cbboxLandingTime);
+		citizenidentifyTextField = new JTextField();
+		citizenidentifyTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		inputPanel.add(citizenidentifyTextField);
+		citizenidentifyTextField.setColumns(10);
 		
-		JComboBox cbboxStatus = new JComboBox();
-		cbboxStatus.setBackground(Color.WHITE);
-		cbboxStatus.setBounds(Location_jtx, 435, 250, 22);
-		inputPanel.add(cbboxStatus);
+		JLabel phoneLable = new JLabel("LandingTime");
+		phoneLable.setFont(font_14_Thin);
+		phoneLable.setHorizontalAlignment(SwingConstants.CENTER);
+		inputPanel.add(phoneLable);
 		
-		JPanel btnPanel =  new JPanel();
-		btnPanel.setBackground(Color.LIGHT_GRAY);
-		btnPanel.setForeground(Color.BLACK);
-		btnPanel.setBounds(0, 470, 450, 52);
-		contentPane.add(btnPanel);
-		btnPanel.setLayout(null);
+		phoneTextField = new JTextField();
+		phoneTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		inputPanel.add(phoneTextField);
+		phoneTextField.setColumns(10);
 		
-		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setForeground(Color.RED);
-		btnCancel.setBackground(Color.WHITE);
-		btnCancel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-		btnCancel.setBounds(43, 0, 127, 49);
-		btnPanel.add(btnCancel);
+		JLabel lblPricebasic = new JLabel("PriceBasic");
+		lblPricebasic.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPricebasic.setFont(new Font("Poppins", Font.PLAIN, 14));
+		inputPanel.add(lblPricebasic);
 		
-		JButton btnSave = new JButton("Save");
-		btnSave.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-		btnSave.setBounds(285, 0, 127, 49);
-		btnPanel.add(btnSave);
+		priceTextField = new JTextField();
+		priceTextField.setColumns(10);
+		priceTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		inputPanel.add(priceTextField);
+		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setBounds(72, 458, 304, 51);
+		buttonPanel.setLayout(new GridLayout(1,2,30,0));
+		contentPane.add(buttonPanel);
+		
+		JButton cancelBtn = new JButton("Cancel");
+		cancelBtn.addActionListener(empIEFController);
+		cancelBtn.setFont(font_16);
+		cancelBtn.setForeground(Color.RED);
+		buttonPanel.add(cancelBtn);
+		
+		JButton saveBtn = new JButton("Save");
+		saveBtn.addActionListener(empIEFController);
+		saveBtn.setFont(font_16);
+		buttonPanel.add(saveBtn);
+//		if(this.homeView.selectedKey=="Modify")
+//			loadEmpToInputCell();
 	}
 }

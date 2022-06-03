@@ -261,6 +261,7 @@ public class HomeView extends JFrame {
 		JTableHeader tableFlightHeader = tableFlight.getTableHeader();
 		tableFlightHeader.setFont(font_12_Thin);
 		
+		tableFlight.setRowHeight(30);
 		
 		FlightManagement.add(toolFlightPanel);
 		FlightManagement.add(scrollTableFight);
