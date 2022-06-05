@@ -21,13 +21,19 @@ import org.jdatepicker.impl.SqlDateModel;
 
 import controller.NavigationController;
 import controller.TabEmployeeManagementController;
+import controller.TabFlightManagementController;
 import dataAccessObject.AccountDAO;
 import dataAccessObject.EmployeeDAO;
+import dataAccessObject.FlightDAO;
 import entities.Account;
+import entities.Airport;
+import entities.AirportModel;
 import entities.Employee;
 import entities.EmployeeModel;
 import entities.Flight;
 import entities.FlightModel;
+import entities.Ticket;
+import entities.TicketModel;
 import net.bytebuddy.asm.Advice.This;
 
 import javax.swing.JLabel;
@@ -47,6 +53,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URL;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,7 +77,9 @@ import java.awt.event.ActionEvent;
 
 public class HomeView extends JFrame {
 
+	private AirportModel airportModel;
 	private EmployeeModel employeeModel;
+	private TicketModel ticketModel;
 	private FlightModel flightModel;
 	private JPanel mainPanel;
 	private JTextField searchTextField;
@@ -86,12 +95,16 @@ public class HomeView extends JFrame {
 	public JButton btnFlightMNM;
 	public JButton btnEmployeeMNM;
 	public JButton btnInvoiceMNM;
+	private JComboBox departureComboBox;
+	private JComboBox destinationComboBox;
+	JDatePickerImpl dateDeparturePicker;
 
 	public JButton PREBUTTON;
 	public String selectedKey = "";
 	
 	ActionListener acNavigation = new NavigationController(this);
 	ActionListener acTabEmployee = new TabEmployeeManagementController(this);
+	ActionListener acTabFlight = new TabFlightManagementController(this);
 	
 	Font font_JetBrains = new Font("JetBrains Mono", Font.BOLD, 12);
 	Font font_20 = new Font("Poppins", Font.BOLD, 18);
@@ -103,6 +116,8 @@ public class HomeView extends JFrame {
 	Font font_10 = new Font("Poppins", Font.BOLD, 10);
 
 	public HomeView() {
+		this.ticketModel = new TicketModel();
+		this.airportModel = new AirportModel();
 		this.employeeModel = new EmployeeModel();
 		this.flightModel = new FlightModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -141,6 +156,7 @@ public class HomeView extends JFrame {
 		
 	// Add
 		JButton addFlightBtn = new JButton();
+		addFlightBtn.addActionListener(acTabFlight);
 		addFlightBtn.setFont(font_12_Thin);
 		addFlightBtn.setText("Add");
 		addFlightBtn.setBounds(18, 1, 126, 57);
@@ -153,6 +169,7 @@ public class HomeView extends JFrame {
 		
 	// Delete
 		JButton deleteFlightBtn = new JButton("Delete");
+		deleteFlightBtn.addActionListener(acTabFlight);
 		deleteFlightBtn.setFont(font_12_Thin);
 		deleteFlightBtn.setBounds(157, 1, 126, 57);
 		toolFlightPanel.add(deleteFlightBtn);
@@ -164,6 +181,7 @@ public class HomeView extends JFrame {
 		
 	// Modify
 		JButton modifyFlightBtn = new JButton("Modify");
+		modifyFlightBtn.addActionListener(acTabFlight);
 		modifyFlightBtn.setFont(font_12_Thin);
 		modifyFlightBtn.setBounds(293, 1, 126, 57);
 		toolFlightPanel.add(modifyFlightBtn);
@@ -175,6 +193,7 @@ public class HomeView extends JFrame {
 		
 	// Refresh
 		JButton refreshFlightBtn = new JButton("Refresh");
+		refreshFlightBtn.addActionListener(acTabFlight);
 		refreshFlightBtn.setFont(font_12_Thin);
 		refreshFlightBtn.setBounds(429, 1, 126, 57);
 		toolFlightPanel.add(refreshFlightBtn);
@@ -184,14 +203,16 @@ public class HomeView extends JFrame {
         ImageIcon scaleIconRefresh = new ImageIcon(imgRefreshScale);
         refreshFlightBtn.setIcon(scaleIconRefresh);
 		
+        
+        ArrayList<Airport> airports = this.airportModel.getAirports();
 	// Departure
 		JLabel departureLable = new JLabel("Departure");
 		departureLable.setBounds(565, 9, 97, 14);
 		departureLable.setFont(font_12);
 		toolFlightPanel.add(departureLable);
 		
-		JComboBox departureComboBox = new JComboBox();
-		departureComboBox.setFont(font_12_Thin);
+		departureComboBox = new JComboBox();
+		departureComboBox.setFont(font_JetBrains);
 		departureComboBox.setBounds(644, 1, 153, 31);
 		toolFlightPanel.add(departureComboBox);
 		
@@ -201,18 +222,22 @@ public class HomeView extends JFrame {
 		destinationLable.setBounds(565, 50, 108, 14);
 		toolFlightPanel.add(destinationLable);
 		
-		JComboBox destinationComboBox = new JComboBox();
-		departureComboBox.setFont(font_12_Thin);
+		destinationComboBox = new JComboBox();
+		destinationComboBox.setFont(font_JetBrains);
 		destinationComboBox.setBounds(644, 42, 153, 31);
 		toolFlightPanel.add(destinationComboBox);
 		
+		
+		for(Airport a:airports) {
+			departureComboBox.addItem(a.getAirportName());
+			destinationComboBox.addItem(a.getAirportName());
+		}
 	// Choose Flight day	
 		JLabel lblDepartureDay = new JLabel("Date");
 		lblDepartureDay.setFont(font_12);
 		lblDepartureDay.setBounds(820, 9, 41, 14);
 		toolFlightPanel.add(lblDepartureDay);
 		
-		JDatePickerImpl dateDeparturePicker;
 		SqlDateModel modelSQLDate = new SqlDateModel();
 		Properties properties = new Properties();
 		properties.put("text.day", "Day");
@@ -238,6 +263,7 @@ public class HomeView extends JFrame {
 		
 		//Create Button Search
 		JButton searchFlightBtn = new JButton("Search");
+		searchFlightBtn.addActionListener(acTabFlight);
 		searchFlightBtn.setBounds(820, 41, 187, 31);
 		searchFlightBtn.setFont(font_20);
 		toolFlightPanel.add(searchFlightBtn);
@@ -249,23 +275,52 @@ public class HomeView extends JFrame {
 		
 		tableFlight = new JTable();
 		tableFlight.setFont(font_JetBrains);
-		tableFlight.setBackground(Color.LIGHT_GRAY);
 		tableFlight.setBounds(23, 0, 933, 597);
 		tableFlight.setModel(new DefaultTableModel(
 				new Object [][] {},
 				new String[] { 
-						"Flight ID", " AirCraft ", "Departure", "Destination", "Business ticket", "General ticket", "Take-Off Time", "Landing Time", "Price business", "Price general"
+						"Flight ID", " AirCraft ", "Departure", "Destination", "Business ticket", "General ticket", "Take-Off Time", "Landing Time", "Date", "Price"
 				}));
 		JScrollPane scrollTableFight = new JScrollPane(tableFlight);
 		scrollTableFight.setBounds(30, 91, 985, 590);
 		JTableHeader tableFlightHeader = tableFlight.getTableHeader();
 		tableFlightHeader.setFont(font_12_Thin);
 		
+		final RowPopupFlight popTableFlight =new RowPopupFlight(tableFlight,this);
+		
+		tableFlight.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if(SwingUtilities.isRightMouseButton(e)) {
+					popTableFlight.show(e.getComponent(),e.getX(),e.getY());
+				}
+			}
+		});
+		
+		tableFlight.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseReleased(MouseEvent e) {
+		        int r = tableFlight.rowAtPoint(e.getPoint());
+		        if (r >= 0 && r < tableFlight.getRowCount()) {
+		        	tableFlight.setRowSelectionInterval(r, r);
+		        } else {
+		        	tableFlight.clearSelection();
+		        }
+
+		        int rowindex = tableFlight.getSelectedRow();
+		        if (rowindex < 0)
+		            return;
+		        if (e.isPopupTrigger() && e.getComponent() instanceof JTable ) {
+		            JPopupMenu popup = popTableFlight;
+		            popup.show(e.getComponent(), e.getX(), e.getY());
+		        }
+		    }
+		});
+		
 		tableFlight.setRowHeight(30);
 		
 		FlightManagement.add(toolFlightPanel);
 		FlightManagement.add(scrollTableFight);
-		loadDataTableFlight();
+		loadDataTableFlight(this.flightModel.getFlights());
 		
 		FlightManagement.setVisible(false);
 	}
@@ -354,17 +409,19 @@ public class HomeView extends JFrame {
 		
 // Create Table
 		tableTicket = new JTable();
-		tableTicket.setBackground(Color.LIGHT_GRAY);
+		tableTicket.setFont(font_JetBrains);
 		tableTicket.setBounds(23, 0, 933, 597);
 		tableTicket.setModel(new DefaultTableModel(
 				new Object [][] {},
 				new String[] { 
-						"Ticket ID", "Flight ", "Customer Name", "Employee Name", "Ticket Type", "Passenger Name", "Boarding Time", "Flight Date"
+						"Ticket ID", "Flight", "Passenger's Name", "Creator", "Ticket Type", "Boarding Time", "Flight Date"
 				}));
 		JScrollPane tableTicketScrollPane = new JScrollPane(tableTicket);
 		tableTicketScrollPane.setBounds(30, 91, 985, 590);
 		JTableHeader tableTicketHeader = tableTicket.getTableHeader();
 		tableTicketHeader.setFont(font_12_Thin);
+		tableTicket.setRowHeight(30);
+		loadDataTableTicket(this.ticketModel.getTickets());
 		
 		ticketManagementPanel.add(toolTabTicketPanel,BorderLayout.NORTH);
 		ticketManagementPanel.add(tableTicketScrollPane, BorderLayout.CENTER);
@@ -469,7 +526,7 @@ public class HomeView extends JFrame {
 						"ID", "Name", "Role", "Gender", "Date of birth", "Phone", "Address", "CitizenIdentify"
 				}));
 		
-		final RowPopup popTableEmp =new RowPopup(tableEmployee);
+		final RowPopupEmp popTableEmp =new RowPopupEmp(tableEmployee);
 		
 		tableEmployee.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -693,6 +750,22 @@ public class HomeView extends JFrame {
 	public void setEmployeeModel(EmployeeModel employeeModel) {
 		this.employeeModel = employeeModel;
 	}
+	
+	public FlightModel getFlightModel() {
+		return flightModel;
+	}
+
+	public void setFlightModel(FlightModel flightModel) {
+		this.flightModel = flightModel;
+	}
+	
+	public TicketModel getTicketModel() {
+		return ticketModel;
+	}
+
+	public void setTicketModel(TicketModel ticketModel) {
+		this.ticketModel = ticketModel;
+	}
 
 	public void loadDataTableEmployee() {
 		DefaultTableModel tableModel = (DefaultTableModel) tableEmployee.getModel();
@@ -736,33 +809,45 @@ public class HomeView extends JFrame {
 		loadDataTableEmployee();
 	}
 	
-	class RowPopup extends JPopupMenu {
-		private static final long serialVersionUID = 365419627976873526L;
-		
-		public RowPopup(JTable table) {
-			JMenuItem edit  = new JMenuItem("Edit");
-			JMenuItem active = new JMenuItem("Active");
-			
-			active.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					
-				}
-			});
-			this.add(edit);
-			this.add(active);
-		}
+	public boolean compareDate(java.util.Date d1, Date d2) {
+		if(d1.getDate()==d2.getDate() && d1.getMonth() == d2.getMonth() && d1.getYear() == d2.getYear())
+			return true;
+		return false;
 	}
 	
-//	"Flight ID", " AirCraft ", "Departure", "Destination", "Business ticket", "General ticket", "Take-Off Time", "Landing Time", "Status", "Price"
-	public void loadDataTableFlight() {
+	public void searchFlight() {
+		ArrayList<Flight> listFlightSearch = new ArrayList<Flight>();
+		String departure = this.departureComboBox.getSelectedItem()+"";
+		String destination = this.destinationComboBox.getSelectedItem()+"";
+		Date dateSelected = (Date) this.dateDeparturePicker.getModel().getValue();
+		if(departure.equals(destination)) {
+			JOptionPane.showMessageDialog(null,"Departure and destination cannot be the same");
+		} else {
+			ArrayList<Flight> flights = this.flightModel.getFlights();
+			if(dateSelected == null) {
+				for(Flight f:flights) {
+					if(f.getAirportByDepartureId().getAirportName().equals(departure) && f.getAirportByDestinationId().getAirportName().equals(destination)) {
+						listFlightSearch.add(f);
+					}
+				}
+			} else {
+				for(Flight f:flights) {
+					if(f.getAirportByDepartureId().getAirportName().equals(departure) && f.getAirportByDestinationId().getAirportName().equals(destination) && compareDate(f.getFlightDate(), dateSelected)) {
+						listFlightSearch.add(f);
+					}
+				}
+			}
+		}
+		if(!listFlightSearch.isEmpty())
+			loadDataTableFlight(listFlightSearch);
+	}
+	
+	public void loadDataTableFlight(ArrayList<Flight> flights) {
 		DefaultTableModel tableModel = (DefaultTableModel) tableFlight.getModel();
-		ArrayList<Flight> flights = flightModel.getFlights();
+		tableModel.getDataVector().removeAllElements();
 		if(flights.isEmpty())
 			return;
 		for(Flight f: flights) {
-			System.out.println(f.getFlightId() + " " +f.getAircraft().getAircraftId() +" " + f.getAirportByDepartureId().getAirportName());
 			tableModel.addRow(new Object[] {
 					f.getFlightId(),
 					f.getAircraft().getAircraftId(),
@@ -772,9 +857,45 @@ public class HomeView extends JFrame {
 					f.getNumberOfEconomySeats(),
 					f.getTakeOffTime(),
 					f.getLandingTime(),
-					f.getStatus(),
+					f.getFlightDate(),
 					f.getBasicPrice()
 			});
 		}
 	}
+	
+	public void deleteFlight() {
+		int rowIndex = this.tableFlight.getSelectedRow();
+		DefaultTableModel tableModel = (DefaultTableModel) this.tableFlight.getModel();
+		String idSelect = tableModel.getValueAt(rowIndex, 0).toString();
+		ArrayList<Flight> flights = this.flightModel.getFlights();
+		for(Flight f : flights) {
+			if(f.getFlightId().equals(idSelect)) {
+				Flight updateF = f;
+				updateF.setIsActive(0);
+				FlightDAO.getInstance().update(updateF);
+				this.flightModel.remove(f);
+				loadDataTableFlight(this.flightModel.getFlights());
+				return;
+			}	
+		}
+	}
+
+	public void loadDataTableTicket(ArrayList<Ticket> tickets) {
+		DefaultTableModel tableModel = (DefaultTableModel) tableTicket.getModel();
+		tableModel.getDataVector().removeAllElements();
+		if(tickets.isEmpty())
+			return;
+		for(Ticket f: tickets) {
+			tableModel.addRow(new Object[] {
+					f.getTicketId(),
+					f.getFlight().getFlightId(),
+					f.getPassengerName(),
+					f.getEmployee().getEmployeeName(),
+					f.getTicketclass().getTicketClassType(),
+					f.getFlight().getTakeOffTime(),
+					f.getFlight().getFlightDate()
+			});
+		}
+	} 
+	
 }

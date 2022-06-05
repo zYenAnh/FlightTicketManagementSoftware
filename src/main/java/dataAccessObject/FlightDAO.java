@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.hibernate.Session;
 
+import entities.Employee;
 import entities.Flight;
 
 public class FlightDAO implements DAOInterface<Flight>{
@@ -14,20 +15,40 @@ public class FlightDAO implements DAOInterface<Flight>{
 	
 	@Override
 	public int add(Flight t) {
-		// TODO Auto-generated method stub
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.save(t);
+            session.getTransaction().commit();
+            session.close();
+            return 1;
+        } catch (Exception e) {
+			e.printStackTrace();
+        }
 		return 0;
 	}
 
 	@Override
 	public void update(Flight t) {
-		// TODO Auto-generated method stub
-		
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.update(t);
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+			e.printStackTrace();
+        }
 	}
 
 	@Override
 	public void delele(Flight t) {
-		// TODO Auto-generated method stub
-		
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.delete(t);
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+			e.printStackTrace();
+        }
 	}
 
 	@Override
@@ -62,4 +83,16 @@ public class FlightDAO implements DAOInterface<Flight>{
 		return null;
 	}
 
+	public ArrayList<Flight> selectIsActive() {
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            ArrayList<Flight> resultSelect = (ArrayList<Flight>) session.createQuery("FROM Flight E WHERE E.isActive = 1")
+            		.list();
+            session.close();
+            return resultSelect;
+        } catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

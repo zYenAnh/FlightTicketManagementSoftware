@@ -2,14 +2,14 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.org/dtd/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
-  <table-filter match-catalog="flightticketmanagementdatabase" match-name="account"/>
-  <table-filter match-catalog="flightticketmanagementdatabase" match-name="aircraft"/>
-  <table-filter match-catalog="flightticketmanagementdatabase" match-name="airport"/>
-  <table-filter match-catalog="flightticketmanagementdatabase" match-name="customer"/>
-  <table-filter match-catalog="flightticketmanagementdatabase" match-name="employee"/>
-  <table-filter match-catalog="flightticketmanagementdatabase" match-name="flight"/>
-  <table-filter match-catalog="flightticketmanagementdatabase" match-name="invoice"/>
-  <table-filter match-catalog="flightticketmanagementdatabase" match-name="invoicedetail"/>
-  <table-filter match-catalog="flightticketmanagementdatabase" match-name="ticket"/>
-  <table-filter match-catalog="flightticketmanagementdatabase" match-name="ticketclass"/>
+  <table-filter match-catalog="sellticketdb" match-name="account"/>
+  <table-filter match-catalog="sellticketdb" match-name="aircraft"/>
+  <table-filter match-catalog="sellticketdb" match-name="airport"/>
+  <table-filter match-catalog="sellticketdb" match-name="customer"/>
+  <table-filter match-catalog="sellticketdb" match-name="employee"/>
+  <table-filter match-catalog="sellticketdb" match-name="flight"/>
+  <table-filter match-catalog="sellticketdb" match-name="invoice"/>
+  <table-filter match-catalog="sellticketdb" match-name="invoicedetail"/>
+  <table-filter match-catalog="sellticketdb" match-name="ticket"/>
+  <table-filter match-catalog="sellticketdb" match-name="ticketclass"/>
 </hibernate-reverse-engineering>

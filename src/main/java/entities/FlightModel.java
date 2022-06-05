@@ -3,13 +3,14 @@ package entities;
 import java.util.ArrayList;
 
 import dataAccessObject.FlightDAO;
+import net.bytebuddy.asm.Advice.This;
 
 public class FlightModel {
 private ArrayList<Flight> flights;
 	
 	public FlightModel() {
 		this.flights = new ArrayList<Flight>();
-		this.flights = FlightDAO.getInstance().selectAll();
+		this.flights = FlightDAO.getInstance().selectIsActive();
 	}
 	
 	public FlightModel(ArrayList<Flight> listFlight) {
@@ -39,14 +40,13 @@ private ArrayList<Flight> flights;
 		this.flights.remove(i);
 	}
 	
-	public void update(Flight student) {
-//		int i;
-//		for(i=0;i<this.dsSinhVien.size();i++) {
-//			if(this.dsSinhVien.get(i).getMaSinhVienInt()==student.getMaSinhVienInt())
-//				break;
-//		}
-//		this.dsSinhVien.remove(i);
-//		this.dsSinhVien.add(student);
+	public void update(Flight f) {
+		for(int i=0;i<flights.size();i++) {
+			if(f.getFlightId().equals(flights.get(i).getFlightId())) {
+				this.flights.set(i, f);
+				break;
+			}
+		}
 	}
 
 	public boolean kiemTraStudentTonTai(Flight st) {
@@ -55,5 +55,13 @@ private ArrayList<Flight> flights;
 //				return true;
 //		}
 		return false;
+	}
+	
+	public Flight searchById(String id) {
+		for(Flight f: flights) {
+			if(f.getFlightId().equals(id))
+				return f;
+		}
+		return null;
 	}
 }

@@ -17,7 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import java.awt.Color; 
+import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -63,6 +65,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 	
 	Font font_16 = new Font("Poppins", Font.BOLD, 16);
 	Font font_14_Thin = new Font("Poppins", Font.PLAIN, 14);
+	Font font_JetBrains = new Font("JetBrains Mono", Font.BOLD, 12);
 	
 	/**
 	 * Create the frame.
@@ -90,6 +93,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		inputPanel.add(nameLabel);
 		
 		nameTextField = new JTextField();
+		nameTextField.setFont(font_JetBrains);
 		nameTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		inputPanel.add(nameTextField);
 		nameTextField.setColumns(10);
@@ -100,6 +104,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		inputPanel.add(roleLable);
 		
 		roleComboBox = new JComboBox();
+		roleComboBox.setFont(font_JetBrains);
 		roleComboBox.addItem("Management Staff");
 		roleComboBox.addItem("Ticket Seller");
 		inputPanel.add(roleComboBox);
@@ -110,6 +115,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		inputPanel.add(genderLable);
 		
 		genderComboBox = new JComboBox();
+		genderComboBox.setFont(font_JetBrains);
 		genderComboBox.addItem("Male");
 		genderComboBox.addItem("Female");
 		inputPanel.add(genderComboBox);
@@ -141,6 +147,12 @@ public class EmployeeInformationEntryForm extends JFrame {
 			@Override
 			public Object stringToValue(String text) throws ParseException {return null;}
 		});
+		dateDeparturePicker.setPreferredSize(new Dimension(195, 200));
+		dateDeparturePicker.getComponent(0).setFont(font_JetBrains);
+		dateDeparturePicker.getComponent(0).setPreferredSize(new Dimension(80,34)); //JFormattedTextField
+		dateDeparturePicker.getComponent(1).setPreferredSize(new Dimension(40,20));
+		
+		dateDeparturePicker.getJFormattedTextField().setHorizontalAlignment(SwingConstants.LEFT);
 		
 		inputPanel.add(dateDeparturePicker);
 				
@@ -150,6 +162,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		inputPanel.add(addressLable);
 					
 		address = new JComboBox();
+		address.setFont(font_JetBrains);
 		ArrayList<Province> provinces = Province.getDSTinh();
 		for(Province p: provinces) {
 			address.addItem(p.getTenTinhString());
@@ -163,6 +176,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		inputPanel.add(citizenIdentifyLable);
 		
 		citizenidentifyTextField = new JTextField();
+		citizenidentifyTextField.setFont(font_JetBrains);
 		citizenidentifyTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		inputPanel.add(citizenidentifyTextField);
 		citizenidentifyTextField.setColumns(10);
@@ -173,6 +187,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		inputPanel.add(phoneLable);
 		
 		phoneTextField = new JTextField();
+		phoneTextField.setFont(font_JetBrains);
 		phoneTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		inputPanel.add(phoneTextField);
 		phoneTextField.setColumns(10);
@@ -230,7 +245,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		checkAddEmp = EmployeeDAO.getInstance().add(e);
 		if(checkAddEmp!=0) {
 			this.homeView.getEmployeeModel().insert(e);
-			this.homeView.reloadTable();
+			this.homeView.reloadTableEmployee();
 			return checkAddEmp;
 		} else {
 				JOptionPane.showMessageDialog(null,"Employee already exists, please re-enter");
@@ -265,15 +280,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		this.nameTextField.setText(tableModel.getValueAt(rowIndex, 1)+"");
 		this.roleComboBox.setSelectedItem(tableModel.getValueAt(rowIndex, 2));
 		this.genderComboBox.setSelectedItem(tableModel.getValueAt(rowIndex, 3));
-		
-//		dateDeparturePicker.getJFormattedTextField().setText(tableModel.getValueAt(rowIndex, 4)+"");
-//		UtilDateModel modelDateUtil = new UtilDateModel();
-//		modelDateUtil.setDate(1999, 10, 10);
-//		modelDateUtil.setSelected(true);
-//		
-		
-//		dateDeparturePicker.getModel().setValue();
-		
+			
 		Date date = (Date) tableModel.getValueAt(rowIndex, 4);
 		this.phoneTextField.setText(tableModel.getValueAt(rowIndex, 5)+"");
 		this.address.setSelectedItem(tableModel.getValueAt(rowIndex, 6));

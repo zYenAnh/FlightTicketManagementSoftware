@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import dataAccessObject.EmployeeDAO;
 
-public class EmployeeModel {
+public class EmployeeModel implements ModelInterface<Employee>{
 	private ArrayList<Employee> employees;
 	
 	public EmployeeModel() {
@@ -25,10 +25,12 @@ public class EmployeeModel {
 		this.employees = listEmp;
 	}
 	
+	@Override
 	public void insert(Employee emp) {
 		this.employees.add(emp);
 	}
 	
+	@Override
 	public void remove(Employee emp) {
 		int i;
 		for(i=0;i<employees.size();i++) {
@@ -39,22 +41,20 @@ public class EmployeeModel {
 		this.employees.remove(i);
 	}
 	
+	@Override
 	public void update(Employee student) {
-//		int i;
-//		for(i=0;i<this.dsSinhVien.size();i++) {
-//			if(this.dsSinhVien.get(i).getMaSinhVienInt()==student.getMaSinhVienInt())
-//				break;
-//		}
-//		this.dsSinhVien.remove(i);
-//		this.dsSinhVien.add(student);
 	}
 
-	public boolean kiemTraStudentTonTai(Employee st) {
-//		for(Employee student: this.dsSinhVien) {
-//			if(student.getMaSinhVienInt() == st.getMaSinhVienInt())
-//				return true;
-//		}
+	@Override
+	public boolean checkExists(Employee t) {
 		return false;
 	}
 	
+	public Employee searchEmployeeById(int Id) {
+		for(Employee e: employees) {
+			if(e.getEmployeeId() == Id)
+				return e;
+		}
+		return null;
+	}
 }

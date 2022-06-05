@@ -1,6 +1,7 @@
 package dataAccessObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -115,5 +116,24 @@ public class EmployeeDAO implements DAOInterface<Employee>{
 	public int saveOrUpdate(Employee t) {
 		return 0;
 	}
-
+//
+//	public static void main(String[] args) {
+//		Employee employee1 = new Employee();
+//		employee1.setEmployeeName("Thien");
+//		Account account = new Account();
+//		account.setUsername("aaaasa");
+//		account.setEmployee(employee1);
+//		account.setPassword("1231");
+//		HashSet<Account> a= new HashSet<>();
+//		a.add(account);
+//		employee1.setAccounts(a);
+//		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+//            session.beginTransaction();
+//            session.persist(employee1);
+//            session.getTransaction().commit();
+//            session.close();
+//        } catch (Exception e) {
+//			e.printStackTrace();
+//        }
+//	}
 }

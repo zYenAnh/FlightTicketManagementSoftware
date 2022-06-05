@@ -15,7 +15,15 @@ public class AccountDAO implements DAOInterface<Account>{
 	
 	@Override
 	public int add(Account t) {
-		// TODO Auto-generated method stub
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.save(t);
+            session.getTransaction().commit();
+            session.close();
+            return 1;
+        } catch (Exception e) {
+			e.printStackTrace();
+        }
 		return 0;
 	}
 
