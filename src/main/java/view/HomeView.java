@@ -27,13 +27,13 @@ import dataAccessObject.EmployeeDAO;
 import dataAccessObject.FlightDAO;
 import entities.Account;
 import entities.Airport;
-import entities.AirportModel;
 import entities.Employee;
-import entities.EmployeeModel;
 import entities.Flight;
-import entities.FlightModel;
 import entities.Ticket;
-import entities.TicketModel;
+import model.AirportModel;
+import model.EmployeeModel;
+import model.FlightModel;
+import model.TicketModel;
 import net.bytebuddy.asm.Advice.This;
 
 import javax.swing.JLabel;
@@ -54,6 +54,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URL;
 import java.sql.Date;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -98,6 +99,7 @@ public class HomeView extends JFrame {
 	private JComboBox departureComboBox;
 	private JComboBox destinationComboBox;
 	JDatePickerImpl dateDeparturePicker;
+	DecimalFormat format = new DecimalFormat("###,###,###");
 
 	public JButton PREBUTTON;
 	public String selectedKey = "";
@@ -274,6 +276,7 @@ public class HomeView extends JFrame {
         searchFlightBtn.setIcon(scaledIconSearch);
 		
 		tableFlight = new JTable();
+		tableFlight.setDefaultEditor(Object.class, null);
 		tableFlight.setFont(font_JetBrains);
 		tableFlight.setBounds(23, 0, 933, 597);
 		tableFlight.setModel(new DefaultTableModel(
@@ -409,6 +412,7 @@ public class HomeView extends JFrame {
 		
 // Create Table
 		tableTicket = new JTable();
+		tableTicket.setDefaultEditor(Object.class, null);
 		tableTicket.setFont(font_JetBrains);
 		tableTicket.setBounds(23, 0, 933, 597);
 		tableTicket.setModel(new DefaultTableModel(
@@ -848,6 +852,7 @@ public class HomeView extends JFrame {
 		if(flights.isEmpty())
 			return;
 		for(Flight f: flights) {
+			String priceString = format.format(Integer.valueOf(f.getBasicPrice()));
 			tableModel.addRow(new Object[] {
 					f.getFlightId(),
 					f.getAircraft().getAircraftId(),
@@ -858,7 +863,7 @@ public class HomeView extends JFrame {
 					f.getTakeOffTime(),
 					f.getLandingTime(),
 					f.getFlightDate(),
-					f.getBasicPrice()
+					priceString
 			});
 		}
 	}

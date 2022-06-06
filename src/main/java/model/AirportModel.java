@@ -1,8 +1,9 @@
-package entities;
+package model;
 
 import java.util.ArrayList;
 
 import dataAccessObject.AirportDAO;
+import entities.Airport;
 import net.bytebuddy.asm.Advice.This;
 
 public class AirportModel implements ModelInterface<Airport> {

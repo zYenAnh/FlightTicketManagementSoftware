@@ -1,5 +1,5 @@
- package entities;
-// Generated Jun 4, 2022, 9:24:35 AM by Hibernate Tools 4.3.6.Final
+package entities;
+// Generated Jun 6, 2022, 6:02:59 PM by Hibernate Tools 4.3.6.Final
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,7 +38,7 @@ public class Account implements java.io.Serializable {
 		this.role = role;
 		this.isActive = isActive;
 	}
-	
+
 	@Id
 
 	@Column(name = "Username", unique = true, nullable = false, length = 100)
@@ -50,7 +50,7 @@ public class Account implements java.io.Serializable {
 		this.username = username;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "Employee_ID", nullable = false)
 	public Employee getEmployee() {
 		return this.employee;

@@ -1,8 +1,9 @@
-package entities;
+package model;
 
 import java.util.ArrayList;
 
 import dataAccessObject.TicketDAO;
+import entities.Ticket;
 
 public class TicketModel implements ModelInterface<Ticket>{
 

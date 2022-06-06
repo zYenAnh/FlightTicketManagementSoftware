@@ -1,11 +1,7 @@
 package entities;
-// Generated Jun 4, 2022, 9:24:35 AM by Hibernate Tools 4.3.6.Final
+// Generated Jun 6, 2022, 6:02:59 PM by Hibernate Tools 4.3.6.Final
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +10,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,25 +24,25 @@ public class Invoice implements java.io.Serializable {
 	private Integer invoiceId;
 	private Customer customer;
 	private Employee employee;
+	private Ticket ticket;
 	private Date establishedDate;
 	private String total;
-	private Set<Invoicedetail> invoicedetails = new HashSet<Invoicedetail>(0);
 
 	public Invoice() {
 	}
 
-	public Invoice(Customer customer, Employee employee) {
+	public Invoice(Customer customer, Employee employee, Ticket ticket) {
 		this.customer = customer;
 		this.employee = employee;
+		this.ticket = ticket;
 	}
 
-	public Invoice(Customer customer, Employee employee, Date establishedDate, String total,
-			Set<Invoicedetail> invoicedetails) {
+	public Invoice(Customer customer, Employee employee, Ticket ticket, Date establishedDate, String total) {
 		this.customer = customer;
 		this.employee = employee;
+		this.ticket = ticket;
 		this.establishedDate = establishedDate;
 		this.total = total;
-		this.invoicedetails = invoicedetails;
 	}
 
 	@Id
@@ -62,7 +57,7 @@ public class Invoice implements java.io.Serializable {
 		this.invoiceId = invoiceId;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "Customer_ID", nullable = false)
 	public Customer getCustomer() {
 		return this.customer;
@@ -72,7 +67,7 @@ public class Invoice implements java.io.Serializable {
 		this.customer = customer;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "Employee_ID", nullable = false)
 	public Employee getEmployee() {
 		return this.employee;
@@ -80,6 +75,16 @@ public class Invoice implements java.io.Serializable {
 
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "Ticket_ID", nullable = false)
+	public Ticket getTicket() {
+		return this.ticket;
+	}
+
+	public void setTicket(Ticket ticket) {
+		this.ticket = ticket;
 	}
 
 	@Temporal(TemporalType.DATE)
@@ -99,15 +104,6 @@ public class Invoice implements java.io.Serializable {
 
 	public void setTotal(String total) {
 		this.total = total;
-	}
-
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "invoice", cascade = CascadeType.PERSIST)
-	public Set<Invoicedetail> getInvoicedetails() {
-		return this.invoicedetails;
-	}
-
-	public void setInvoicedetails(Set<Invoicedetail> invoicedetails) {
-		this.invoicedetails = invoicedetails;
 	}
 
 }

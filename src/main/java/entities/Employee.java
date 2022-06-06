@@ -1,11 +1,9 @@
 package entities;
-// Generated Jun 4, 2022, 9:24:35 AM by Hibernate Tools 4.3.6.Final
+// Generated Jun 6, 2022, 6:02:59 PM by Hibernate Tools 4.3.6.Final
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -142,7 +140,7 @@ public class Employee implements java.io.Serializable {
 		this.isActive = isActive;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee",cascade = CascadeType.PERSIST)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
 	public Set<Invoice> getInvoices() {
 		return this.invoices;
 	}
@@ -151,7 +149,7 @@ public class Employee implements java.io.Serializable {
 		this.invoices = invoices;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee",cascade = CascadeType.PERSIST)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
 	public Set<Account> getAccounts() {
 		return this.accounts;
 	}
@@ -160,7 +158,7 @@ public class Employee implements java.io.Serializable {
 		this.accounts = accounts;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee",cascade = CascadeType.PERSIST)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
 	public Set<Ticket> getTickets() {
 		return this.tickets;
 	}
@@ -168,4 +166,5 @@ public class Employee implements java.io.Serializable {
 	public void setTickets(Set<Ticket> tickets) {
 		this.tickets = tickets;
 	}
+
 }

@@ -1,8 +1,9 @@
-package entities;
+package model;
 
 import java.util.ArrayList;
 
 import dataAccessObject.FlightDAO;
+import entities.Flight;
 import net.bytebuddy.asm.Advice.This;
 
 public class FlightModel {

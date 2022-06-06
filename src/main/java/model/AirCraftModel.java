@@ -1,9 +1,10 @@
-package entities;
+package model;
 
 import java.util.ArrayList;
 
 import dataAccessObject.AircraftDAO;
 import dataAccessObject.EmployeeDAO;
+import entities.Aircraft;
 
 public class AirCraftModel implements ModelInterface<Aircraft>{
 	

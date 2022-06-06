@@ -21,7 +21,6 @@
         <mapping class="entities.Airport" />
         <mapping class="entities.Invoice" />
         <mapping class="entities.Customer" />
-        <mapping class="entities.Invoicedetail" />
         <mapping class="entities.Ticketclass" />
     </session-factory>
 </hibernate-configuration>

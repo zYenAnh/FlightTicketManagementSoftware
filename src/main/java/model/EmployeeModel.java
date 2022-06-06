@@ -1,8 +1,9 @@
-package entities;
+package model;
 
 import java.util.ArrayList;
 
 import dataAccessObject.EmployeeDAO;
+import entities.Employee;
 
 public class EmployeeModel implements ModelInterface<Employee>{
 	private ArrayList<Employee> employees;

@@ -1,5 +1,5 @@
 package entities;
-// Generated Jun 4, 2022, 9:24:35 AM by Hibernate Tools 4.3.6.Final
+// Generated Jun 6, 2022, 6:02:59 PM by Hibernate Tools 4.3.6.Final
 
 import java.util.Date;
 import java.util.HashSet;
@@ -10,8 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -55,7 +53,7 @@ public class Customer implements java.io.Serializable {
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = IDENTITY)
 
 	@Column(name = "Customer_ID", unique = true, nullable = false)
 	public Integer getCustomerId() {
@@ -130,7 +128,7 @@ public class Customer implements java.io.Serializable {
 		this.isActive = isActive;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "customer", cascade = CascadeType.PERSIST)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.PERSIST)
 	public Set<Invoice> getInvoices() {
 		return this.invoices;
 	}
@@ -139,7 +137,7 @@ public class Customer implements java.io.Serializable {
 		this.invoices = invoices;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "customer", cascade = CascadeType.PERSIST)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.PERSIST)
 	public Set<Ticket> getTickets() {
 		return this.tickets;
 	}
@@ -147,4 +145,5 @@ public class Customer implements java.io.Serializable {
 	public void setTickets(Set<Ticket> tickets) {
 		this.tickets = tickets;
 	}
+
 }

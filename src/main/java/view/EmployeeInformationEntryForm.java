@@ -40,12 +40,13 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 import org.jdatepicker.impl.UtilDateModel;
 
+import controller.CustomKeyListener;
 import controller.InployeeInformationEntryFormController;
 import dataAccessObject.AccountDAO;
 import dataAccessObject.EmployeeDAO;
 import entities.Account;
 import entities.Employee;
-import entities.Province;
+import model.Province;
 
 public class EmployeeInformationEntryForm extends JFrame {
 
@@ -93,6 +94,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		inputPanel.add(nameLabel);
 		
 		nameTextField = new JTextField();
+		nameTextField.addKeyListener(new CustomKeyListener(nameTextField,50));
 		nameTextField.setFont(font_JetBrains);
 		nameTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		inputPanel.add(nameTextField);
@@ -176,6 +178,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		inputPanel.add(citizenIdentifyLable);
 		
 		citizenidentifyTextField = new JTextField();
+		citizenidentifyTextField.addKeyListener(new CustomKeyListener(citizenidentifyTextField,50));
 		citizenidentifyTextField.setFont(font_JetBrains);
 		citizenidentifyTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		inputPanel.add(citizenidentifyTextField);
@@ -187,6 +190,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		inputPanel.add(phoneLable);
 		
 		phoneTextField = new JTextField();
+		phoneTextField.addKeyListener(new CustomKeyListener(phoneTextField, 10));
 		phoneTextField.setFont(font_JetBrains);
 		phoneTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		inputPanel.add(phoneTextField);

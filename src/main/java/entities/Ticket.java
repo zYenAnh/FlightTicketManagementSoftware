@@ -1,5 +1,5 @@
 package entities;
-// Generated Jun 4, 2022, 9:24:35 AM by Hibernate Tools 4.3.6.Final
+// Generated Jun 6, 2022, 6:02:59 PM by Hibernate Tools 4.3.6.Final
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +30,7 @@ public class Ticket implements java.io.Serializable {
 	private Ticketclass ticketclass;
 	private String ticketType;
 	private String passengerName;
-	private Set<Invoicedetail> invoicedetails = new HashSet<Invoicedetail>(0);
+	private Set<Invoice> invoices = new HashSet<Invoice>(0);
 
 	public Ticket() {
 	}
@@ -43,14 +43,14 @@ public class Ticket implements java.io.Serializable {
 	}
 
 	public Ticket(Customer customer, Employee employee, Flight flight, Ticketclass ticketclass, String ticketType,
-			String passengerName, Set<Invoicedetail> invoicedetails) {
+			String passengerName, Set<Invoice> invoices) {
 		this.customer = customer;
 		this.employee = employee;
 		this.flight = flight;
 		this.ticketclass = ticketclass;
 		this.ticketType = ticketType;
 		this.passengerName = passengerName;
-		this.invoicedetails = invoicedetails;
+		this.invoices = invoices;
 	}
 
 	@Id
@@ -65,7 +65,7 @@ public class Ticket implements java.io.Serializable {
 		this.ticketId = ticketId;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "Customer_ID", nullable = false)
 	public Customer getCustomer() {
 		return this.customer;
@@ -75,7 +75,7 @@ public class Ticket implements java.io.Serializable {
 		this.customer = customer;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "Employee_ID", nullable = false)
 	public Employee getEmployee() {
 		return this.employee;
@@ -85,7 +85,7 @@ public class Ticket implements java.io.Serializable {
 		this.employee = employee;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "Flight_ID", nullable = false)
 	public Flight getFlight() {
 		return this.flight;
@@ -95,7 +95,7 @@ public class Ticket implements java.io.Serializable {
 		this.flight = flight;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TicketClass_ID", nullable = false)
 	public Ticketclass getTicketclass() {
 		return this.ticketclass;
@@ -123,13 +123,13 @@ public class Ticket implements java.io.Serializable {
 		this.passengerName = passengerName;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "ticket" , cascade = CascadeType.PERSIST)
-	public Set<Invoicedetail> getInvoicedetails() {
-		return this.invoicedetails;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ticket", cascade = CascadeType.PERSIST)
+	public Set<Invoice> getInvoices() {
+		return this.invoices;
 	}
 
-	public void setInvoicedetails(Set<Invoicedetail> invoicedetails) {
-		this.invoicedetails = invoicedetails;
+	public void setInvoices(Set<Invoice> invoices) {
+		this.invoices = invoices;
 	}
 
 }

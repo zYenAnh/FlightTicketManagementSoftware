@@ -37,14 +37,14 @@ import org.jdatepicker.impl.SqlDateModel;
 import controller.FlightInfomationEntryController;
 import dataAccessObject.EmployeeDAO;
 import dataAccessObject.FlightDAO;
-import entities.AirCraftModel;
 import entities.Aircraft;
 import entities.Airport;
-import entities.AirportModel;
 import entities.Employee;
 import entities.Flight;
-import entities.FlightModel;
-import entities.Province;
+import model.AirCraftModel;
+import model.AirportModel;
+import model.FlightModel;
+import model.Province;
 import net.bytebuddy.asm.Advice.This;
 
 import javax.swing.JComboBox;

@@ -1,4 +1,4 @@
-package entities;
+package model;
 
 public interface ModelInterface<T> {
 	public void insert(T t);

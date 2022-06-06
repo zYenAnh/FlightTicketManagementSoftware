@@ -8,6 +8,9 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -37,26 +40,27 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 
+import controller.CustomKeyListener;
 import controller.FormCreateTicketController;
 import dataAccessObject.CustomerDAO;
 import dataAccessObject.EmployeeDAO;
+import dataAccessObject.FlightDAO;
 import dataAccessObject.HibernateUtils;
+import dataAccessObject.InvoiceDAO;
 import entities.Account;
-import entities.AirCraftModel;
 import entities.Aircraft;
 import entities.Airport;
-import entities.AirportModel;
 import entities.Customer;
 import entities.Employee;
 import entities.Flight;
-import entities.FlightModel;
 import entities.Invoice;
-import entities.Invoicedetail;
-import entities.InvoicedetailId;
-import entities.Province;
 import entities.Ticket;
-import entities.TicketClassModel;
 import entities.Ticketclass;
+import model.AirCraftModel;
+import model.AirportModel;
+import model.FlightModel;
+import model.Province;
+import model.TicketClassModel;
 
 import javax.swing.JSeparator;
 import javax.swing.JTable;
@@ -81,11 +85,13 @@ public class FormCreateTicket extends JFrame {
 	private JComboBox genderCbb;
 	private HomeView homeView;
 	private ActionListener acFormCreateTicket;
+	DecimalFormat format = new DecimalFormat("###,###,###");
 	
 	Font font_16 = new Font("Poppins", Font.BOLD, 16);
 	Font font_14_bold = new Font("Poppins", Font.BOLD, 14);
 	Font font_14_Thin = new Font("Poppins", Font.PLAIN, 14);
 	Font font_JetBrains = new Font("JetBrains Mono", Font.BOLD, 12);
+	Font font_JetBrains_14 = new Font("JetBrains Mono", Font.BOLD, 14);
 	private JTextField nameTxtF;
 	private JTextField textField_1;
 	private JTextField citizenidentifyTxtF;
@@ -112,7 +118,7 @@ public class FormCreateTicket extends JFrame {
 		lblNewLabel.setFont(new Font("Poppins", Font.BOLD | Font.ITALIC, 30));
 		lblNewLabel.setBounds(344, 10, 215, 51);
 		contentPane.add(lblNewLabel);
-		
+	
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setBounds(165, 588, 585, 65);
 		buttonPanel.setLayout(new GridLayout(1,2,30,0));
@@ -141,6 +147,7 @@ public class FormCreateTicket extends JFrame {
 		infoCustomerPanel.add(nameLbl);
 		
 		nameTxtF = new JTextField();
+		nameTxtF.addKeyListener(new CustomKeyListener(nameTxtF, 50));
 		nameTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
 		nameTxtF.setColumns(10);
 		nameTxtF.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -221,6 +228,7 @@ public class FormCreateTicket extends JFrame {
 		infoCustomerPanel.add(phoneLbl);
 		
 		phoneTxtF = new JTextField();
+		phoneTxtF.addKeyListener(new CustomKeyListener(phoneTxtF,10));
 		phoneTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
 		phoneTxtF.setColumns(10);
 		phoneTxtF.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -254,7 +262,7 @@ public class FormCreateTicket extends JFrame {
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		departureLbl = new JLabel("");
-		departureLbl.setFont(font_14_Thin);
+		departureLbl.setFont(font_JetBrains_14);
 		panel.add(departureLbl);
 		
 		JLabel lblNewLabel_3 = new JLabel("To:");
@@ -263,7 +271,7 @@ public class FormCreateTicket extends JFrame {
 		lblNewLabel_3.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		destinationLbl = new JLabel("");
-		destinationLbl.setFont(font_14_Thin);
+		destinationLbl.setFont(font_JetBrains_14);
 		panel.add(destinationLbl);
 		
 		JLabel lblNewLabel_4 = new JLabel("Departure Day: ");
@@ -272,7 +280,7 @@ public class FormCreateTicket extends JFrame {
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		departureDayLbl = new JLabel("");
-		departureDayLbl.setFont(font_14_Thin);
+		departureDayLbl.setFont(font_JetBrains_14);
 		panel.add(departureDayLbl);
 		
 		JLabel lblNewLabel_5 = new JLabel("Departure Time: ");
@@ -281,7 +289,7 @@ public class FormCreateTicket extends JFrame {
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		departureTimeLbl = new JLabel("");
-		departureTimeLbl.setFont(font_14_Thin);
+		departureTimeLbl.setFont(font_JetBrains_14);
 		panel.add(departureTimeLbl);
 		
 		JLabel lblNewLabel_6 = new JLabel("Price:");
@@ -290,7 +298,7 @@ public class FormCreateTicket extends JFrame {
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		priceLbl = new JLabel("");
-		priceLbl.setFont(font_14_Thin);
+		priceLbl.setFont(font_JetBrains_14);
 		panel.add(priceLbl);
 		
 		JSeparator separator_1 = new JSeparator();
@@ -320,42 +328,6 @@ public class FormCreateTicket extends JFrame {
 		customer.setIsActive(1);
 		return customer;
 	}
-	
-	public void createTickett() {
-		DefaultTableModel tableModel = (DefaultTableModel) this.getTable.getModel();
-		Customer customer = getInfoCustomerFromCell();
-		Invoice invoice = new Invoice();
-		InvoicedetailId invoicedetailId = new InvoicedetailId();
-		Date now = new Date();
-		int RowSelect = this.getTable.getSelectedRow();
-		Flight flight = this.homeView.getFlightModel().searchById(tableModel.getValueAt(RowSelect, 0)+"");
-		Employee employee = this.homeView.getEmployeeModel().searchEmployeeById(1);
-		Ticketclass ticketclass = ticketClassModel.searchByName(this.ticketTypeCbb.getSelectedItem()+"");
-		Ticket ticket = new Ticket(customer,employee,flight,ticketclass);
-		Invoicedetail invoicedetail = new Invoicedetail(invoicedetailId,invoice,ticket,1);
-		HashSet<Invoice> invoices = new HashSet<Invoice>();
-		invoices.add(invoice);
-		HashSet<Ticket> tickets = new HashSet<Ticket>();
-		tickets.add(ticket);
-		HashSet<Invoicedetail> invoicedetails = new HashSet<Invoicedetail>();
-		invoicedetails.add(invoicedetail);
-		invoice.setInvoicedetails(invoicedetails);
-		ticket.setInvoicedetails(invoicedetails);
-		
-		employee.setInvoices(invoices);
-		employee.setTickets(tickets);
-		customer.setInvoices(invoices);
-		customer.setTickets(tickets);
-		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
-            session.beginTransaction();
-            session.persist(customer);
-            session.getTransaction().commit();
-            session.close();
-        } catch (Exception e) {
-			e.printStackTrace();
-        }
-	}
-	
 	public void closeForm() {
 		this.setVisible(false);
 	}
@@ -363,18 +335,29 @@ public class FormCreateTicket extends JFrame {
 	public void createTicket() {
 		DefaultTableModel tableModel = (DefaultTableModel) this.getTable.getModel();
 		int RowSelect = this.getTable.getSelectedRow();
-		
+		Date now = new Date();
 		Customer customer = getInfoCustomerFromCell();
 		Flight flight = this.homeView.getFlightModel().searchById(tableModel.getValueAt(RowSelect, 0)+"");
 		Employee employee = this.homeView.getEmployeeModel().searchEmployeeById(1);
 		Ticketclass ticketclass = ticketClassModel.searchByName(this.ticketTypeCbb.getSelectedItem()+"");
+		if(ticketclass.getTicketClassId().equals("BC"))
+			flight.decreaseBCNumber();
+		else {
+			flight.decreaseECNumber();
+		}
 		Ticket ticket = new Ticket(customer,employee,flight,ticketclass);
 		ticket.setPassengerName(customer.getCustomerName());
+		Invoice invoice = new Invoice(customer,employee,ticket,now,flight.getBasicPrice());
+		HashSet<Invoice> invoices = new HashSet<Invoice>();
+		invoices.add(invoice);
+		ticket.setInvoices(invoices);
 		HashSet<Ticket> tickets = new HashSet<Ticket>();
 		tickets.add(ticket);
 		customer.setTickets(tickets);
 		CustomerDAO.getInstance().presist(customer);
+		FlightDAO.getInstance().update(flight);
 		this.homeView.getTicketModel().insert(ticket);
 		this.homeView.loadDataTableTicket(this.homeView.getTicketModel().getTickets());
+		this.homeView.loadDataTableFlight(this.homeView.getFlightModel().getFlights());
 	}
 }

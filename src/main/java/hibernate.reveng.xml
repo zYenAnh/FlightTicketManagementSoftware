@@ -9,7 +9,6 @@
   <table-filter match-catalog="sellticketdb" match-name="employee"/>
   <table-filter match-catalog="sellticketdb" match-name="flight"/>
   <table-filter match-catalog="sellticketdb" match-name="invoice"/>
-  <table-filter match-catalog="sellticketdb" match-name="invoicedetail"/>
   <table-filter match-catalog="sellticketdb" match-name="ticket"/>
   <table-filter match-catalog="sellticketdb" match-name="ticketclass"/>
 </hibernate-reverse-engineering>
