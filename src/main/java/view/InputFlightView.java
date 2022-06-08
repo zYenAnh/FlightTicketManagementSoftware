@@ -327,6 +327,7 @@ public class InputFlightView extends JFrame {
 		result.setAirportByDestinationId(this.airportModel.searchByName(this.destinationComboBox.getSelectedItem()+""));
 		Date dateSelected = (Date) this.dateDeparturePicker.getModel().getValue();
 		result.setTakeOffTime(takeOfTimeTPK.getSelectedTime());
+		
 		result.setLandingTime(landingTimePicker.getSelectedTime());
 		result.setFlightDate(dateSelected);
 		result.setNumberOfBusinessSeats(aircraftSelect.getBusinessClassSeats());

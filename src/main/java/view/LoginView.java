@@ -131,9 +131,9 @@ public class LoginView extends JFrame {
 		String username = this.usernameTextField.getText();
 		String password = this.passwordTextField.getText();
 		if(username.equals("") || password.equals("")) {
-			JOptionPane.showMessageDialog(contentPane, "Bạn chưa nhập tài khoản hoặc mật khẩu! Vui lòng nhập lại.");
+			JOptionPane.showMessageDialog(contentPane, "You have not entered your username or password! Please re-enter!");
 		} else {
-			String condition = "Username = " + "'" +username+ "'" + " AND Password = " + password;
+			String condition = "Username = " + "'" +username+ "'" + " AND Password = " +"'" + password+"'";
 			List<Account> accounts = AccountDAO.getInstance().selectByCondition(condition);
 			if(!accounts.isEmpty()) {
 				if(accounts.get(0).getRole().equals("ADMIN")) {
@@ -144,9 +144,26 @@ public class LoginView extends JFrame {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+				} else if (accounts.get(0).getRole().equals("Management Staff")) {
+					try {
+						UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+						new HomeView();
+						this.setVisible(false);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+						new HomeView();
+						this.setVisible(false);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
+				
 			} else {
-				this.messageLogin.setText("Tài khoản hoặc mật khẩu không đúng! Vui lòng nhập lại");
+				this.messageLogin.setText("Incorrect account or password! Please re-enter!");
 			}
 		}
 		

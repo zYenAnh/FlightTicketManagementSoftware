@@ -26,8 +26,14 @@ public class TicketDAO implements DAOInterface<Ticket>{
 
 	@Override
 	public void delele(Ticket t) {
-		// TODO Auto-generated method stub
-		
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.delete(t);
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+			e.printStackTrace();
+        }
 	}
 
 	@Override

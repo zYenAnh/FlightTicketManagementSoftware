@@ -26,8 +26,8 @@ public class Flight implements java.io.Serializable {
 	private Aircraft aircraft;
 	private Airport airportByDepartureId;
 	private Airport airportByDestinationId;
-	private Date takeOffTime;
-	private Date landingTime;
+	private String takeOffTime;
+	private String landingTime;
 	private Date flightDate;
 	private Integer numberOfEconomySeats;
 	private Integer numberOfBusinessSeats;
@@ -46,7 +46,7 @@ public class Flight implements java.io.Serializable {
 	}
 
 	public Flight(String flightId, Aircraft aircraft, Airport airportByDepartureId, Airport airportByDestinationId,
-			Date takeOffTime, Date landingTime, Date flightDate, Integer numberOfEconomySeats,
+			String takeOffTime, String landingTime, Date flightDate, Integer numberOfEconomySeats,
 			Integer numberOfBusinessSeats, String status, String basicPrice, Integer isActive, Set<Ticket> tickets) {
 		this.flightId = flightId;
 		this.aircraft = aircraft;
@@ -104,23 +104,21 @@ public class Flight implements java.io.Serializable {
 		this.airportByDestinationId = airportByDestinationId;
 	}
 
-	@Temporal(TemporalType.TIME)
 	@Column(name = "TakeOffTime", length = 8)
-	public Date getTakeOffTime() {
+	public String getTakeOffTime() {
 		return this.takeOffTime;
 	}
 
-	public void setTakeOffTime(Date takeOffTime) {
+	public void setTakeOffTime(String takeOffTime) {
 		this.takeOffTime = takeOffTime;
 	}
 
-	@Temporal(TemporalType.TIME)
 	@Column(name = "LandingTime", length = 8)
-	public Date getLandingTime() {
+	public String getLandingTime() {
 		return this.landingTime;
 	}
 
-	public void setLandingTime(Date landingTime) {
+	public void setLandingTime(String landingTime) {
 		this.landingTime = landingTime;
 	}
 

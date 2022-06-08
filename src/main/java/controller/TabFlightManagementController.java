@@ -30,8 +30,12 @@ public class TabFlightManagementController implements ActionListener{
 				e1.printStackTrace();
 			}
 		} else if(src.equals("Delete")) {
-			this.homeView.deleteFlight();
-			this.homeView.getTableFlight().clearSelection();
+			int choose = JOptionPane.showConfirmDialog(homeView,"Are you sure to delete this ticket?");
+			if(choose==0)
+			{
+				this.homeView.deleteFlight();
+				this.homeView.getTableFlight().clearSelection();				
+			}
 		} else if(src.equals("Modify")) {
 			if(this.homeView.getTableFlight().getSelectedRow()!=-1) {
 				try {
@@ -42,7 +46,7 @@ public class TabFlightManagementController implements ActionListener{
 					e1.printStackTrace();
 				}
 			} else {
-				JOptionPane.showMessageDialog(homeView, "Vui lòng chọn đối tượng cần sửa");
+				JOptionPane.showMessageDialog(homeView, "Please select the flight to be edited!");
 			}
 		} else if(src.equals("Refresh")) {
 			this.homeView.loadDataTableFlight(this.homeView.getFlightModel().getFlights());

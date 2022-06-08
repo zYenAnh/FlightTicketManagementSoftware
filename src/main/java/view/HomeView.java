@@ -22,9 +22,11 @@ import org.jdatepicker.impl.SqlDateModel;
 import controller.NavigationController;
 import controller.TabEmployeeManagementController;
 import controller.TabFlightManagementController;
+import controller.TabTicketManagementController;
 import dataAccessObject.AccountDAO;
 import dataAccessObject.EmployeeDAO;
 import dataAccessObject.FlightDAO;
+import dataAccessObject.TicketDAO;
 import entities.Account;
 import entities.Airport;
 import entities.Employee;
@@ -107,6 +109,7 @@ public class HomeView extends JFrame {
 	ActionListener acNavigation = new NavigationController(this);
 	ActionListener acTabEmployee = new TabEmployeeManagementController(this);
 	ActionListener acTabFlight = new TabFlightManagementController(this);
+	ActionListener acTabTicket = new TabTicketManagementController(this);
 	
 	Font font_JetBrains = new Font("JetBrains Mono", Font.BOLD, 12);
 	Font font_20 = new Font("Poppins", Font.BOLD, 18);
@@ -374,7 +377,8 @@ public class HomeView extends JFrame {
         addBtn.setIcon(scaledIconAdd);
 		
 // Create button Delete
-		JButton deleteBtn = new JButton("Delete");
+		JButton deleteBtn = new JButton("Cancel ticket");
+		deleteBtn.addActionListener(acTabTicket);
 		deleteBtn.setFont(font_12_Thin);
 		deleteBtn.setBounds(157, 1, 126, 57);
 		toolTabTicketPanel.add(deleteBtn);
@@ -420,6 +424,37 @@ public class HomeView extends JFrame {
 				new String[] { 
 						"Ticket ID", "Flight", "Passenger's Name", "Creator", "Ticket Type", "Boarding Time", "Flight Date"
 				}));
+		
+		final RowPopupTicket popTableTicket =new RowPopupTicket(tableTicket,this);
+		
+		tableTicket.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if(SwingUtilities.isRightMouseButton(e)) {
+					popTableTicket.show(e.getComponent(),e.getX(),e.getY());
+				}
+			}
+		});
+		
+		tableTicket.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseReleased(MouseEvent e) {
+		        int r = tableTicket.rowAtPoint(e.getPoint());
+		        if (r >= 0 && r < tableTicket.getRowCount()) {
+		        	tableTicket.setRowSelectionInterval(r, r);
+		        } else {
+		        	tableTicket.clearSelection();
+		        }
+
+		        int rowindex = tableTicket.getSelectedRow();
+		        if (rowindex < 0)
+		            return;
+		        if (e.isPopupTrigger() && e.getComponent() instanceof JTable ) {
+		            JPopupMenu popup = popTableTicket;
+		            popup.show(e.getComponent(), e.getX(), e.getY());
+		        }
+		    }
+		});
+		
 		JScrollPane tableTicketScrollPane = new JScrollPane(tableTicket);
 		tableTicketScrollPane.setBounds(30, 91, 985, 590);
 		JTableHeader tableTicketHeader = tableTicket.getTableHeader();
@@ -901,6 +936,28 @@ public class HomeView extends JFrame {
 					f.getFlight().getFlightDate()
 			});
 		}
-	} 
+	}
+	
+	public void cancelTicket() {
+		DefaultTableModel tableModel = (DefaultTableModel) tableTicket.getModel();
+		int rowSelect = tableTicket.getSelectedRow();
+		
+		int ticketId = Integer.valueOf(tableModel.getValueAt(rowSelect, 0)+"");
+		Ticket ticket = this.ticketModel.searchTicketById(ticketId);
+		
+		Flight flight = ticket.getFlight();
+		if(ticket.getTicketclass().getTicketClassId().equals("BC")) {
+			flight.ascendingBCNumber();
+		} else {
+			flight.ascendingECNumber();
+		}
+		
+		ticketModel.remove(ticket);
+		TicketDAO.getInstance().delele(ticket);
+		FlightDAO.getInstance().update(flight);
+		flightModel.update(flight);
+		loadDataTableFlight(this.flightModel.getFlights());
+		loadDataTableTicket(this.ticketModel.getTickets());
+	}
 	
 }

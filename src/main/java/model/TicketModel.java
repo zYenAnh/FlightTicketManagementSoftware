@@ -21,7 +21,7 @@ public class TicketModel implements ModelInterface<Ticket>{
 
 	@Override
 	public void remove(Ticket t) {
-		// TODO Auto-generated method stub
+		this.tickets.remove(t);
 		
 	}
 
@@ -45,6 +45,13 @@ public class TicketModel implements ModelInterface<Ticket>{
 		this.tickets = tickets;
 	}
 	
+	public Ticket searchTicketById(int id) {
+		for(Ticket t: tickets) {
+			if(t.getTicketId()==id)
+				return t;
+		}
+		return null;
+	}
 	
 
 }

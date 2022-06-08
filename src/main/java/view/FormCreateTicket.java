@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -340,10 +341,18 @@ public class FormCreateTicket extends JFrame {
 		Flight flight = this.homeView.getFlightModel().searchById(tableModel.getValueAt(RowSelect, 0)+"");
 		Employee employee = this.homeView.getEmployeeModel().searchEmployeeById(1);
 		Ticketclass ticketclass = ticketClassModel.searchByName(this.ticketTypeCbb.getSelectedItem()+"");
-		if(ticketclass.getTicketClassId().equals("BC"))
+		if(ticketclass.getTicketClassId().equals("BC")) {
+			if (flight.getNumberOfBusinessSeats() == 0) {
+				JOptionPane.showMessageDialog(this, "Sold out!!!");
+				return;
+			}
 			flight.decreaseBCNumber();
-		else {
-			flight.decreaseECNumber();
+		}	else {
+				if (flight.getNumberOfEconomySeats() == 0) {
+					JOptionPane.showMessageDialog(this, "Sold out!!!");
+					return;
+				}
+				flight.decreaseECNumber();
 		}
 		Ticket ticket = new Ticket(customer,employee,flight,ticketclass);
 		ticket.setPassengerName(customer.getCustomerName());

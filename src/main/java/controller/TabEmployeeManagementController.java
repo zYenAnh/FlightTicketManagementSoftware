@@ -35,8 +35,11 @@ public class TabEmployeeManagementController implements ActionListener {
 				ex.printStackTrace();
 			}
 		} else if(src.equals("Delete")) {
-			this.homeView.deleteEmp();
-			this.homeView.getTableEmployee().clearSelection();
+			int choose = JOptionPane.showConfirmDialog(homeView,"Are you sure to delete this employee?");
+			if(choose==0) {
+				this.homeView.deleteEmp();
+				this.homeView.getTableEmployee().clearSelection();				
+			}
 		} else if(src.equals("Modify")) {
 			if(this.homeView.getTableEmployee().getSelectedRow()!=-1) {
 				try {
@@ -47,7 +50,7 @@ public class TabEmployeeManagementController implements ActionListener {
 					ex.printStackTrace();
 				}				
 			} else {
-				JOptionPane.showMessageDialog(homeView, "Vui lòng chọn đối tượng cần sửa");
+				JOptionPane.showMessageDialog(homeView, "Please select the employee to be edited!");
 			}
 		} else if(src.equals("Refresh")) {
 			this.homeView.reloadTableEmployee();
