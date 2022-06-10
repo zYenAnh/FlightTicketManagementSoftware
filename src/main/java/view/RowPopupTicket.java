@@ -28,6 +28,20 @@ public class RowPopupTicket extends JPopupMenu {
 					homeView.cancelTicket();
 			}
 		});
+		
+		detailsTicket.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+					new FormTicketDetails(table, homeView);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		
 		this.add(cancelTicket);
 		this.add(detailsTicket);
 	}

@@ -29,6 +29,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.raven.swing.TimePicker;
+import com.toedter.calendar.JDateChooser;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -58,7 +59,7 @@ public class InputFlightView extends JFrame {
 	private JTextField dateofbirth;
 	private JTextField phoneTextField;
 	private ActionListener empIEFController;
-	private JDatePickerImpl dateDeparturePicker;
+	private JDateChooser dateChooser;
 	private JComboBox departureComboBox;
 	private JComboBox airCraftComboBox;
 	private JComboBox destinationComboBox;
@@ -157,35 +158,8 @@ public class InputFlightView extends JFrame {
 		flightDateLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(flightDateLable);
 		
-		SqlDateModel modelSQLDate = new SqlDateModel();
-		Properties properties = new Properties();
-		properties.put("text.day", "Day");
-		properties.put("text.month", "Month");
-		properties.put("text.year", "Year");
-		
-		JDatePanelImpl panle = new JDatePanelImpl(modelSQLDate, properties);
-		dateDeparturePicker = new JDatePickerImpl(panle, new AbstractFormatter() {
-			
-			@Override
-			public String valueToString(Object value) throws ParseException {
-				if(value!=null) {
-					Calendar calendar = (Calendar) value;
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-					String dateString = format.format(calendar.getTime());
-					return dateString;
-				}				
-				return "";
-			}
-			@Override
-			public Object stringToValue(String text) throws ParseException {return null;}
-		});
-		dateDeparturePicker.setPreferredSize(new Dimension(195, 200));
-		dateDeparturePicker.getComponent(0).setFont(font_JetBrains);
-		dateDeparturePicker.getComponent(0).setPreferredSize(new Dimension(75,28)); //JFormattedTextField
-		dateDeparturePicker.getComponent(1).setPreferredSize(new Dimension(40,20));
-		
-		dateDeparturePicker.getJFormattedTextField().setHorizontalAlignment(SwingConstants.LEFT);
-		inputPanel.add(dateDeparturePicker);
+		dateChooser = new JDateChooser();
+		inputPanel.add(dateChooser);
 		
 		JLabel takeOfTimeLable = new JLabel("TakeOfTime");
 		takeOfTimeLable.setFont(font_14_Thin);
@@ -325,7 +299,7 @@ public class InputFlightView extends JFrame {
 		result.setAircraft(aircraftSelect);
 		result.setAirportByDepartureId(this.airportModel.searchByName(this.departureComboBox.getSelectedItem()+""));
 		result.setAirportByDestinationId(this.airportModel.searchByName(this.destinationComboBox.getSelectedItem()+""));
-		Date dateSelected = (Date) this.dateDeparturePicker.getModel().getValue();
+		Date dateSelected = (Date) dateChooser.getDate();
 		result.setTakeOffTime(takeOfTimeTPK.getSelectedTime());
 		
 		result.setLandingTime(landingTimePicker.getSelectedTime());
@@ -341,13 +315,14 @@ public class InputFlightView extends JFrame {
 	public void loadFlightToInputCell() {
 		int rowIndex = this.homeView.getTableFlight().getSelectedRow();
 		DefaultTableModel tableModel = (DefaultTableModel) this.homeView.getTableFlight().getModel();
-		this.FlightTextField.setText(tableModel.getValueAt(rowIndex, 0)+"");
-		this.airCraftComboBox.setSelectedItem(tableModel.getValueAt(rowIndex, 1));
-		this.departureComboBox.setSelectedItem(tableModel.getValueAt(rowIndex, 2));
-		this.destinationComboBox.setSelectedItem(tableModel.getValueAt(rowIndex, 3));
-		this.takeOfTimeInputLbl.setText(tableModel.getValueAt(rowIndex, 6)+"");
-		this.landingTimeTF.setText(tableModel.getValueAt(rowIndex, 7)+"");
-		this.priceTextField.setText(tableModel.getValueAt(rowIndex, 9)+"");
+		Flight flight = this.homeView.getFlightModel().searchById(tableModel.getValueAt(rowIndex, 0)+"");
+		this.airCraftComboBox.setSelectedItem(flight.getAircraft().getAircraftId());
+		this.departureComboBox.setSelectedItem(flight.getAirportByDepartureId().getAirportName());
+		this.destinationComboBox.setSelectedItem(flight.getAirportByDestinationId().getAirportName());
+		this.takeOfTimeInputLbl.setText(flight.getTakeOffTime());
+		this.landingTimeTF.setText(flight.getLandingTime());
+		this.priceTextField.setText(flight.getBasicPrice());
+		this.dateChooser.setDate(flight.getFlightDate());
 	}
 	
 	

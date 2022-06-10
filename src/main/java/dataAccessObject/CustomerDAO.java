@@ -39,8 +39,14 @@ public class CustomerDAO implements DAOInterface<Customer>{
 
 	@Override
 	public void update(Customer t) {
-		// TODO Auto-generated method stub
-		
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.update(t);
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+			e.printStackTrace();
+        }
 	}
 
 	@Override

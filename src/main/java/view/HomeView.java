@@ -101,6 +101,8 @@ public class HomeView extends JFrame {
 	private JComboBox departureComboBox;
 	private JComboBox destinationComboBox;
 	JDatePickerImpl dateDeparturePicker;
+	private Account loginAccount;
+	
 	DecimalFormat format = new DecimalFormat("###,###,###");
 
 	public JButton PREBUTTON;
@@ -120,7 +122,8 @@ public class HomeView extends JFrame {
 	Font font_8_Thin = new Font("Poppins", Font.PLAIN, 8);
 	Font font_10 = new Font("Poppins", Font.BOLD, 10);
 
-	public HomeView() {
+	public HomeView(Account account,LoginView loginView) {
+		this.loginAccount = account;
 		this.ticketModel = new TicketModel();
 		this.airportModel = new AirportModel();
 		this.employeeModel = new EmployeeModel();
@@ -144,7 +147,45 @@ public class HomeView extends JFrame {
 		FlightManagement.setVisible(false);
 		employeeManagerPanel.setVisible(false);
 		PREBUTTON = this.btnTicketMNM;
+		
+		JLabel UsernameLbl = new JLabel("");
+		UsernameLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		UsernameLbl.setText(account.getEmployee().getEmployeeName());
+		UsernameLbl.setFont(new Font("JetBrains Mono", Font.BOLD, 18));
+		UsernameLbl.setBounds(10, 608, 240, 28);
+		mainPanel.add(UsernameLbl);
+		
+		HomeView homeView = this;
+		
+		JButton logOutBtn = new JButton("Log out");
+		logOutBtn.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int choose = JOptionPane.showConfirmDialog(homeView, "Are you sure you want to sign out?");
+				if(choose==0) {
+					closeForm();
+					loginView.setVisible(true);					
+				}
+			}
+		});
+		logOutBtn.setFont(font_JetBrains);
+		logOutBtn.setBounds(60, 646, 130, 25);
+		mainPanel.add(logOutBtn);
+		handleDecentralization(account);
 		this.setVisible(true);
+	}
+	
+	public void handleDecentralization(Account account) {
+		String role = account.getRole();
+		if(role.equals("ADMIN") || role.equals("Management Staff")) {
+			
+		} else if(role.equals("Ticket Seller")) {
+			btnEmployeeMNM.setEnabled(false);
+		}
+	}
+	
+	public void closeForm() {
+		this.setVisible(false);
 	}
 	
 	public void createTabFlightManagement() {
@@ -391,10 +432,7 @@ public class HomeView extends JFrame {
 // Create button Modify
 		JButton modifyBtn = new JButton("Modify");
 		modifyBtn.setFont(font_12_Thin);
-		modifyBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		modifyBtn.addActionListener(acTabTicket);
 		modifyBtn.setBounds(293, 1, 126, 57);
 		toolTabTicketPanel.add(modifyBtn);
 		ImageIcon modifyIcon = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//settingIcon.png");
@@ -806,6 +844,14 @@ public class HomeView extends JFrame {
 		this.ticketModel = ticketModel;
 	}
 
+	public Account getLoginAccount() {
+		return loginAccount;
+	}
+
+	public void setLoginAccount(Account loginAccount) {
+		this.loginAccount = loginAccount;
+	}
+	
 	public void loadDataTableEmployee() {
 		DefaultTableModel tableModel = (DefaultTableModel) tableEmployee.getModel();
 		ArrayList<Employee> employees = this.employeeModel.getEmployees();
@@ -959,5 +1005,4 @@ public class HomeView extends JFrame {
 		loadDataTableFlight(this.flightModel.getFlights());
 		loadDataTableTicket(this.ticketModel.getTickets());
 	}
-	
 }

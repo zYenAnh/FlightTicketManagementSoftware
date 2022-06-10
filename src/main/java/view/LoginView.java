@@ -136,32 +136,14 @@ public class LoginView extends JFrame {
 			String condition = "Username = " + "'" +username+ "'" + " AND Password = " +"'" + password+"'";
 			List<Account> accounts = AccountDAO.getInstance().selectByCondition(condition);
 			if(!accounts.isEmpty()) {
-				if(accounts.get(0).getRole().equals("ADMIN")) {
-					try {
-						UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-						new HomeView();
-						this.setVisible(false);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				} else if (accounts.get(0).getRole().equals("Management Staff")) {
-					try {
-						UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-						new HomeView();
-						this.setVisible(false);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				} else {
-					try {
-						UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-						new HomeView();
-						this.setVisible(false);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+				Account account = accounts.get(0);
+				try {
+					UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+					new HomeView(account,this);
+					this.setVisible(false);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				
 			} else {
 				this.messageLogin.setText("Incorrect account or password! Please re-enter!");
 			}

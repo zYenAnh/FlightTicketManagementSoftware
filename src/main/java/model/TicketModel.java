@@ -27,8 +27,12 @@ public class TicketModel implements ModelInterface<Ticket>{
 
 	@Override
 	public void update(Ticket t) {
-		// TODO Auto-generated method stub
-		
+		for(int i=0;i<tickets.size();i++) {
+			if(t.getTicketId().equals(tickets.get(i).getTicketId())) {
+				this.tickets.set(i, t);
+				break;
+			}
+		}	
 	}
 
 	@Override

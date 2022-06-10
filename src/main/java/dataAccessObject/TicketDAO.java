@@ -20,8 +20,14 @@ public class TicketDAO implements DAOInterface<Ticket>{
 
 	@Override
 	public void update(Ticket t) {
-		// TODO Auto-generated method stub
-		
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.update(t);
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+			e.printStackTrace();
+        }
 	}
 
 	@Override

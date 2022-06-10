@@ -34,11 +34,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
-import org.jdatepicker.DateModel;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.SqlDateModel;
-import org.jdatepicker.impl.UtilDateModel;
+import com.toedter.calendar.JDateChooser;
 
 import controller.CustomKeyListener;
 import controller.InployeeInformationEntryFormController;
@@ -57,10 +53,10 @@ public class EmployeeInformationEntryForm extends JFrame {
 	private JTextField citizenidentifyTextField;
 	private JTextField phoneTextField;
 	private ActionListener empIEFController;
-	private JDatePickerImpl dateDeparturePicker;
 	private JComboBox genderComboBox;
 	private JComboBox roleComboBox;
-	private JComboBox address;
+	private JTextField address;
+	private JDateChooser dateChooser;
 	
 	public int rowSelectedIndex;
 	
@@ -127,49 +123,16 @@ public class EmployeeInformationEntryForm extends JFrame {
 		dateOfBirthLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(dateOfBirthLable);
 		
-		SqlDateModel modelSQLDate = new SqlDateModel();
-		Properties properties = new Properties();
-		properties.put("text.day", "Day");
-		properties.put("text.month", "Month");
-		properties.put("text.year", "Year");
-		
-		JDatePanelImpl panle = new JDatePanelImpl(modelSQLDate, properties);
-		dateDeparturePicker = new JDatePickerImpl(panle, new AbstractFormatter() {
-			
-			@Override
-			public String valueToString(Object value) throws ParseException {
-				if(value!=null) {
-					Calendar calendar = (Calendar) value;
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-					String dateString = format.format(calendar.getTime());
-					return dateString;
-				}				
-				return "";
-			}
-			@Override
-			public Object stringToValue(String text) throws ParseException {return null;}
-		});
-		dateDeparturePicker.setPreferredSize(new Dimension(195, 200));
-		dateDeparturePicker.getComponent(0).setFont(font_JetBrains);
-		dateDeparturePicker.getComponent(0).setPreferredSize(new Dimension(80,34)); //JFormattedTextField
-		dateDeparturePicker.getComponent(1).setPreferredSize(new Dimension(40,20));
-		
-		dateDeparturePicker.getJFormattedTextField().setHorizontalAlignment(SwingConstants.LEFT);
-		
-		inputPanel.add(dateDeparturePicker);
+		dateChooser = new JDateChooser();
+		inputPanel.add(dateChooser);
 				
 		JLabel addressLable = new JLabel("Address");
 		addressLable.setFont(font_14_Thin);
 		addressLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(addressLable);
 					
-		address = new JComboBox();
+		address = new JTextField();
 		address.setFont(font_JetBrains);
-		ArrayList<Province> provinces = Province.getDSTinh();
-		for(Province p: provinces) {
-			address.addItem(p.getTenTinhString());
-		}
-		
 		inputPanel.add(address);
 		
 		JLabel citizenIdentifyLable = new JLabel("CitizenIdentify");
@@ -268,9 +231,9 @@ public class EmployeeInformationEntryForm extends JFrame {
 		if(rowIndex!=-1)
 			result.setEmployeeId(Integer.valueOf(tableModel.getValueAt(rowIndex, 0)+""));
 		result.setEmployeeName(this.nameTextField.getText());
-		result.setAddress(this.address.getSelectedItem()+"");
+		result.setAddress(this.address.getText());
 		result.setCitizenIdentify(this.citizenidentifyTextField.getText());
-		Date dateSelected = (Date) this.dateDeparturePicker.getModel().getValue();
+		Date dateSelected = (Date) this.dateChooser.getDate();
 		result.setDateOfBirth(dateSelected);
 		result.setPhone(this.phoneTextField.getText());
 		result.setGender(this.genderComboBox.getSelectedItem()+"");
@@ -281,13 +244,13 @@ public class EmployeeInformationEntryForm extends JFrame {
 	public void loadEmpToInputCell() {
 		int rowIndex = this.homeView.getTableEmployee().getSelectedRow();
 		DefaultTableModel tableModel = (DefaultTableModel) this.homeView.getTableEmployee().getModel();
-		this.nameTextField.setText(tableModel.getValueAt(rowIndex, 1)+"");
+		Employee employee = this.homeView.getEmployeeModel().searchEmployeeById( Integer.valueOf(tableModel.getValueAt(rowIndex, 0)+""));
+		this.nameTextField.setText(employee.getEmployeeName());
 		this.roleComboBox.setSelectedItem(tableModel.getValueAt(rowIndex, 2));
-		this.genderComboBox.setSelectedItem(tableModel.getValueAt(rowIndex, 3));
-			
-		Date date = (Date) tableModel.getValueAt(rowIndex, 4);
-		this.phoneTextField.setText(tableModel.getValueAt(rowIndex, 5)+"");
-		this.address.setSelectedItem(tableModel.getValueAt(rowIndex, 6));
-		this.citizenidentifyTextField.setText(tableModel.getValueAt(rowIndex, 7)+"");
+		this.genderComboBox.setSelectedItem(employee.getGender());
+		this.dateChooser.setDate(employee.getDateOfBirth());
+		this.phoneTextField.setText(employee.getPhone());
+		this.address.setText(employee.getAddress());
+		this.citizenidentifyTextField.setText(employee.getCitizenIdentify());
 	}
 }

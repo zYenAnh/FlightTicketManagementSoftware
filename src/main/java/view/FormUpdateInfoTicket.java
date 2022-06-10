@@ -35,6 +35,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.raven.swing.TimePicker;
+import com.toedter.calendar.JDateChooser;
 
 import org.hibernate.Session;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -43,9 +44,16 @@ import org.jdatepicker.impl.SqlDateModel;
 
 import controller.CustomKeyListener;
 import controller.FormCreateTicketController;
+import controller.FormInfoTicketController;
 import dataAccessObject.CustomerDAO;
 import dataAccessObject.EmployeeDAO;
 import dataAccessObject.FlightDAO;
+import dataAccessObject.HibernateUtils;
+import dataAccessObject.InvoiceDAO;
+import dataAccessObject.TicketDAO;
+import entities.Account;
+import entities.Aircraft;
+import entities.Airport;
 import entities.Customer;
 import entities.Employee;
 import entities.Flight;
@@ -61,17 +69,11 @@ import model.TicketClassModel;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
-import com.toedter.calendar.JDayChooser;
-import com.toedter.calendar.JDateChooser;
 
-public class FormCreateTicket extends JFrame {
+public class FormUpdateInfoTicket extends JFrame {
 
 	private JPanel contentPane;
-	private ActionListener empIEFController;
 	public int rowSelectedIndex;
-	private ActionListener acFlightInfoController;
-	private JDatePickerImpl dateDeparturePicker;
-	private JDateChooser dateChooser;
 	private JLabel departureLbl;
 	private JLabel destinationLbl;
 	private JLabel departureDayLbl;
@@ -80,11 +82,11 @@ public class FormCreateTicket extends JFrame {
 	private TicketClassModel ticketClassModel;
 	private JComboBox ticketTypeCbb;
 	private JTable getTable;
-	private JComboBox addressCbb;
+	private JTextField addressTxtF;
 	private JComboBox genderCbb;
 	private HomeView homeView;
-	private JTextField addressTxtF;
-	private ActionListener acFormCreateTicket;
+	private JDateChooser dateChooser;
+	private ActionListener acFormInfoTicket;
 	DecimalFormat format = new DecimalFormat("###,###,###");
 	
 	Font font_16 = new Font("Poppins", Font.BOLD, 16);
@@ -104,8 +106,8 @@ public class FormCreateTicket extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FormCreateTicket(JTable table,HomeView homeView) {
-		acFormCreateTicket = new FormCreateTicketController(this);
+	public FormUpdateInfoTicket(JTable table,HomeView homeView) {
+		acFormInfoTicket = new FormInfoTicketController(this);
 		getTable = table;
 		this.homeView =homeView;
 		setBounds(100, 100, 900, 700);
@@ -113,6 +115,7 @@ public class FormCreateTicket extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		this.setVisible(true);
 		
 		JLabel lblNewLabel = new JLabel("Create Ticket");
 		lblNewLabel.setFont(new Font("Poppins", Font.BOLD | Font.ITALIC, 30));
@@ -125,15 +128,13 @@ public class FormCreateTicket extends JFrame {
 		contentPane.add(buttonPanel);
 		
 		JButton cancelBtn = new JButton("Cancel");
-		cancelBtn.addActionListener(acFormCreateTicket);
+		cancelBtn.addActionListener(acFormInfoTicket);
 		cancelBtn.setFont(font_16);
 		cancelBtn.setForeground(Color.RED);
 		buttonPanel.add(cancelBtn);
 		
-		JButton createBtn = new JButton("Create");
-		createBtn.addActionListener(acFormCreateTicket);
-		createBtn.addActionListener(acFlightInfoController);
-		createBtn.addActionListener(empIEFController);
+		JButton createBtn = new JButton("Save");
+		createBtn.addActionListener(acFormInfoTicket);
 		createBtn.setFont(font_16);
 		buttonPanel.add(createBtn);
 		
@@ -178,9 +179,8 @@ public class FormCreateTicket extends JFrame {
 		dateOfBirthLbl.setFont(new Font("Poppins", Font.PLAIN, 14));
 		infoCustomerPanel.add(dateOfBirthLbl);
 		
-		JDateChooser dateChooser = new JDateChooser();
+		dateChooser = new JDateChooser();
 		infoCustomerPanel.add(dateChooser);
-//		infoCustomerPanel.add(dateDeparturePicker);
 			
 		JLabel citizenidentifyLbl = new JLabel("Citizenidentify");
 		citizenidentifyLbl.setHorizontalAlignment(SwingConstants.CENTER);
@@ -281,17 +281,27 @@ public class FormCreateTicket extends JFrame {
 	public void loadInfoFlight(JTable table) {
 		DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
 		int rowSelect = table.getSelectedRow();
-		departureLbl.setText(tableModel.getValueAt(rowSelect, 2)+"");
-		destinationLbl.setText(tableModel.getValueAt(rowSelect, 3)+"");
-		departureDayLbl.setText(tableModel.getValueAt(rowSelect, 8)+"");
-		departureTimeLbl.setText(tableModel.getValueAt(rowSelect, 6)+"");
-		priceLbl.setText(tableModel.getValueAt(rowSelect, 9)+" VND");
+		Flight flight = this.homeView.getFlightModel().searchById(tableModel.getValueAt(rowSelect, 1)+"");
+		Ticket ticket = this.homeView.getTicketModel().searchTicketById(Integer.valueOf(tableModel.getValueAt(rowSelect, 0)+""));
+		Customer customer = ticket.getCustomer();
+		
+		departureLbl.setText(flight.getAirportByDepartureId().getAirportName());
+		destinationLbl.setText(flight.getAirportByDestinationId().getAirportName());
+		departureDayLbl.setText(flight.getFlightDate()+"");
+		departureTimeLbl.setText(flight.getTakeOffTime());
+		priceLbl.setText(flight.getBasicPrice()+" VND");
+		this.dateChooser.setDate(customer.getDateOfBirth());
+		this.nameTxtF.setText(customer.getCustomerName());
+		this.genderCbb.setSelectedItem(customer.getGender());
+		this.addressTxtF.setText(customer.getAddress());
+		this.citizenidentifyTxtF.setText(customer.getCitizenIdentify());
+		this.phoneTxtF.setText(customer.getPhone());
 	}
 
 	public Customer getInfoCustomerFromCell() {
 		Customer customer = new Customer();
 		customer.setCustomerName(this.nameTxtF.getText());
-		customer.setDateOfBirth(dateChooser.getDate());
+		customer.setDateOfBirth((Date)this.dateChooser.getDate());
 		customer.setGender(this.genderCbb.getSelectedItem()+"");
 		customer.setAddress(this.addressTxtF.getText());
 		customer.setCitizenIdentify(this.citizenidentifyTxtF.getText());
@@ -303,39 +313,39 @@ public class FormCreateTicket extends JFrame {
 		this.setVisible(false);
 	}
 	
-	public void createTicket() {
-		DefaultTableModel tableModel = (DefaultTableModel) this.getTable.getModel();
-		int RowSelect = this.getTable.getSelectedRow();
-		Date now = new Date();
+	public void updateTicket() {
+		DefaultTableModel tableModel = (DefaultTableModel) getTable.getModel();
+		int rowSelect = getTable.getSelectedRow();
+		Flight flight = this.homeView.getFlightModel().searchById(tableModel.getValueAt(rowSelect, 1)+"");
+		Ticket ticket = this.homeView.getTicketModel().searchTicketById(Integer.valueOf(tableModel.getValueAt(rowSelect, 0)+""));
 		Customer customer = getInfoCustomerFromCell();
-		Flight flight = this.homeView.getFlightModel().searchById(tableModel.getValueAt(RowSelect, 0)+"");
-		Employee employee = this.homeView.getLoginAccount().getEmployee();
+		customer.setCustomerId(ticket.getCustomer().getCustomerId());
+		ticket.setPassengerName(customer.getCustomerName());
 		Ticketclass ticketclass = ticketClassModel.searchByName(this.ticketTypeCbb.getSelectedItem()+"");
-		if(ticketclass.getTicketClassId().equals("BC")) {
-			if (flight.getNumberOfBusinessSeats() == 0) {
-				JOptionPane.showMessageDialog(this, "Sold out!!!");
-				return;
-			}
-			flight.decreaseBCNumber();
-		}	else {
+		if(!ticketclass.getTicketClassId().equals(ticket.getTicketclass().getTicketClassId())) {
+			ticket.setTicketclass(ticketclass);
+			if(ticketclass.getTicketClassId().equals("BC")) {
+				if (flight.getNumberOfBusinessSeats() == 0) {
+					JOptionPane.showMessageDialog(this, "Sold out!!!");
+					return;
+				}
+				flight.decreaseBCNumber();
+				flight.ascendingECNumber();
+			}	else {
 				if (flight.getNumberOfEconomySeats() == 0) {
 					JOptionPane.showMessageDialog(this, "Sold out!!!");
 					return;
 				}
 				flight.decreaseECNumber();
+				flight.ascendingBCNumber();
+			}			
 		}
-		Ticket ticket = new Ticket(customer,employee,flight,ticketclass);
-		ticket.setPassengerName(customer.getCustomerName());
-		Invoice invoice = new Invoice(customer,employee,ticket,now,flight.getBasicPrice());
-		HashSet<Invoice> invoices = new HashSet<Invoice>();
-		invoices.add(invoice);
-		ticket.setInvoices(invoices);
-		HashSet<Ticket> tickets = new HashSet<Ticket>();
-		tickets.add(ticket);
-		customer.setTickets(tickets);
-		CustomerDAO.getInstance().presist(customer);
+		CustomerDAO.getInstance().update(customer);
 		FlightDAO.getInstance().update(flight);
-		this.homeView.getTicketModel().insert(ticket);
+		TicketDAO.getInstance().update(ticket);
+		ticket.setCustomer(customer);
+		this.homeView.getFlightModel().update(flight);
+		this.homeView.getTicketModel().update(ticket);
 		this.homeView.loadDataTableTicket(this.homeView.getTicketModel().getTickets());
 		this.homeView.loadDataTableFlight(this.homeView.getFlightModel().getFlights());
 	}

@@ -23,7 +23,7 @@ private ArrayList<Flight> flights;
 		return flights;
 	}
 
-	public void setEmployees(ArrayList<Flight> listFlight) {
+	public void setFlights(ArrayList<Flight> listFlight) {
 		this.flights = listFlight;
 	}
 	
@@ -32,13 +32,7 @@ private ArrayList<Flight> flights;
 	}
 	
 	public void remove(Flight flg) {
-		int i;
-		for(i=0;i<flights.size();i++) {
-			if(flights.get(i).getFlightId()==flg.getFlightId()) {
-				break;
-			}
-		}
-		this.flights.remove(i);
+		flights.remove(flg);
 	}
 	
 	public void update(Flight f) {
