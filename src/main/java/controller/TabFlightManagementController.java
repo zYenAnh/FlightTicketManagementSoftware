@@ -2,10 +2,18 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
+import com.toedter.calendar.JCalendar;
+
+import commons.ExcelHelpers;
+import entities.Aircraft;
+import entities.Flight;
 import view.HomeView;
 import view.InputFlightView;
 
@@ -21,6 +29,7 @@ public class TabFlightManagementController implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		String src = e.getActionCommand();
 		this.homeView.selectedKey = src;
+		JFileChooser fc = new JFileChooser();
 		if(src.equals("Add")) {
 			try {
 				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -52,7 +61,26 @@ public class TabFlightManagementController implements ActionListener{
 			this.homeView.loadDataTableFlight(this.homeView.getFlightModel().getFlights());
 		} else if(src.equals("Search")) {
 			this.homeView.searchFlight();
+		} else if(src.equals("Import")) {
+			int returnVal = fc.showOpenDialog(this.homeView);
+			if(returnVal== JFileChooser.APPROVE_OPTION) {
+				java.io.File file = fc.getSelectedFile();
+				try {
+					this.homeView.handleImport(file);
+				} catch (Exception e1) {
+					JOptionPane.showConfirmDialog(fc,"Flight nayf da ton tai!" );
+				}
+			}
+		} else if(src.equals("Export")) {
+			int returnVal = fc.showSaveDialog(this.homeView);
+			if(returnVal== JFileChooser.APPROVE_OPTION) {
+				java.io.File file = fc.getSelectedFile();
+				try {
+					this.homeView.handleExportFlight(this.homeView.getFlightModel().getFlights(), file);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
 		}
 	}
-
 }

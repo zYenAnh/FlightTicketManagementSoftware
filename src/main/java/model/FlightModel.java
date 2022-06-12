@@ -11,7 +11,7 @@ private ArrayList<Flight> flights;
 	
 	public FlightModel() {
 		this.flights = new ArrayList<Flight>();
-		this.flights = FlightDAO.getInstance().selectIsActive();
+		this.flights = FlightDAO.getInstance().selectFromToday();
 	}
 	
 	public FlightModel(ArrayList<Flight> listFlight) {
@@ -44,11 +44,11 @@ private ArrayList<Flight> flights;
 		}
 	}
 
-	public boolean kiemTraStudentTonTai(Flight st) {
-//		for(Employee student: this.dsSinhVien) {
-//			if(student.getMaSinhVienInt() == st.getMaSinhVienInt())
-//				return true;
-//		}
+	public boolean kiemTraStudentTonTai(Flight f) {
+		for(Flight flight: this.flights) {
+			if(flight.getFlightId() == f.getFlightId())
+				return true;
+		}
 		return false;
 	}
 	

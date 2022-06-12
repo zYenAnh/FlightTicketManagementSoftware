@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -290,6 +291,7 @@ public class FormUpdateInfoTicket extends JFrame {
 		departureDayLbl.setText(flight.getFlightDate()+"");
 		departureTimeLbl.setText(flight.getTakeOffTime());
 		priceLbl.setText(flight.getBasicPrice()+" VND");
+		this.ticketTypeCbb.setSelectedItem(ticket.getTicketclass().getTicketClassType());
 		this.dateChooser.setDate(customer.getDateOfBirth());
 		this.nameTxtF.setText(customer.getCustomerName());
 		this.genderCbb.setSelectedItem(customer.getGender());

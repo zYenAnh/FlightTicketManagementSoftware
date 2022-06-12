@@ -127,6 +127,7 @@ public class InputFlightView extends JFrame {
 		for(Aircraft a: aircrafts) {
 			airCraftComboBox.addItem(a.getAircraftId());
 		}
+		airCraftComboBox.setSelectedIndex(-1);
 		inputPanel.add(airCraftComboBox);
 		
 		JLabel depatureLable = new JLabel("Departure");
@@ -151,6 +152,8 @@ public class InputFlightView extends JFrame {
 			departureComboBox.addItem(a.getAirportName());
 			destinationComboBox.addItem(a.getAirportName());
 		}
+		destinationComboBox.setSelectedIndex(-1);
+		departureComboBox.setSelectedIndex(-1);
 		inputPanel.add(destinationComboBox);
 		
 		JLabel flightDateLable = new JLabel("flightDate");
@@ -251,8 +254,10 @@ public class InputFlightView extends JFrame {
 		saveBtn.addActionListener(empIEFController);
 		saveBtn.setFont(font_16);
 		buttonPanel.add(saveBtn);
-		if(this.homeView.selectedKey=="Modify")
+		if(this.homeView.selectedKey=="Modify") {
 		 	loadFlightToInputCell();
+		 	this.FlightTextField.disable();
+		 	}
 		rowSelectedIndex = this.homeView.getTableFlight().getSelectedRow();
 	}
 	
@@ -299,7 +304,7 @@ public class InputFlightView extends JFrame {
 		result.setAircraft(aircraftSelect);
 		result.setAirportByDepartureId(this.airportModel.searchByName(this.departureComboBox.getSelectedItem()+""));
 		result.setAirportByDestinationId(this.airportModel.searchByName(this.destinationComboBox.getSelectedItem()+""));
-		Date dateSelected = (Date) dateChooser.getDate();
+		java.util.Date dateSelected = dateChooser.getDate();
 		result.setTakeOffTime(takeOfTimeTPK.getSelectedTime());
 		
 		result.setLandingTime(landingTimePicker.getSelectedTime());
@@ -312,10 +317,12 @@ public class InputFlightView extends JFrame {
 		return result;
 	}
 	
+
 	public void loadFlightToInputCell() {
 		int rowIndex = this.homeView.getTableFlight().getSelectedRow();
 		DefaultTableModel tableModel = (DefaultTableModel) this.homeView.getTableFlight().getModel();
 		Flight flight = this.homeView.getFlightModel().searchById(tableModel.getValueAt(rowIndex, 0)+"");
+		this.FlightTextField.setText(flight.getFlightId());
 		this.airCraftComboBox.setSelectedItem(flight.getAircraft().getAircraftId());
 		this.departureComboBox.setSelectedItem(flight.getAirportByDepartureId().getAirportName());
 		this.destinationComboBox.setSelectedItem(flight.getAirportByDestinationId().getAirportName());
@@ -324,6 +331,4 @@ public class InputFlightView extends JFrame {
 		this.priceTextField.setText(flight.getBasicPrice());
 		this.dateChooser.setDate(flight.getFlightDate());
 	}
-	
-	
 }

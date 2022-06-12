@@ -58,5 +58,14 @@ public class AirportModel implements ModelInterface<Airport> {
 		}
 		return null;
 	}
+	
+	public Airport searchById(String id) {
+		for(Airport airport: airports) {
+			if(airport.getDepartureId().equals(id)) {
+				return airport;
+			}
+		}
+		return null;
+	}
 
 }

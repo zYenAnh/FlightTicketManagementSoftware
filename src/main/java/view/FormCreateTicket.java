@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
@@ -85,6 +87,7 @@ public class FormCreateTicket extends JFrame {
 	private HomeView homeView;
 	private JTextField addressTxtF;
 	private ActionListener acFormCreateTicket;
+	private Flight flight;
 	DecimalFormat format = new DecimalFormat("###,###,###");
 	
 	Font font_16 = new Font("Poppins", Font.BOLD, 16);
@@ -108,6 +111,9 @@ public class FormCreateTicket extends JFrame {
 		acFormCreateTicket = new FormCreateTicketController(this);
 		getTable = table;
 		this.homeView =homeView;
+		DefaultTableModel tableModel = (DefaultTableModel) this.getTable.getModel();
+		int RowSelect = this.getTable.getSelectedRow();
+		flight = this.homeView.getFlightModel().searchById(tableModel.getValueAt(RowSelect, 0)+"");
 		setBounds(100, 100, 900, 700);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -215,6 +221,17 @@ public class FormCreateTicket extends JFrame {
 		for(Ticketclass tc: ticketClassModel.getTicketclasses()) {
 			ticketTypeCbb.addItem(tc.getTicketClassType());
 		}
+		ticketTypeCbb.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getItem().equals("Business class")) {
+					priceLbl.setText((2* Integer.valueOf(flight.getBasicPrice())+" VND"));
+				} else {
+					priceLbl.setText((3* Integer.valueOf(flight.getBasicPrice())+" VND"));
+				}
+			}
+		});
 		ticketTypeCbb.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
 		infoCustomerPanel.add(ticketTypeCbb);
 		
@@ -285,7 +302,7 @@ public class FormCreateTicket extends JFrame {
 		destinationLbl.setText(tableModel.getValueAt(rowSelect, 3)+"");
 		departureDayLbl.setText(tableModel.getValueAt(rowSelect, 8)+"");
 		departureTimeLbl.setText(tableModel.getValueAt(rowSelect, 6)+"");
-		priceLbl.setText(tableModel.getValueAt(rowSelect, 9)+" VND");
+		priceLbl.setText((3* Integer.valueOf(flight.getBasicPrice())+" VND"));
 	}
 
 	public Customer getInfoCustomerFromCell() {
@@ -308,14 +325,15 @@ public class FormCreateTicket extends JFrame {
 		int RowSelect = this.getTable.getSelectedRow();
 		Date now = new Date();
 		Customer customer = getInfoCustomerFromCell();
-		Flight flight = this.homeView.getFlightModel().searchById(tableModel.getValueAt(RowSelect, 0)+"");
 		Employee employee = this.homeView.getLoginAccount().getEmployee();
 		Ticketclass ticketclass = ticketClassModel.searchByName(this.ticketTypeCbb.getSelectedItem()+"");
+		String price = "";
 		if(ticketclass.getTicketClassId().equals("BC")) {
 			if (flight.getNumberOfBusinessSeats() == 0) {
 				JOptionPane.showMessageDialog(this, "Sold out!!!");
 				return;
 			}
+			price = (3* Integer.valueOf(flight.getBasicPrice())+"");
 			flight.decreaseBCNumber();
 		}	else {
 				if (flight.getNumberOfEconomySeats() == 0) {
@@ -323,10 +341,11 @@ public class FormCreateTicket extends JFrame {
 					return;
 				}
 				flight.decreaseECNumber();
+				price = (2* Integer.valueOf(flight.getBasicPrice())+"");
 		}
 		Ticket ticket = new Ticket(customer,employee,flight,ticketclass);
 		ticket.setPassengerName(customer.getCustomerName());
-		Invoice invoice = new Invoice(customer,employee,ticket,now,flight.getBasicPrice());
+		Invoice invoice = new Invoice(customer,employee,ticket,now,price);
 		HashSet<Invoice> invoices = new HashSet<Invoice>();
 		invoices.add(invoice);
 		ticket.setInvoices(invoices);

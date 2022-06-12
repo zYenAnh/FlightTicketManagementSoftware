@@ -71,7 +71,6 @@ public class InvoiceDAO implements DAOInterface<Invoice>{
 
 	@Override
 	public ArrayList<Invoice> selectByCondition(String condition) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -123,7 +123,7 @@ public class Ticket implements java.io.Serializable {
 		this.passengerName = passengerName;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ticket", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "ticket", cascade = CascadeType.ALL)
 	public Set<Invoice> getInvoices() {
 		return this.invoices;
 	}

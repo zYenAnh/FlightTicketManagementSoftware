@@ -15,10 +15,21 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
+import com.microsoft.schemas.office.visio.x2012.main.CellType;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 
+import commons.ExcelHelpers;
 import controller.NavigationController;
 import controller.TabEmployeeManagementController;
 import controller.TabFlightManagementController;
@@ -28,10 +39,12 @@ import dataAccessObject.EmployeeDAO;
 import dataAccessObject.FlightDAO;
 import dataAccessObject.TicketDAO;
 import entities.Account;
+import entities.Aircraft;
 import entities.Airport;
 import entities.Employee;
 import entities.Flight;
 import entities.Ticket;
+import model.AirCraftModel;
 import model.AirportModel;
 import model.EmployeeModel;
 import model.FlightModel;
@@ -54,13 +67,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
+import java.sql.Array;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -84,6 +104,7 @@ public class HomeView extends JFrame {
 	private EmployeeModel employeeModel;
 	private TicketModel ticketModel;
 	private FlightModel flightModel;
+	private AirCraftModel airCraftModel;
 	private JPanel mainPanel;
 	private JTextField searchTextField;
 	private JTextField searchEmpTextField;
@@ -121,6 +142,7 @@ public class HomeView extends JFrame {
 	Font font_12_Thin = new Font("Poppins", Font.PLAIN, 12);
 	Font font_8_Thin = new Font("Poppins", Font.PLAIN, 8);
 	Font font_10 = new Font("Poppins", Font.BOLD, 10);
+	private JTextField idExportFlight;
 
 	public HomeView(Account account,LoginView loginView) {
 		this.loginAccount = account;
@@ -128,8 +150,9 @@ public class HomeView extends JFrame {
 		this.airportModel = new AirportModel();
 		this.employeeModel = new EmployeeModel();
 		this.flightModel = new FlightModel();
+		this.airCraftModel = new AirCraftModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(1280,720);
+		setSize(1280,725);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		mainPanel = new JPanel();
@@ -329,7 +352,7 @@ public class HomeView extends JFrame {
 						"Flight ID", " AirCraft ", "Departure", "Destination", "Business ticket", "General ticket", "Take-Off Time", "Landing Time", "Date", "Price"
 				}));
 		JScrollPane scrollTableFight = new JScrollPane(tableFlight);
-		scrollTableFight.setBounds(30, 91, 985, 590);
+		scrollTableFight.setBounds(30, 91, 985, 547);
 		JTableHeader tableFlightHeader = tableFlight.getTableHeader();
 		tableFlightHeader.setFont(font_12_Thin);
 		
@@ -367,6 +390,19 @@ public class HomeView extends JFrame {
 		
 		FlightManagement.add(toolFlightPanel);
 		FlightManagement.add(scrollTableFight);
+		
+		JButton importBtn = new JButton("Import");
+		importBtn.addActionListener(acTabFlight);
+		importBtn.setFont(font_JetBrains);
+		importBtn.setBounds(764, 645, 110, 35);
+		FlightManagement.add(importBtn);
+		
+		JButton exportBtn = new JButton("Export");
+		exportBtn.addActionListener(acTabFlight);
+		exportBtn.setFont(font_JetBrains);
+		exportBtn.setBounds(905, 645, 110, 35);
+		FlightManagement.add(exportBtn);
+		
 		loadDataTableFlight(this.flightModel.getFlights());
 		
 		FlightManagement.setVisible(false);
@@ -460,7 +496,7 @@ public class HomeView extends JFrame {
 		tableTicket.setModel(new DefaultTableModel(
 				new Object [][] {},
 				new String[] { 
-						"Ticket ID", "Flight", "Passenger's Name", "Creator", "Ticket Type", "Boarding Time", "Flight Date"
+						"Ticket ID", "Flight", "Passenger's Name","Phone", "Creator", "Ticket Type", "Boarding Time", "Flight Date"
 				}));
 		
 		final RowPopupTicket popTableTicket =new RowPopupTicket(tableTicket,this);
@@ -494,7 +530,7 @@ public class HomeView extends JFrame {
 		});
 		
 		JScrollPane tableTicketScrollPane = new JScrollPane(tableTicket);
-		tableTicketScrollPane.setBounds(30, 91, 985, 590);
+		tableTicketScrollPane.setBounds(30, 91, 985, 547);
 		JTableHeader tableTicketHeader = tableTicket.getTableHeader();
 		tableTicketHeader.setFont(font_12_Thin);
 		tableTicket.setRowHeight(30);
@@ -504,6 +540,21 @@ public class HomeView extends JFrame {
 		ticketManagementPanel.add(tableTicketScrollPane, BorderLayout.CENTER);
 		
 		mainPanel.add(ticketManagementPanel);
+		
+		JButton exportBtn = new JButton("Export");
+		exportBtn.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		exportBtn.setBounds(905, 645, 110, 35);
+		ticketManagementPanel.add(exportBtn);
+		
+		idExportFlight = new JTextField();
+		idExportFlight.setBounds(707, 648, 171, 32);
+		ticketManagementPanel.add(idExportFlight);
+		idExportFlight.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("Enter the flight code to export the file:");
+		lblNewLabel_2.setFont(font_JetBrains);
+		lblNewLabel_2.setBounds(398, 648, 295, 32);
+		ticketManagementPanel.add(lblNewLabel_2);
 	}
 	
 	public void createTabEmployeeManagement() {
@@ -652,6 +703,7 @@ public class HomeView extends JFrame {
 	
 	public void createNavigation() {
 		JPanel navigationPanel = new JPanel();
+		navigationPanel.setBackground(Color.WHITE);
 		navigationPanel.setBorder(new LineBorder(Color.black));
 		navigationPanel.setBounds(0,90,250,300);
 		mainPanel.add(navigationPanel);
@@ -934,6 +986,8 @@ public class HomeView extends JFrame {
 			return;
 		for(Flight f: flights) {
 			String priceString = format.format(Integer.valueOf(f.getBasicPrice()));
+			java.util.Date flDate =f.getFlightDate();
+			String dateFlight = flDate.getDate()+"/" +(flDate.getMonth()+1)+"/"+(flDate.getYear()+1900);
 			tableModel.addRow(new Object[] {
 					f.getFlightId(),
 					f.getAircraft().getAircraftId(),
@@ -943,7 +997,7 @@ public class HomeView extends JFrame {
 					f.getNumberOfEconomySeats(),
 					f.getTakeOffTime(),
 					f.getLandingTime(),
-					f.getFlightDate(),
+					dateFlight,
 					priceString
 			});
 		}
@@ -976,6 +1030,7 @@ public class HomeView extends JFrame {
 					f.getTicketId(),
 					f.getFlight().getFlightId(),
 					f.getPassengerName(),
+					f.getCustomer().getPhone(),
 					f.getEmployee().getEmployeeName(),
 					f.getTicketclass().getTicketClassType(),
 					f.getFlight().getTakeOffTime(),
@@ -1004,5 +1059,93 @@ public class HomeView extends JFrame {
 		flightModel.update(flight);
 		loadDataTableFlight(this.flightModel.getFlights());
 		loadDataTableTicket(this.ticketModel.getTickets());
+	}
+	
+	public void handleExportFlight(ArrayList<Flight> flights, java.io.File file) {
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet sheet = workbook.createSheet("Flight");
+		int rowNum = 0;
+		Row firstRow = sheet.createRow(rowNum++);
+		String[] title = {"Flight ID","Aircraft","Departure","Destination","Date","Take Of Time","LandingTime","Bussiness seats","Economic seats","Basic Price"};
+		for(int i=0;i<title.length;i++) {
+			firstRow.createCell(i).setCellValue(title[i]);
+		}
+		for(Flight flight: flights) {
+			Row row = sheet.createRow(rowNum++);
+			row.createCell(0).setCellValue(flight.getFlightId());
+			row.createCell(1).setCellValue(flight.getAircraft().getAircraftId());
+			row.createCell(2).setCellValue(flight.getAirportByDepartureId().getAirportName());
+			row.createCell(3).setCellValue(flight.getAirportByDestinationId().getAirportName());
+			row.createCell(4).setCellValue(flight.getFlightDate().toString());
+			row.createCell(5).setCellValue(flight.getTakeOffTime());
+			row.createCell(6).setCellValue(flight.getLandingTime());
+			row.createCell(7).setCellValue(flight.getNumberOfBusinessSeats());
+			row.createCell(8).setCellValue(flight.getNumberOfEconomySeats());
+			row.createCell(9).setCellValue(flight.getBasicPrice());
+		}
+		try {
+			FileOutputStream outputStream = new FileOutputStream(file.getPath());
+			workbook.write(outputStream);
+			workbook.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void handleImport(java.io.File file) throws IOException {
+		FileInputStream inputStream = new FileInputStream(file.getPath());
+		XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+		XSSFSheet sheet = workbook.getSheetAt(0);
+		DataFormatter formatter = new DataFormatter();
+		Iterator<Row> rowIterator = sheet.iterator();
+		rowIterator.next();
+		while(rowIterator.hasNext()) {
+			Row row = rowIterator.next();
+			Flight flight = new Flight();
+			flight.setFlightId(row.getCell(0).getStringCellValue());
+			Aircraft aircraftSelect = this.airCraftModel.search(row.getCell(1).getStringCellValue());
+			flight.setAircraft(aircraftSelect);
+			flight.setAirportByDepartureId(this.airportModel.searchById(row.getCell(2).getStringCellValue()));
+			flight.setAirportByDestinationId(this.airportModel.searchById(row.getCell(3).getStringCellValue()));
+			flight.setFlightDate(row.getCell(4).getDateCellValue());
+			LocalDateTime takeOfTime = row.getCell(5).getLocalDateTimeCellValue();
+			LocalDateTime landingTime = row.getCell(6).getLocalDateTimeCellValue();
+			flight.setTakeOffTime(handleTime(takeOfTime));
+			flight.setLandingTime(handleTime(landingTime));
+			flight.setNumberOfBusinessSeats(aircraftSelect.getBusinessClassSeats());
+			flight.setNumberOfEconomySeats(aircraftSelect.getEconomyClassSeats());
+			flight.setStatus("waiting");
+			flight.setBasicPrice(formatter.formatCellValue(row.getCell(7))+"");
+			flight.setIsActive(1);
+			FlightDAO.getInstance().add(flight);
+			this.flightModel.insert(flight);
+		}
+		loadDataTableFlight(this.flightModel.getFlights());
+	}
+	
+	public String handleTime (LocalDateTime time) {
+		String timeString = "";
+		String midday = "";
+		int hour = time.getHour();
+		int minutes = time.getMinute();
+		if(hour>12) {
+			hour -=12;
+			midday = "PM";
+			if(minutes<10)
+				timeString = "0" + hour +":0" +minutes+ " "+midday;
+			else {
+				timeString = "0" + hour +":" +minutes + " " +midday;
+			}
+		} else {
+			midday = "AM";
+			if(minutes<10)
+				timeString = hour +":0" +minutes+ " "+midday;
+			else {
+				timeString = hour +":" +minutes + " " +midday;
+			}
+		}
+		return timeString;
 	}
 }
