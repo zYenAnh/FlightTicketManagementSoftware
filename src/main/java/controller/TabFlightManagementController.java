@@ -68,7 +68,7 @@ public class TabFlightManagementController implements ActionListener{
 				try {
 					this.homeView.handleImport(file);
 				} catch (Exception e1) {
-					JOptionPane.showConfirmDialog(fc,"Flight nayf da ton tai!" );
+					e1.printStackTrace();
 				}
 			}
 		} else if(src.equals("Export")) {

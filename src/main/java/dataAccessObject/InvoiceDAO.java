@@ -41,8 +41,14 @@ public class InvoiceDAO implements DAOInterface<Invoice>{
 
 	@Override
 	public void update(Invoice t) {
-		// TODO Auto-generated method stub
-		
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.update(t);
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+			e.printStackTrace();
+        }
 	}
 
 	@Override

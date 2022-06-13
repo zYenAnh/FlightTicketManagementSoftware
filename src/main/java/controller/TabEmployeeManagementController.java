@@ -34,8 +34,8 @@ public class TabEmployeeManagementController implements ActionListener {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-		} else if(src.equals("Delete")) {
-			int choose = JOptionPane.showConfirmDialog(homeView,"Are you sure to delete this employee?");
+		} else if(src.equals("Lock")) {
+			int choose = JOptionPane.showConfirmDialog(homeView,"Are you sure to lock this employee?");
 			if(choose==0) {
 				this.homeView.deleteEmp();
 				this.homeView.getTableEmployee().clearSelection();				
@@ -53,8 +53,10 @@ public class TabEmployeeManagementController implements ActionListener {
 				JOptionPane.showMessageDialog(homeView, "Please select the employee to be edited!");
 			}
 		} else if(src.equals("Refresh")) {
-			this.homeView.reloadTableEmployee();
-		}		
+			this.homeView.loadDataTableEmployee(this.homeView.getEmployeeModel().getEmployees());
+		} else if(src.equals("Search")) {
+			this.homeView.searchEmployee();
+		}
 	}
 
 }

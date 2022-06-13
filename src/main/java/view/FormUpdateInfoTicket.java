@@ -282,10 +282,9 @@ public class FormUpdateInfoTicket extends JFrame {
 	public void loadInfoFlight(JTable table) {
 		DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
 		int rowSelect = table.getSelectedRow();
-		Flight flight = this.homeView.getFlightModel().searchById(tableModel.getValueAt(rowSelect, 1)+"");
 		Ticket ticket = this.homeView.getTicketModel().searchTicketById(Integer.valueOf(tableModel.getValueAt(rowSelect, 0)+""));
+		Flight flight = ticket.getFlight();
 		Customer customer = ticket.getCustomer();
-		
 		departureLbl.setText(flight.getAirportByDepartureId().getAirportName());
 		destinationLbl.setText(flight.getAirportByDestinationId().getAirportName());
 		departureDayLbl.setText(flight.getFlightDate()+"");
@@ -324,6 +323,11 @@ public class FormUpdateInfoTicket extends JFrame {
 		customer.setCustomerId(ticket.getCustomer().getCustomerId());
 		ticket.setPassengerName(customer.getCustomerName());
 		Ticketclass ticketclass = ticketClassModel.searchByName(this.ticketTypeCbb.getSelectedItem()+"");
+		Set<Invoice> invoices = ticket.getInvoices();
+		Invoice invoice = new Invoice();
+		for(Invoice i:invoices) {
+			invoice = i;
+		}
 		if(!ticketclass.getTicketClassId().equals(ticket.getTicketclass().getTicketClassId())) {
 			ticket.setTicketclass(ticketclass);
 			if(ticketclass.getTicketClassId().equals("BC")) {
@@ -331,6 +335,7 @@ public class FormUpdateInfoTicket extends JFrame {
 					JOptionPane.showMessageDialog(this, "Sold out!!!");
 					return;
 				}
+				invoice.setTotal((3* Integer.valueOf(flight.getBasicPrice())+""));
 				flight.decreaseBCNumber();
 				flight.ascendingECNumber();
 			}	else {
@@ -338,6 +343,7 @@ public class FormUpdateInfoTicket extends JFrame {
 					JOptionPane.showMessageDialog(this, "Sold out!!!");
 					return;
 				}
+				invoice.setTotal((2* Integer.valueOf(flight.getBasicPrice())+""));
 				flight.decreaseECNumber();
 				flight.ascendingBCNumber();
 			}			
@@ -345,6 +351,7 @@ public class FormUpdateInfoTicket extends JFrame {
 		CustomerDAO.getInstance().update(customer);
 		FlightDAO.getInstance().update(flight);
 		TicketDAO.getInstance().update(ticket);
+		InvoiceDAO.getInstance().update(invoice);
 		ticket.setCustomer(customer);
 		this.homeView.getFlightModel().update(flight);
 		this.homeView.getTicketModel().update(ticket);

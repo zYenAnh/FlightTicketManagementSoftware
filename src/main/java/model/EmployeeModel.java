@@ -43,11 +43,17 @@ public class EmployeeModel implements ModelInterface<Employee>{
 	}
 	
 	@Override
-	public void update(Employee student) {
+	public void update(Employee emp) {
+		for(int i=0;i<employees.size();i++) {
+			if(employees.get(i).getEmployeeId()== emp.getEmployeeId()) {
+				this.employees.set(i, emp);
+				break;
+			}
+		}
 	}
 
 	@Override
-	public boolean checkExists(Employee t) {
+	public boolean checkExists(Employee e) {
 		return false;
 	}
 	

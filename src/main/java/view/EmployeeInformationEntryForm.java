@@ -212,7 +212,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		checkAddEmp = EmployeeDAO.getInstance().add(e);
 		if(checkAddEmp!=0) {
 			this.homeView.getEmployeeModel().insert(e);
-			this.homeView.reloadTableEmployee();
+			this.homeView.loadDataTableEmployee(this.homeView.getEmployeeModel().getEmployees());
 			return checkAddEmp;
 		} else {
 				JOptionPane.showMessageDialog(null,"Employee already exists, please re-enter");
@@ -233,7 +233,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 		result.setEmployeeName(this.nameTextField.getText());
 		result.setAddress(this.address.getText());
 		result.setCitizenIdentify(this.citizenidentifyTextField.getText());
-		Date dateSelected = (Date) this.dateChooser.getDate();
+		java.util.Date dateSelected = this.dateChooser.getDate();
 		result.setDateOfBirth(dateSelected);
 		result.setPhone(this.phoneTextField.getText());
 		result.setGender(this.genderComboBox.getSelectedItem()+"");

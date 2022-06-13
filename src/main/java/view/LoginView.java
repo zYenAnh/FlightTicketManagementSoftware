@@ -137,12 +137,16 @@ public class LoginView extends JFrame {
 			List<Account> accounts = AccountDAO.getInstance().selectByCondition(condition);
 			if(!accounts.isEmpty()) {
 				Account account = accounts.get(0);
-				try {
-					UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-					new HomeView(account,this);
-					this.setVisible(false);
-				} catch (Exception e) {
-					e.printStackTrace();
+				if(account.getEmployee().getIsActive()==1) {
+					try {
+						UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+						new HomeView(account,this);
+						this.setVisible(false);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					JOptionPane.showMessageDialog(this, "Temporarily you cannot access this account!");
 				}
 			} else {
 				this.messageLogin.setText("Incorrect account or password! Please re-enter!");

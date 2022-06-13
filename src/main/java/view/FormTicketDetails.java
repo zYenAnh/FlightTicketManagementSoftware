@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -88,7 +89,7 @@ public class FormTicketDetails extends JFrame {
 	private JLabel nameTxtF;
 	private JLabel ticketTypeLbl;
 	private JLabel LandingTimeLbl;
-	DecimalFormat format = new DecimalFormat("###,###,###");
+	DecimalFormat formatter = new DecimalFormat("###,###,###");
 	
 	Font font_16 = new Font("Poppins", Font.BOLD, 16);
 	Font font_14_bold = new Font("Poppins", Font.BOLD, 14);
@@ -293,16 +294,18 @@ public class FormTicketDetails extends JFrame {
 		Ticket ticket = this.homeView.getTicketModel().searchTicketById(Integer.valueOf(tableModel.getValueAt(rowSelect, 0)+""));
 		Flight flight = ticket.getFlight();
 		Customer customer = ticket.getCustomer();
-		
-		System.out.println(flight.getLandingTime());
-		
+		Set<Invoice> invoices = ticket.getInvoices();
+		Invoice invoice = new Invoice();
+		for(Invoice i:invoices) {
+			invoice = i;
+		}
 		departureLbl.setText(flight.getAirportByDepartureId().getAirportName());
 		destinationLbl.setText(flight.getAirportByDestinationId().getAirportName());
 		departureTimeLbl.setText(flight.getTakeOffTime());
 		departureDayLbl.setText(flight.getFlightDate()+"");
 		LandingTimeLbl.setText(flight.getLandingTime());
 		ticketTypeLbl.setText(ticket.getTicketclass().getTicketClassType());
-		priceLbl.setText(flight.getBasicPrice()+" VND");
+		priceLbl.setText(formatter.format(Integer.parseInt(invoice.getTotal()))+" VND");
 		
 		nameTxtF.setText(customer.getCustomerName());
 		dateOfBirthTxtF.setText(customer.getDateOfBirth()+"");

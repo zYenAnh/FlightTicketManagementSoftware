@@ -29,6 +29,14 @@ public class AccountDAO implements DAOInterface<Account>{
 
 	@Override
 	public void update(Account t) {
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.update(t);
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+			e.printStackTrace();
+        }
 	}
 
 	@Override

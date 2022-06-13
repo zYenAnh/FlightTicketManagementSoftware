@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import org.apache.poi.ss.formula.functions.IfFunc;
+
 import dataAccessObject.TicketDAO;
 import entities.Ticket;
 
@@ -57,5 +59,13 @@ public class TicketModel implements ModelInterface<Ticket>{
 		return null;
 	}
 	
+	public ArrayList<Ticket> searchByFlight(String id) {
+		ArrayList<Ticket> result = new ArrayList<Ticket>();
+		for(Ticket ticket : tickets) {
+			if(ticket.getFlight().getFlightId().equals(id)) 
+				result.add(ticket);
+		}
+		return result;
+	}
 
 }

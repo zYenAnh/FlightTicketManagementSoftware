@@ -72,7 +72,6 @@ public class FormCreateTicket extends JFrame {
 	private ActionListener empIEFController;
 	public int rowSelectedIndex;
 	private ActionListener acFlightInfoController;
-	private JDatePickerImpl dateDeparturePicker;
 	private JDateChooser dateChooser;
 	private JLabel departureLbl;
 	private JLabel destinationLbl;
@@ -184,7 +183,7 @@ public class FormCreateTicket extends JFrame {
 		dateOfBirthLbl.setFont(new Font("Poppins", Font.PLAIN, 14));
 		infoCustomerPanel.add(dateOfBirthLbl);
 		
-		JDateChooser dateChooser = new JDateChooser();
+		dateChooser = new JDateChooser();
 		infoCustomerPanel.add(dateChooser);
 //		infoCustomerPanel.add(dateDeparturePicker);
 			
@@ -226,9 +225,9 @@ public class FormCreateTicket extends JFrame {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getItem().equals("Business class")) {
-					priceLbl.setText((2* Integer.valueOf(flight.getBasicPrice())+" VND"));
-				} else {
 					priceLbl.setText((3* Integer.valueOf(flight.getBasicPrice())+" VND"));
+				} else {
+					priceLbl.setText((2* Integer.valueOf(flight.getBasicPrice())+" VND"));
 				}
 			}
 		});

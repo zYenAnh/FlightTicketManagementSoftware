@@ -3,6 +3,7 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
@@ -20,6 +21,7 @@ public class TabTicketManagementController implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String src = e.getActionCommand();
+		JFileChooser fc = new JFileChooser();
 		if(src.equals("Cancel ticket")) {
 			int choose = JOptionPane.showConfirmDialog(homeView, "Are you cancel ticket?");
 			if(choose==0)
@@ -35,6 +37,18 @@ public class TabTicketManagementController implements ActionListener {
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}				
+			}
+		} else if(src.equals("Refresh")) {
+			this.homeView.loadDataTableTicket(this.homeView.getTicketModel().getTickets());
+		} else if(src.equals("Export")) {
+			int returnVal = fc.showSaveDialog(this.homeView);
+			if(returnVal== JFileChooser.APPROVE_OPTION) {
+				java.io.File file = fc.getSelectedFile();
+				try {
+					this.homeView.exportTicketByIdFlight(file);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
 	}
