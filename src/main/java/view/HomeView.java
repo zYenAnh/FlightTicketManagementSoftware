@@ -35,6 +35,7 @@ import commons.ExcelHelpers;
 import controller.NavigationController;
 import controller.TabEmployeeManagementController;
 import controller.TabFlightManagementController;
+import controller.TabPaymentController;
 import controller.TabTicketManagementController;
 import dataAccessObject.AccountDAO;
 import dataAccessObject.AircraftDAO;
@@ -45,12 +46,14 @@ import dataAccessObject.TicketDAO;
 import entities.Account;
 import entities.Aircraft;
 import entities.Airport;
+import entities.Customer;
 import entities.Employee;
 import entities.Flight;
 import entities.Invoice;
 import entities.Ticket;
 import model.AirCraftModel;
 import model.AirportModel;
+import model.CustomerModel;
 import model.EmployeeModel;
 import model.FlightModel;
 import model.TicketModel;
@@ -112,6 +115,9 @@ import javax.swing.JPasswordField;
 public class HomeView extends JFrame {
 
 	private Account loginAccount;
+	private FlightModel listFlightWaiting;
+	private CustomerModel listCustomerWaiting;
+	private TicketModel listTicketWaiting;
 	private AirportModel airportModel;
 	private EmployeeModel employeeModel;
 	private TicketModel ticketModel;
@@ -123,6 +129,7 @@ public class HomeView extends JFrame {
 	private JTable tableTicket;
 	private JTable tableFlight;
 	private JTable tableEmployee;
+	private JTable tableWaiting;
 	private JPanel FlightManagement;
 	private JPanel ticketManagementPanel;
 	private JPanel employeeManagerPanel;
@@ -162,6 +169,7 @@ public class HomeView extends JFrame {
 	ActionListener acTabEmployee = new TabEmployeeManagementController(this);
 	ActionListener acTabFlight = new TabFlightManagementController(this);
 	ActionListener acTabTicket = new TabTicketManagementController(this);
+	ActionListener acTabPayment = new TabPaymentController(this);
 	
 	Font font_JetBrains = new Font("JetBrains Mono", Font.BOLD, 12);
 	Font font_JetBrains_14 = new Font("JetBrains Mono", Font.BOLD, 14);
@@ -176,9 +184,13 @@ public class HomeView extends JFrame {
 	private JPasswordField pfCurrentPassword;
 	private JPasswordField pfNewPassword;
 	private JPasswordField pfReNewPassword;
+	private JButton btnPaymentTicket;
 
 	public HomeView(Account account,LoginView loginView) {
 		this.loginAccount = account;
+		listCustomerWaiting = new CustomerModel();
+		listFlightWaiting = new FlightModel();
+		listTicketWaiting = new TicketModel();
 		this.ticketModel = new TicketModel();
 		this.airportModel = new AirportModel();
 		this.employeeModel = new EmployeeModel();
@@ -233,6 +245,12 @@ public class HomeView extends JFrame {
 		this.setVisible(true);
 	}
 	
+	public void setEmptyAllList() {
+		listCustomerWaiting.clearList();
+		listFlightWaiting.clearList();
+		listTicketWaiting.clearList();
+	}
+	
 	public void handleDecentralization(Account account) {
 		String role = account.getRole();
 		if(role.equals("ADMIN") || role.equals("Management Staff")) {
@@ -252,7 +270,108 @@ public class HomeView extends JFrame {
 		mainPanel.add(panelTabPayment);
 		panelTabPayment.setLayout(null);
 		
+		btnPaymentTicket = new JButton("Payment");
+		btnPaymentTicket.addActionListener(acTabPayment);
+		btnPaymentTicket.setBounds(860, 639, 123, 39);
+		btnPaymentTicket.setFont(font_JetBrains);
+		panelTabPayment.add(btnPaymentTicket);
 		
+		ImageIcon iconAdd = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//addIcon.png");
+		Image addImg = iconAdd.getImage();
+        Image imgAddScale = addImg.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+        ImageIcon scaledIconAdd = new ImageIcon(imgAddScale);
+		ImageIcon deleteIcon = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//deleteIcon.png");
+		Image deleteImg = deleteIcon.getImage();
+        Image deleteScaleImg = deleteImg.getScaledInstance(46, 38, Image.SCALE_SMOOTH);
+        ImageIcon scaledIconDelete = new ImageIcon(deleteScaleImg);
+		ImageIcon modifyIcon = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//settingIcon.png");
+		Image modifyImg = modifyIcon.getImage();
+        Image modifyScaleImg = modifyImg.getScaledInstance(27, 27, Image.SCALE_SMOOTH);
+        ImageIcon scaledIconModify = new ImageIcon(modifyScaleImg);
+		ImageIcon iconRefresh = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//refresh_reload_icon.png");
+		Image imgRefresh = iconRefresh.getImage();
+        Image imgRefreshScale = imgRefresh.getScaledInstance(27, 27, Image.SCALE_SMOOTH);
+        ImageIcon scaleIconRefresh = new ImageIcon(imgRefreshScale);
+		
+		JPanel panel = new JPanel(new GridLayout(1,4,15,0));
+		panel.setBounds(0, 58, 489, 39);
+		panelTabPayment.add(panel);
+		
+// Create button Delete
+		JButton deleteBtn = new JButton("Cancel ticket");
+		panel.add(deleteBtn);
+		deleteBtn.addActionListener(acTabTicket);
+		deleteBtn.setFont(font_12_Thin);
+		deleteBtn.setIcon(scaledIconDelete);
+		
+// Create button Modify
+		JButton modifyBtn = new JButton("Modify");
+		panel.add(modifyBtn);
+		modifyBtn.setFont(font_12_Thin);
+		modifyBtn.addActionListener(acTabTicket);
+		modifyBtn.setIcon(scaledIconModify);
+		
+// Create button reload 		
+		JButton refreshBtn = new JButton("Refresh");
+		panel.add(refreshBtn);
+		refreshBtn.addActionListener(acTabTicket);
+		refreshBtn.setFont(font_12_Thin);
+		refreshBtn.setIcon(scaleIconRefresh);
+		
+		tableWaiting = new JTable();
+		tableWaiting.setDefaultEditor(Object.class, null);
+		tableWaiting.setFont(font_JetBrains);
+		tableWaiting.setBounds(23, 0, 933, 597);
+		tableWaiting.setModel(new DefaultTableModel(
+				new Object [][] {},
+				new String[] { 
+						"STT", "Flight", "Passenger's Name","Phone", "Creator", "Ticket Type", "Boarding Time", "Flight Date"
+				}));
+		
+		final RowPopupTableWaiting popupTableWaiting =new RowPopupTableWaiting(tableWaiting,this);
+		
+		tableWaiting.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if(SwingUtilities.isRightMouseButton(e)) {
+					popupTableWaiting.show(e.getComponent(),e.getX(),e.getY());
+				}
+			}
+		});
+		
+		tableWaiting.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseReleased(MouseEvent e) {
+		        int r = tableWaiting.rowAtPoint(e.getPoint());
+		        if (r >= 0 && r < tableWaiting.getRowCount()) {
+		        	tableWaiting.setRowSelectionInterval(r, r);
+		        } else {
+		        	tableWaiting.clearSelection();
+		        }
+
+		        int rowindex = tableWaiting.getSelectedRow();
+		        if (rowindex < 0)
+		            return;
+		        if (e.isPopupTrigger() && e.getComponent() instanceof JTable ) {
+		            JPopupMenu popup = popupTableWaiting;
+		            popup.show(e.getComponent(), e.getX(), e.getY());
+		        }
+		    }
+		});
+		
+		JScrollPane tableTicketBeingBooked = new JScrollPane(tableWaiting);
+		tableTicketBeingBooked.setBounds(0, 117, 993, 512);
+		JTableHeader tableWaitingHeader = tableTicket.getTableHeader();
+		tableWaitingHeader.setFont(font_12_Thin);
+		tableWaiting.setRowHeight(30);
+		panelTabPayment.add(tableTicketBeingBooked);
+		
+		JLabel lblNewLabel_5 = new JLabel("Ticket list waiting for payment");
+		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_5.setFont(new Font("JetBrains Mono Medium", Font.BOLD, 20));
+		lblNewLabel_5.setBounds(239, -11, 539, 70);
+		panelTabPayment.add(lblNewLabel_5);
+		
+		panelTabPayment.setVisible(false);
 	}
 	
 	public void createTabAccount() {
@@ -810,7 +929,7 @@ public class HomeView extends JFrame {
 		JTableHeader tableTicketHeader = tableTicket.getTableHeader();
 		tableTicketHeader.setFont(font_12_Thin);
 		tableTicket.setRowHeight(30);
-		loadDataTableTicket(this.ticketModel.getTickets());
+		refreshTableTicket();
 		
 		ticketManagementPanel.add(toolTabTicketPanel,BorderLayout.NORTH);
 		
@@ -1190,6 +1309,16 @@ public class HomeView extends JFrame {
         navigationPanel.add(btnAccount);
 	}
 	
+	
+	
+	public TicketModel getListTicketWaiting() {
+		return listTicketWaiting;
+	}
+
+	public void setListTicketWaiting(TicketModel listTicketWaiting) {
+		this.listTicketWaiting = listTicketWaiting;
+	}
+
 	public JPanel getPanelTabPayment() {
 		return panelTabPayment;
 	}
@@ -1286,6 +1415,22 @@ public class HomeView extends JFrame {
 		this.loginAccount = loginAccount;
 	}
 	
+	public FlightModel getListFlightWaiting() {
+		return listFlightWaiting;
+	}
+
+	public void setListFlightWaiting(FlightModel listFlightWaiting) {
+		this.listFlightWaiting = listFlightWaiting;
+	}
+
+	public CustomerModel getListCustomerWaiting() {
+		return listCustomerWaiting;
+	}
+
+	public void setListCustomerWaiting(CustomerModel listCustomerWaiting) {
+		this.listCustomerWaiting = listCustomerWaiting;
+	}
+
 	public void refreshTableEmployee() {
 		ArrayList<Employee> employees = EmployeeDAO.getInstance().selectAll();
 		loadDataTableEmployee(employees);
@@ -1299,6 +1444,10 @@ public class HomeView extends JFrame {
 	public void refreshTableTicket() {
 		ArrayList<Ticket> tickets = TicketDAO.getInstance().selectAll();
 		loadDataTableTicket(tickets);
+	}
+	
+	public void refreshTableWaiting() {
+		loadDataTableWaiting(listTicketWaiting.getTickets());
 	}
 	
 	public void reverseLocation() {
@@ -1411,6 +1560,10 @@ public class HomeView extends JFrame {
 		flight.setIsActive(0);
 		FlightDAO.getInstance().update(flight);
 	}
+	
+	public void handlePayment() {
+		
+	}
 
 	public void loadDataTableTicket(ArrayList<Ticket> tickets) {
 		DefaultTableModel tableModel = (DefaultTableModel) tableTicket.getModel();
@@ -1428,6 +1581,27 @@ public class HomeView extends JFrame {
 					tickets.get(i).getFlight().getTakeOffTime(),
 					tickets.get(i).getFlight().getFlightDate()
 			});
+		}
+	}
+	
+	public void loadDataTableWaiting(ArrayList<Ticket> tickets) {
+		DefaultTableModel tableModel = (DefaultTableModel) tableWaiting.getModel();
+		tableModel.getDataVector().removeAllElements();
+		if(tickets.isEmpty())
+			return;
+		int stt =1;
+		for(int i = tickets.size()-1;i>=0;i--) {
+			tableModel.addRow(new Object[] {
+					stt,
+					tickets.get(i).getFlight().getFlightId(),
+					tickets.get(i).getPassengerName(),
+					tickets.get(i).getCustomer().getPhone(),
+					tickets.get(i).getEmployee().getEmployeeName(),
+					tickets.get(i).getTicketclass().getTicketClassType(),
+					tickets.get(i).getFlight().getTakeOffTime(),
+					tickets.get(i).getFlight().getFlightDate()
+			});
+			stt++;
 		}
 	}
 	

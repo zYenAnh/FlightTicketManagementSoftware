@@ -13,7 +13,6 @@ public class TicketModel implements ModelInterface<Ticket>{
 	
 	public TicketModel() {
 		tickets = new ArrayList<Ticket>();
-		tickets = TicketDAO.getInstance().selectAll();
 	}
 	
 	@Override
@@ -68,4 +67,7 @@ public class TicketModel implements ModelInterface<Ticket>{
 		return result;
 	}
 
+	public void clearList() {
+		this.tickets.clear();
+	}
 }

@@ -349,10 +349,15 @@ public class FormCreateTicket extends JFrame {
 		ticket.setInvoices(invoices);
 		HashSet<Ticket> tickets = new HashSet<Ticket>();
 		tickets.add(ticket);
+		System.out.println(ticket.getTicketId());
 		customer.setTickets(tickets);
-		CustomerDAO.getInstance().presist(customer);
-		FlightDAO.getInstance().update(flight);
-		this.homeView.refreshTableFlight();
-		this.homeView.refreshTableTicket();
+		this.homeView.getListCustomerWaiting().insert(customer);
+		this.homeView.getListFlightWaiting().insert(flight);
+		this.homeView.getListTicketWaiting().insert(ticket);
+		this.homeView.loadDataTableWaiting(this.homeView.getListTicketWaiting().getTickets());
+//		CustomerDAO.getInstance().presist(customer);
+//		FlightDAO.getInstance().update(flight);
+//		this.homeView.refreshTableFlight();
+//		this.homeView.refreshTableTicket();
 	}
 }

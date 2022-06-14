@@ -58,4 +58,8 @@ private ArrayList<Flight> flights;
 		}
 		return null;
 	}
+	
+	public void clearList() {
+		this.flights.clear();
+	}
 }
