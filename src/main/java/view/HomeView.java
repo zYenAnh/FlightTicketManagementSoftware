@@ -1502,15 +1502,12 @@ public class HomeView extends JFrame {
 			JOptionPane.showMessageDialog(null,"Departure and destination cannot be the same");
 			return;
 		} else {
-			ArrayList<Flight> flights = this.flightModel.getFlights();
+			ArrayList<Flight> flights = FlightDAO.getInstance().selectIsActive();
 			if(fromDate == null || toDate ==null) {
 				JOptionPane.showMessageDialog(null,"Please select a time period to search!");
 				return;
 			} else {
 				for(Flight f:flights) {
-					System.out.println(toDate.compareTo(f.getFlightDate()));
-					System.out.println(fromDate.compareTo(f.getFlightDate()));
-					System.out.println("___________________________");
 					if(f.getAirportByDepartureId().getAirportName().equals(departure) 
 							&& f.getAirportByDestinationId().getAirportName().equals(destination) 
 							&& toDate.compareTo(f.getFlightDate())<=0 && fromDate.compareTo(f.getFlightDate())>=0) {
@@ -1559,6 +1556,7 @@ public class HomeView extends JFrame {
 		Flight flight = FlightDAO.getInstance().selectById(flightId);
 		flight.setIsActive(0);
 		FlightDAO.getInstance().update(flight);
+		refreshTableFlight();
 	}
 	
 	public void handlePayment() {
@@ -1608,10 +1606,8 @@ public class HomeView extends JFrame {
 	public void cancelTicket() {
 		DefaultTableModel tableModel = (DefaultTableModel) tableTicket.getModel();
 		int rowSelect = tableTicket.getSelectedRow();
-		
 		int ticketId = Integer.valueOf(tableModel.getValueAt(rowSelect, 0)+"");
-		Ticket ticket = this.ticketModel.searchTicketById(ticketId);
-		
+		Ticket ticket = TicketDAO.getInstance().selectById(ticketId);
 		Flight flight = ticket.getFlight();
 		if(ticket.getTicketclass().getTicketClassId().equals("BC")) {
 			flight.ascendingBCNumber();
@@ -1623,8 +1619,8 @@ public class HomeView extends JFrame {
 		TicketDAO.getInstance().delele(ticket);
 		FlightDAO.getInstance().update(flight);
 		flightModel.update(flight);
-		loadDataTableFlight(this.flightModel.getFlights());
-		loadDataTableTicket(this.ticketModel.getTickets());
+		refreshTableFlight();
+		refreshTableTicket();
 	}
 	
 	public void handleExportFlight(ArrayList<Flight> flights, java.io.File file) {

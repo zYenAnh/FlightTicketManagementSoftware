@@ -60,7 +60,7 @@ public class TabFlightManagementController implements ActionListener{
 				JOptionPane.showMessageDialog(homeView, "Please select the flight to be edited!");
 			}
 		} else if(src.equals("Refresh")) {
-			this.homeView.loadDataTableFlight(this.homeView.getFlightModel().getFlights());
+			this.homeView.refreshTableFlight();
 		} else if(src.equals("Search")) {
 			this.homeView.searchFlight();
 		} else if(src.equals("Import")) {

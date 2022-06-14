@@ -282,7 +282,8 @@ public class FormUpdateInfoTicket extends JFrame {
 	public void loadInfoFlight(JTable table) {
 		DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
 		int rowSelect = table.getSelectedRow();
-		Ticket ticket = this.homeView.getTicketModel().searchTicketById(Integer.valueOf(tableModel.getValueAt(rowSelect, 0)+""));
+		int ticketId = Integer.valueOf(tableModel.getValueAt(rowSelect, 0)+"");
+		Ticket ticket = TicketDAO.getInstance().selectById(ticketId);
 		Flight flight = ticket.getFlight();
 		Customer customer = ticket.getCustomer();
 		departureLbl.setText(flight.getAirportByDepartureId().getAirportName());
@@ -317,8 +318,10 @@ public class FormUpdateInfoTicket extends JFrame {
 	public void updateTicket() {
 		DefaultTableModel tableModel = (DefaultTableModel) getTable.getModel();
 		int rowSelect = getTable.getSelectedRow();
-		Flight flight = this.homeView.getFlightModel().searchById(tableModel.getValueAt(rowSelect, 1)+"");
-		Ticket ticket = this.homeView.getTicketModel().searchTicketById(Integer.valueOf(tableModel.getValueAt(rowSelect, 0)+""));
+		String flightId = tableModel.getValueAt(rowSelect, 1)+"";
+		int ticketId = Integer.valueOf(tableModel.getValueAt(rowSelect, 0)+"");
+		Flight flight = FlightDAO.getInstance().selectById(flightId);
+		Ticket ticket = TicketDAO.getInstance().selectById(ticketId);
 		Customer customer = getInfoCustomerFromCell();
 		customer.setCustomerId(ticket.getCustomer().getCustomerId());
 		ticket.setPassengerName(customer.getCustomerName());
@@ -352,10 +355,7 @@ public class FormUpdateInfoTicket extends JFrame {
 		FlightDAO.getInstance().update(flight);
 		TicketDAO.getInstance().update(ticket);
 		InvoiceDAO.getInstance().update(invoice);
-		ticket.setCustomer(customer);
-		this.homeView.getFlightModel().update(flight);
-		this.homeView.getTicketModel().update(ticket);
-		this.homeView.loadDataTableTicket(this.homeView.getTicketModel().getTickets());
-		this.homeView.loadDataTableFlight(this.homeView.getFlightModel().getFlights());
+		this.homeView.refreshTableTicket();
+		this.homeView.refreshTableFlight();
 	}
 }
