@@ -29,7 +29,7 @@ import javax.swing.JTable;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
-public class FromCreateAccount extends JFrame {
+public class FormCreateAccount extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField usernameTxtF;
@@ -40,7 +40,7 @@ public class FromCreateAccount extends JFrame {
 	private HomeView homeView;
 	
 
-	public FromCreateAccount(JTable table,HomeView homeView) {
+	public FormCreateAccount(JTable table,HomeView homeView) {
 		this.getTable = table;
 		this.homeView = homeView;
 		setBounds(100, 100, 634, 347);
@@ -90,7 +90,7 @@ public class FromCreateAccount extends JFrame {
 		authorCbb.addItem("Ticket Seller");
 		authorCbb.setSelectedIndex(-1);
 		panel.add(authorCbb);
-		FromCreateAccount form = this;
+		FormCreateAccount form = this;
 		
 		JButton saveBtn = new JButton("Save");
 		saveBtn.addActionListener(new ActionListener() {

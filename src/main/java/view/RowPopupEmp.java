@@ -40,7 +40,7 @@ class RowPopupEmp extends JPopupMenu {
 				if(AccountDAO.getInstance().selectByCondition(condition).isEmpty()) {
 					try {
 						UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-						FromCreateAccount fromCreateAccount = new FromCreateAccount(table,homeView);
+						FormCreateAccount fromCreateAccount = new FormCreateAccount(table,homeView);
 						fromCreateAccount.setVisible(true);
 					} catch (Exception e1) {
 						e1.printStackTrace();

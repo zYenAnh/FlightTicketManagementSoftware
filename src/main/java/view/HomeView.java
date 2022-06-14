@@ -1559,10 +1559,6 @@ public class HomeView extends JFrame {
 		refreshTableFlight();
 	}
 	
-	public void handlePayment() {
-		
-	}
-
 	public void loadDataTableTicket(ArrayList<Ticket> tickets) {
 		DefaultTableModel tableModel = (DefaultTableModel) tableTicket.getModel();
 		tableModel.getDataVector().removeAllElements();
@@ -1658,7 +1654,8 @@ public class HomeView extends JFrame {
 	
 	public void exportTicketByIdFlight(java.io.File file) {
 		String flightId = idExportFlight.getText();
-		ArrayList<Ticket> tickets = this.ticketModel.searchByFlight(flightId);
+		String condition = "Flight_ID = '" + flightId +"'";
+		ArrayList<Ticket> tickets = TicketDAO.getInstance().selectByCondition(condition);
 		handleExportTicket(tickets, file);
 	}
 	

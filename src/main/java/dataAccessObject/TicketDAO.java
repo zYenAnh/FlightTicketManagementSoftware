@@ -79,7 +79,7 @@ public class TicketDAO implements DAOInterface<Ticket>{
 	public ArrayList<Ticket> selectByCondition(String condition) {
 		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
-            String hql = "FROM Account WHERE " +condition;
+            String hql = "FROM Ticket WHERE " +condition;
             ArrayList<Ticket> resultSelect =  (ArrayList<Ticket>) session.createQuery(hql).list();
             session.getTransaction().commit();
             session.close();

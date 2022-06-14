@@ -43,7 +43,6 @@ public class Invoice extends JFrame {
 	
 	public Invoice(HomeView homeView) {
 		this.homeView = homeView;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 470, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
