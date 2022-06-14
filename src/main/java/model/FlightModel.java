@@ -11,7 +11,6 @@ private ArrayList<Flight> flights;
 	
 	public FlightModel() {
 		this.flights = new ArrayList<Flight>();
-		this.flights = FlightDAO.getInstance().selectIsActive();
 	}
 	
 	public FlightModel(ArrayList<Flight> listFlight) {

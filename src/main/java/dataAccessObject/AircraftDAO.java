@@ -50,9 +50,16 @@ public class AircraftDAO implements DAOInterface<Aircraft> {
 		return null;
 	}
 
-	@Override
-	public Aircraft selectById(Aircraft t) {
-		// TODO Auto-generated method stub
+	public Aircraft selectById(String id) {
+		Aircraft result;
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            result = session.find(Aircraft.class, id);
+            session.close();
+            return result;
+        } catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 

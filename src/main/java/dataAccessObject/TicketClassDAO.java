@@ -50,8 +50,7 @@ public class TicketClassDAO implements DAOInterface<Ticketclass>{
 		return null;
 	}
 
-	@Override
-	public Ticketclass selectById(Ticketclass t) {
+	public Ticketclass selectById(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

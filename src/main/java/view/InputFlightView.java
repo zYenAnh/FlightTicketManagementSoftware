@@ -262,30 +262,19 @@ public class InputFlightView extends JFrame {
 	}
 	
 	public void closeForm() {
-		this.setVisible(false);
+		this.dispose();;
 	}
 	
-	public void updateFlight(Flight e, int rowIndex) {
+	public void updateFlight(Flight e) {
 		FlightDAO.getInstance().update(e);
-		DefaultTableModel tableModel = (DefaultTableModel) this.homeView.getTableFlight().getModel();
-		this.homeView.getFlightModel().update(e);
-		tableModel.setValueAt(e.getAircraft().getAircraftId() , rowIndex, 1);
-		tableModel.setValueAt(e.getAirportByDepartureId().getAirportName(), rowIndex, 2);
-		tableModel.setValueAt(e.getAirportByDestinationId().getAirportName(), rowIndex, 3);
-		tableModel.setValueAt(e.getNumberOfBusinessSeats() , rowIndex, 4);
-		tableModel.setValueAt(e.getNumberOfEconomySeats(), rowIndex, 5);
-		tableModel.setValueAt(e.getTakeOffTime() , rowIndex, 6);
-		tableModel.setValueAt(e.getLandingTime() , rowIndex, 7);
-		tableModel.setValueAt(e.getFlightDate() , rowIndex, 8);
-		tableModel.setValueAt(e.getBasicPrice() , rowIndex, 9);
+		this.homeView.refreshTableFlight();
 	}
 	
-	public int addFlight(Flight e) {
+	public int insertFlight(Flight e) {
 		int checkAdd =0;
 		checkAdd = FlightDAO.getInstance().add(e);
 		if(checkAdd!=0) {
-			this.homeView.getFlightModel().insert(e);
-			this.homeView.loadDataTableFlight(this.homeView.getFlightModel().getFlights());
+			this.homeView.refreshTableFlight();
 			return checkAdd;
 		} else {
 				JOptionPane.showMessageDialog(null,"Flight already exists, please re-enter");
@@ -297,31 +286,30 @@ public class InputFlightView extends JFrame {
 		return this.homeView.selectedKey;
 	}
 	
-	public Flight getDataFromEmployeeInput() {
-		Flight result = new Flight();
-		result.setFlightId(this.FlightTextField.getText());
-		Aircraft aircraftSelect = this.aircraftModel.search(this.airCraftComboBox.getSelectedItem()+"");
-		result.setAircraft(aircraftSelect);
-		result.setAirportByDepartureId(this.airportModel.searchByName(this.departureComboBox.getSelectedItem()+""));
-		result.setAirportByDestinationId(this.airportModel.searchByName(this.destinationComboBox.getSelectedItem()+""));
+	public Flight createFlightFromInputCell() {
+		String flightId = this.FlightTextField.getText();
+		String airCraftId = this.airCraftComboBox.getSelectedItem()+"";
+		Aircraft aircraftSelect = this.aircraftModel.search(airCraftId);
+		String departureName = this.departureComboBox.getSelectedItem()+"";
+		Airport airportDeparture = this.airportModel.searchByName(departureName);
+		String destinationName = this.destinationComboBox.getSelectedItem()+"";
+		Airport airportDestination = this.airportModel.searchByName(destinationName);
 		java.util.Date dateSelected = dateChooser.getDate();
-		result.setTakeOffTime(takeOfTimeTPK.getSelectedTime());
-		
-		result.setLandingTime(landingTimePicker.getSelectedTime());
-		result.setFlightDate(dateSelected);
-		result.setNumberOfBusinessSeats(aircraftSelect.getBusinessClassSeats());
-		result.setNumberOfEconomySeats(aircraftSelect.getEconomyClassSeats());
-		result.setStatus("waiting");
-		result.setBasicPrice(this.priceTextField.getText());
-		result.setIsActive(1);
-		return result;
+		String takeOfTime = takeOfTimeTPK.getSelectedTime();
+		String landingTime = landingTimePicker.getSelectedTime();
+		int numberBusinessSeats = aircraftSelect.getBusinessClassSeats();
+		int numberEconomySeats = aircraftSelect.getEconomyClassSeats();
+		String price = this.priceTextField.getText();
+		return new Flight(flightId, aircraftSelect, airportDeparture, airportDestination, takeOfTime
+				, landingTime, dateSelected, numberBusinessSeats, numberEconomySeats,"Waiting", price, 1, null);
 	}
 	
 
 	public void loadFlightToInputCell() {
 		int rowIndex = this.homeView.getTableFlight().getSelectedRow();
 		DefaultTableModel tableModel = (DefaultTableModel) this.homeView.getTableFlight().getModel();
-		Flight flight = this.homeView.getFlightModel().searchById(tableModel.getValueAt(rowIndex, 0)+"");
+		String flightId = tableModel.getValueAt(rowIndex, 0)+"";
+		Flight flight = FlightDAO.getInstance().selectById(flightId);
 		this.FlightTextField.setText(flight.getFlightId());
 		this.airCraftComboBox.setSelectedItem(flight.getAircraft().getAircraftId());
 		this.departureComboBox.setSelectedItem(flight.getAirportByDepartureId().getAirportName());

@@ -291,7 +291,8 @@ public class FormTicketDetails extends JFrame {
 	public void loadInfoTicket(JTable table) {
 		DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
 		int rowSelect = table.getSelectedRow();
-		Ticket ticket = this.homeView.getTicketModel().searchTicketById(Integer.valueOf(tableModel.getValueAt(rowSelect, 0)+""));
+		int ticketId = Integer.valueOf(tableModel.getValueAt(rowSelect, 0)+"");
+		Ticket ticket = TicketDAO.getInstance().selectById(ticketId);
 		Flight flight = ticket.getFlight();
 		Customer customer = ticket.getCustomer();
 		Set<Invoice> invoices = ticket.getInvoices();

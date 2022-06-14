@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -37,7 +38,7 @@ public class TabEmployeeManagementController implements ActionListener {
 		} else if(src.equals("Lock")) {
 			int choose = JOptionPane.showConfirmDialog(homeView,"Are you sure to lock this employee?");
 			if(choose==0) {
-				this.homeView.deleteEmp();
+				this.homeView.lockEmployee();
 				this.homeView.getTableEmployee().clearSelection();				
 			}
 		} else if(src.equals("Modify")) {
@@ -53,7 +54,7 @@ public class TabEmployeeManagementController implements ActionListener {
 				JOptionPane.showMessageDialog(homeView, "Please select the employee to be edited!");
 			}
 		} else if(src.equals("Refresh")) {
-			this.homeView.loadDataTableEmployee(this.homeView.getEmployeeModel().getEmployees());
+			this.homeView.refreshTableEmployee();
 		} else if(src.equals("Search")) {
 			this.homeView.searchEmployee();
 		}

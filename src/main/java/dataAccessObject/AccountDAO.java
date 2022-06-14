@@ -49,8 +49,7 @@ public class AccountDAO implements DAOInterface<Account>{
 		return null;
 	}
 
-	@Override
-	public Account selectById(Account t) {
+	public Account selectById(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

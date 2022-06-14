@@ -62,15 +62,31 @@ public class TicketDAO implements DAOInterface<Ticket>{
 		return null;
 	}
 
-	@Override
-	public Ticket selectById(Ticket t) {
-		// TODO Auto-generated method stub
+	public Ticket selectById(int id) {
+		Ticket result;
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            result = session.find(Ticket.class, id);
+            session.close();
+            return result;
+        } catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public ArrayList<Ticket> selectByCondition(String condition) {
-		// TODO Auto-generated method stub
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            String hql = "FROM Account WHERE " +condition;
+            ArrayList<Ticket> resultSelect =  (ArrayList<Ticket>) session.createQuery(hql).list();
+            session.getTransaction().commit();
+            session.close();
+            return resultSelect;
+        } catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 

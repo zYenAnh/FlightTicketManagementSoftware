@@ -69,8 +69,7 @@ public class InvoiceDAO implements DAOInterface<Invoice>{
 		return null;
 	}
 
-	@Override
-	public Invoice selectById(Invoice t) {
+	public Invoice selectById(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

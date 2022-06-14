@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.hibernate.Session;
 
 import entities.Airport;
+import entities.Flight;
 
 public class AirportDAO implements DAOInterface<Airport>{
 
@@ -50,9 +51,16 @@ public class AirportDAO implements DAOInterface<Airport>{
 		return null;
 	}
 
-	@Override
-	public Airport selectById(Airport t) {
-		// TODO Auto-generated method stub
+	public Airport selectById(String id) {
+		Airport result;
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            result = session.find(Airport.class, id);
+            session.close();
+            return result;
+        } catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 

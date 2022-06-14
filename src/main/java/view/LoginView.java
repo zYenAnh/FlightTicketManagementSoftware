@@ -124,6 +124,10 @@ public class LoginView extends JFrame {
         messageLogin.setFont(font_JetBrains);
         messageLogin.setBounds(157, 336, 357, 14);
         centerJPanel.add(messageLogin);
+        
+        //
+        usernameTextField.setText("admin");
+        passwordTextField.setText("1");
 	}
 	
 	public void handleLogin() 

@@ -25,18 +25,38 @@ public class NavigationController implements ActionListener{
 		if(src.equals("TICKET MANAGEMENT")) {
 			this.viewHome.getFlightManagement().setVisible(false);
 			this.viewHome.getEmployeeManagerPanel().setVisible(false);
+			this.viewHome.getPanelTabAccount().setVisible(false);
 			this.viewHome.getTicketManagementPanel().setVisible(true);
+			this.viewHome.getPanelTabPayment().setVisible(false);
 			changeColor(this.viewHome.btnTicketMNM);
 		} else if(src.equals("FLIGHT MANAGEMENT")) {
 			this.viewHome.getTicketManagementPanel().setVisible(false);
 			this.viewHome.getEmployeeManagerPanel().setVisible(false);
+			this.viewHome.getPanelTabAccount().setVisible(false);
 			this.viewHome.getFlightManagement().setVisible(true);
+			this.viewHome.getPanelTabPayment().setVisible(false);
 			changeColor(this.viewHome.btnFlightMNM);
 		} else if(src.equals("EMPLOYEE MANAGEMENT")) {
 			this.viewHome.getTicketManagementPanel().setVisible(false);
 			this.viewHome.getFlightManagement().setVisible(false);
+			this.viewHome.getPanelTabAccount().setVisible(false);
 			this.viewHome.getEmployeeManagerPanel().setVisible(true);
+			this.viewHome.getPanelTabPayment().setVisible(false);
 			changeColor(this.viewHome.btnEmployeeMNM);
+		} else if(src.equals("ACCOUNT")) {
+			this.viewHome.getTicketManagementPanel().setVisible(false);
+			this.viewHome.getFlightManagement().setVisible(false);
+			this.viewHome.getEmployeeManagerPanel().setVisible(false);
+			this.viewHome.getPanelTabAccount().setVisible(true);
+			this.viewHome.getPanelTabPayment().setVisible(false);
+			changeColor(this.viewHome.btnAccount);
+		} else if(src.equals("PAYMENT")) {
+			this.viewHome.getTicketManagementPanel().setVisible(false);
+			this.viewHome.getFlightManagement().setVisible(false);
+			this.viewHome.getEmployeeManagerPanel().setVisible(false);
+			this.viewHome.getPanelTabAccount().setVisible(false);
+			this.viewHome.getPanelTabPayment().setVisible(true);
+			changeColor(this.viewHome.btnPayment);
 		}
 	}
 	

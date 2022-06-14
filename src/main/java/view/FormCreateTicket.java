@@ -112,7 +112,8 @@ public class FormCreateTicket extends JFrame {
 		this.homeView =homeView;
 		DefaultTableModel tableModel = (DefaultTableModel) this.getTable.getModel();
 		int RowSelect = this.getTable.getSelectedRow();
-		flight = this.homeView.getFlightModel().searchById(tableModel.getValueAt(RowSelect, 0)+"");
+		String flightId =tableModel.getValueAt(RowSelect, 0) +"";
+		flight = FlightDAO.getInstance().selectById(flightId);
 		setBounds(100, 100, 900, 700);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -304,26 +305,24 @@ public class FormCreateTicket extends JFrame {
 		priceLbl.setText((3* Integer.valueOf(flight.getBasicPrice())+" VND"));
 	}
 
-	public Customer getInfoCustomerFromCell() {
-		Customer customer = new Customer();
-		customer.setCustomerName(this.nameTxtF.getText());
-		customer.setDateOfBirth(dateChooser.getDate());
-		customer.setGender(this.genderCbb.getSelectedItem()+"");
-		customer.setAddress(this.addressTxtF.getText());
-		customer.setCitizenIdentify(this.citizenidentifyTxtF.getText());
-		customer.setPhone(this.phoneTxtF.getText());
-		customer.setIsActive(1);
-		return customer;
+	public Customer createCustomerFromInputCell() {
+		String name = this.nameTxtF.getText();
+		Date dateOfBirth = dateChooser.getDate();
+		String gender = this.genderCbb.getSelectedItem()+"";
+		String address = this.addressTxtF.getText();
+		String citizenidentify = this.citizenidentifyTxtF.getText();
+		String phone = this.phoneTxtF.getText();
+		return new Customer(name, citizenidentify, dateOfBirth, gender, address, phone, 1, null, null);
 	}
 	public void closeForm() {
-		this.setVisible(false);
+		this.dispose();
 	}
 	
 	public void createTicket() {
 		DefaultTableModel tableModel = (DefaultTableModel) this.getTable.getModel();
 		int RowSelect = this.getTable.getSelectedRow();
 		Date now = new Date();
-		Customer customer = getInfoCustomerFromCell();
+		Customer customer = createCustomerFromInputCell();
 		Employee employee = this.homeView.getLoginAccount().getEmployee();
 		Ticketclass ticketclass = ticketClassModel.searchByName(this.ticketTypeCbb.getSelectedItem()+"");
 		String price = "";
@@ -353,8 +352,7 @@ public class FormCreateTicket extends JFrame {
 		customer.setTickets(tickets);
 		CustomerDAO.getInstance().presist(customer);
 		FlightDAO.getInstance().update(flight);
-		this.homeView.getTicketModel().insert(ticket);
-		this.homeView.loadDataTableTicket(this.homeView.getTicketModel().getTickets());
-		this.homeView.loadDataTableFlight(this.homeView.getFlightModel().getFlights());
+		this.homeView.refreshTableFlight();
+		this.homeView.refreshTableTicket();
 	}
 }

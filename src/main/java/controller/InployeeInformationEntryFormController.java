@@ -11,31 +11,38 @@ import view.EmployeeInformationEntryForm;
 
 public class InployeeInformationEntryFormController implements ActionListener{
 
-	private EmployeeInformationEntryForm empIEFView;
+	private EmployeeInformationEntryForm employeeInformationEntryForm;
 	
-	public InployeeInformationEntryFormController(EmployeeInformationEntryForm v) {
-		this.empIEFView = v;
+	public InployeeInformationEntryFormController(EmployeeInformationEntryForm employeeInformationEntryForm) {
+		this.employeeInformationEntryForm = employeeInformationEntryForm;
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String src = e.getActionCommand();
-		String selectedKeyInTabEmpManagement = this.empIEFView.getSelectedKey();
+		String selectedKeyInTabEmpManagement = this.employeeInformationEntryForm.getSelectedKey();
 		if(src.equals("Cancel")) {
-			this.empIEFView.closeForm();
-		} else if(src.equals("Save")) {
-			Employee empSave = this.empIEFView.getDataFromEmployeeInput();
-			int choose = JOptionPane.showConfirmDialog(empIEFView,"Are you sure to add/edit this employee");
-			if(choose == 0) {
-				int checkAdd = 0;
-				if(selectedKeyInTabEmpManagement=="Add") {
-					checkAdd = this.empIEFView.addEmp(empSave);		
-				} else {
-					this.empIEFView.updateEmp(empSave, this.empIEFView.rowSelectedIndex);
-					this.empIEFView.setVisible(false);
+			this.employeeInformationEntryForm.closeForm();
+		} else if(selectedKeyInTabEmpManagement.equals("Add")) {
+			if(src.equals("Save")) {
+				Employee employee = this.employeeInformationEntryForm.createEmployeeFromInputCell();
+				int choose = JOptionPane.showConfirmDialog(employeeInformationEntryForm,"Are you sure to insert this employee to database?");
+				int checkInsert =0;
+				if(choose ==0) {
+					checkInsert =  this.employeeInformationEntryForm.insertEmployee(employee);
 				}
-				if(checkAdd!=0) {
-					JOptionPane.showMessageDialog(empIEFView, "Successfully");
-					this.empIEFView.setVisible(false);
+				if(checkInsert!=0) {
+					JOptionPane.showMessageDialog(employeeInformationEntryForm, "Successfully");
+					this.employeeInformationEntryForm.setVisible(false);
+				}
+			}
+		} else if(selectedKeyInTabEmpManagement.equals("Modify")) {
+			if(src.equals("Save")) {
+				Employee employee = this.employeeInformationEntryForm.createEmployeeFromInputCell();
+				int choose = JOptionPane.showConfirmDialog(employeeInformationEntryForm,"Are you sure to update this employee to database?");
+				if(choose ==0) {
+					this.employeeInformationEntryForm.updateEmployee(employee);
+					JOptionPane.showMessageDialog(employeeInformationEntryForm, "Successfully");
+					this.employeeInformationEntryForm.setVisible(false);
 				}
 			}
 		}

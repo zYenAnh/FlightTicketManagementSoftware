@@ -181,38 +181,29 @@ public class EmployeeInformationEntryForm extends JFrame {
 		saveBtn.setFont(font_16);
 		buttonPanel.add(saveBtn);
 		if(this.homeView.selectedKey=="Modify")
-			loadEmpToInputCell();
+			loadInfoEmployeeToInputCell();
 	}
 	
 	public void closeForm() {
-		this.setVisible(false);
+		this.dispose();
 	}
 	
-	public void updateEmp(Employee e, int rowIndex) {
-		EmployeeDAO.getInstance().update(e);
+	public void updateEmployee(Employee e) {
+		int rowIndex = this.homeView.getTableEmployee().getSelectedRow();
 		DefaultTableModel tableModel = (DefaultTableModel) this.homeView.getTableEmployee().getModel();
-		ArrayList<Employee> employees = this.homeView.getEmployeeModel().getEmployees();
-		for(int i=0;i<employees.size();i++) {
-			if(e.getEmployeeId().equals(employees.get(i).getEmployeeId())) {
-				this.homeView.getEmployeeModel().getEmployees().set(i, e);
-				break;
-			}
-		}
-		tableModel.setValueAt(e.getEmployeeName(), rowIndex, 1);
-		tableModel.setValueAt(e.getRole(), rowIndex, 2);
-		tableModel.setValueAt(e.getGender(), rowIndex, 3);
-		tableModel.setValueAt(e.getDateOfBirth(), rowIndex, 4);
-		tableModel.setValueAt(e.getPhone(), rowIndex, 5);
-		tableModel.setValueAt(e.getAddress(), rowIndex, 6);
-		tableModel.setValueAt(e.getCitizenIdentify(), rowIndex, 7);
+		int employeeId = Integer.valueOf(tableModel.getValueAt(rowIndex, 0)+"");
+		e.setEmployeeId(employeeId);
+		EmployeeDAO.getInstance().update(e);
+		ArrayList<Employee> employees = EmployeeDAO.getInstance().selectAll();
+		this.homeView.loadDataTableEmployee(employees);
 	}
 	
-	public int addEmp(Employee e) {
+	public int insertEmployee(Employee e) {
 		int checkAddEmp =0;
 		checkAddEmp = EmployeeDAO.getInstance().add(e);
 		if(checkAddEmp!=0) {
-			this.homeView.getEmployeeModel().insert(e);
-			this.homeView.loadDataTableEmployee(this.homeView.getEmployeeModel().getEmployees());
+			ArrayList<Employee> employees = EmployeeDAO.getInstance().selectAll();
+			this.homeView.loadDataTableEmployee(employees);
 			return checkAddEmp;
 		} else {
 				JOptionPane.showMessageDialog(null,"Employee already exists, please re-enter");
@@ -224,27 +215,22 @@ public class EmployeeInformationEntryForm extends JFrame {
 		return this.homeView.selectedKey;
 	}
 	
-	public Employee getDataFromEmployeeInput() {
-		DefaultTableModel tableModel = (DefaultTableModel) this.homeView.getTableEmployee().getModel();
-		int rowIndex = this.homeView.getTableEmployee().getSelectedRow();
-		Employee result = new Employee();
-		if(rowIndex!=-1)
-			result.setEmployeeId(Integer.valueOf(tableModel.getValueAt(rowIndex, 0)+""));
-		result.setEmployeeName(this.nameTextField.getText());
-		result.setAddress(this.address.getText());
-		result.setCitizenIdentify(this.citizenidentifyTextField.getText());
+	public Employee createEmployeeFromInputCell() {
+		String name = this.nameTextField.getText();
+		String address = this.address.getText();
+		String citizenidentify = this.citizenidentifyTextField.getText();
 		java.util.Date dateSelected = this.dateChooser.getDate();
-		result.setDateOfBirth(dateSelected);
-		result.setPhone(this.phoneTextField.getText());
-		result.setGender(this.genderComboBox.getSelectedItem()+"");
-		result.setRole(this.roleComboBox.getSelectedItem()+"");
-		return result;
+		String phone = this.phoneTextField.getText();
+		String gender = this.genderComboBox.getSelectedItem()+"";
+		String role = this.roleComboBox.getSelectedItem()+"";
+		return new Employee(name, citizenidentify, dateSelected, gender, address, phone, role, 1, null, null, null);
 	}
 	
-	public void loadEmpToInputCell() {
+	public void loadInfoEmployeeToInputCell() {
 		int rowIndex = this.homeView.getTableEmployee().getSelectedRow();
 		DefaultTableModel tableModel = (DefaultTableModel) this.homeView.getTableEmployee().getModel();
-		Employee employee = this.homeView.getEmployeeModel().searchEmployeeById( Integer.valueOf(tableModel.getValueAt(rowIndex, 0)+""));
+		int employeeId = Integer.valueOf(tableModel.getValueAt(rowIndex, 0)+"");
+		Employee employee = EmployeeDAO.getInstance().selectById(employeeId);
 		this.nameTextField.setText(employee.getEmployeeName());
 		this.roleComboBox.setSelectedItem(tableModel.getValueAt(rowIndex, 2));
 		this.genderComboBox.setSelectedItem(employee.getGender());

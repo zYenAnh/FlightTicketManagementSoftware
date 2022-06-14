@@ -3,6 +3,7 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -12,6 +13,7 @@ import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
 import com.toedter.calendar.JCalendar;
 
 import commons.ExcelHelpers;
+import dataAccessObject.FlightDAO;
 import entities.Aircraft;
 import entities.Flight;
 import view.HomeView;
@@ -76,11 +78,14 @@ public class TabFlightManagementController implements ActionListener{
 			if(returnVal== JFileChooser.APPROVE_OPTION) {
 				java.io.File file = fc.getSelectedFile();
 				try {
-					this.homeView.handleExportFlight(this.homeView.getFlightModel().getFlights(), file);
+					ArrayList<Flight> flights = FlightDAO.getInstance().selectFromToday();
+					this.homeView.handleExportFlight(flights, file);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			}
+		} else if(src.equals("Reverse")) {
+			this.homeView.reverseLocation();
 		}
 	}
 }

@@ -70,12 +70,11 @@ public class EmployeeDAO implements DAOInterface<Employee>{
 		return null;
 	}
 
-	@Override
-	public Employee selectById(Employee t) {
+	public Employee selectById(int id) {
 		Employee result;
 		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
-            result = session.find(Employee.class, t.getEmployeeId());
+            result = session.find(Employee.class, id);
             session.close();
             return result;
         } catch (Exception e) {
@@ -86,15 +85,15 @@ public class EmployeeDAO implements DAOInterface<Employee>{
 
 	@Override
 	public ArrayList<Employee> selectByCondition(String condition) {
-//		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
-//            session.beginTransaction();
-//            ArrayList<Employee> resultSelect = (ArrayList<Employee>) session.createQuery("FROM Employee WHERE Employee.isActive = 1",Employee.class)
-//            		.list();
-//            session.close();
-//            return resultSelect;
-//        } catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            ArrayList<Employee> resultSelect = (ArrayList<Employee>) session.createQuery("FROM Employee WHERE Employee.isActive = 1",Employee.class)
+            		.list();
+            session.close();
+            return resultSelect;
+        } catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 

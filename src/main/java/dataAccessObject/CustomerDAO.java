@@ -67,8 +67,7 @@ public class CustomerDAO implements DAOInterface<Customer>{
 		return null;
 	}
 
-	@Override
-	public Customer selectById(Customer t) {
+	public Customer selectById(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
