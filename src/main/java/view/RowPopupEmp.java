@@ -35,7 +35,8 @@ class RowPopupEmp extends JPopupMenu {
 			public void actionPerformed(ActionEvent e) {
 				int rowSelect = getTable.getSelectedRow();
 				DefaultTableModel tableModel = (DefaultTableModel) getTable.getModel();
-				Employee employee = homeView.getEmployeeModel().searchEmployeeById(Integer.valueOf((tableModel.getValueAt(rowSelect, 0)+"")));
+				int empId = Integer.valueOf((tableModel.getValueAt(rowSelect, 0)+""));
+				Employee employee = EmployeeDAO.getInstance().selectById(empId);
 				String condition = "Employee_ID = " + employee.getEmployeeId();
 				if(AccountDAO.getInstance().selectByCondition(condition).isEmpty()) {
 					try {
@@ -51,20 +52,19 @@ class RowPopupEmp extends JPopupMenu {
 			}
 		});
 		
-		active.addActionListener(new ActionListener() {
-			
+		active.addActionListener(new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int rowSelect = getTable.getSelectedRow();
 				DefaultTableModel tableModel = (DefaultTableModel) getTable.getModel();
-				Employee employee = homeView.getEmployeeModel().searchEmployeeById(Integer.valueOf((tableModel.getValueAt(rowSelect, 0)+"")));
+				int employeeId = Integer.valueOf((tableModel.getValueAt(rowSelect, 0)+""));
+				Employee employee = EmployeeDAO.getInstance().selectById(employeeId);
 				if(employee.getIsActive()==1) {
 					JOptionPane.showMessageDialog(homeView, "This account is being active");
 				} else {
 					employee.setIsActive(1);
 					EmployeeDAO.getInstance().update(employee);
-					homeView.getEmployeeModel().update(employee);
-					homeView.loadDataTableEmployee(homeView.getEmployeeModel().getEmployees());
+					homeView.refreshTableEmployee();
 				}
 			}
 		});

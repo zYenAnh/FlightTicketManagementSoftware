@@ -16,6 +16,11 @@ import dataAccessObject.FlightDAO;
 import entities.Customer;
 import entities.Flight;
 import entities.Ticket;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,8 +28,14 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import javax.swing.JSeparator;
@@ -38,11 +49,12 @@ public class Invoice extends JFrame {
 	Font font_JetBrains = new Font("JetBrains Mono", Font.BOLD, 12);
 	Font font_JetBrains_14 = new Font("JetBrains Mono", Font.BOLD, 14);
 	Font font_12_Thin = new Font("Poppins", Font.PLAIN, 12);
-	int total = 0;
+	Long total = (long) 0;
 	
 	
 	public Invoice(HomeView homeView) {
 		this.homeView = homeView;
+		this.setLocationRelativeTo(null);
 		setBounds(100, 100, 470, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -88,8 +100,8 @@ public class Invoice extends JFrame {
 		JTableHeader tableWaitingHeader = tableShowTicket.getTableHeader();
 		tableWaitingHeader.setFont(font_12_Thin);
 		tableShowTicket.setRowHeight(30);
-		contentPane.add(tableTicketBeingBooked);																																									Random genarator = new Random(); int idHd = genarator.nextInt(300)+1;															
-		JLabel lblDateCreateInvoice_1 = new JLabel("HD" + idHd);
+		contentPane.add(tableTicketBeingBooked);																																									Random genarator = new Random(); int idHd = genarator.nextInt(300)+1;	String hdId = "HD " + idHd;	
+		JLabel lblDateCreateInvoice_1 = new JLabel(hdId);
 		lblDateCreateInvoice_1.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
 		lblDateCreateInvoice_1.setBounds(10, 135, 214, 19);
 		contentPane.add(lblDateCreateInvoice_1);
@@ -111,20 +123,22 @@ public class Invoice extends JFrame {
 		lblDateCreateInvoice_3_1.setBounds(10, 470, 101, 19);
 		contentPane.add(lblDateCreateInvoice_3_1);
 		
-		JLabel lblTotalMoney_1 = new JLabel(total+"");
-		lblTotalMoney_1.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		lblTotalMoney_1.setBounds(352, 412, 94, 19);
-		contentPane.add(lblTotalMoney_1);
+		JLabel totalMoney = new JLabel(total+"");
+		totalMoney.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		totalMoney.setBounds(352, 412, 94, 19);
+		contentPane.add(totalMoney);
 		
-		JLabel lblTotalMoney_1_1 = new JLabel((total*0.05)+"");
-		lblTotalMoney_1_1.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		lblTotalMoney_1_1.setBounds(352, 441, 94, 19);
-		contentPane.add(lblTotalMoney_1_1);
+		Double vatDouble = total*0.05;
+		JLabel vat = new JLabel(vatDouble+"");
+		vat.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		vat.setBounds(352, 441, 94, 19);
+		contentPane.add(vat);
 		
-		JLabel lblTotalMoney_1_1_1 = new JLabel((total + total*0.05)+"");
-		lblTotalMoney_1_1_1.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		lblTotalMoney_1_1_1.setBounds(352, 470, 94, 19);
-		contentPane.add(lblTotalMoney_1_1_1);
+		Long totalPaymentLong = (long) (total + total*0.05);
+		JLabel totalPayment = new JLabel(totalPaymentLong+"");
+		totalPayment.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		totalPayment.setBounds(352, 470, 94, 19);
+		contentPane.add(totalPayment);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(10, 395, 446, 10);
@@ -151,10 +165,21 @@ public class Invoice extends JFrame {
 						CustomerDAO.getInstance().presist(customers.get(i));
 						FlightDAO.getInstance().update(flights.get(i));
 					}
-					homeView.setEmptyAllList();
+					System.out.println(homeView.getListTicketWaiting().getTickets().get(0).getTicketId());
+					
+					
+					String targetFolder = "C:\\Users\\Administrator\\Desktop\\";  
+					ArrayList<Ticket> tickets = homeView.getListTicketWaiting().getTickets();
+					
+					for(int i=0;i<tickets.size();i++) {
+						int ticketid = tickets.get(i).getTicketId();
+						exportInvoiceMarkToPdf(ticketid,hdId,nowDate.toString(),total,vatDouble,totalPaymentLong, targetFolder);
+					}
+//					homeView.setEmptyAllList();
 					homeView.refreshTableFlight();
 					homeView.refreshTableTicket();
 					homeView.refreshTableWaiting();
+					
 					closeForm();
 				}
 				
@@ -163,6 +188,52 @@ public class Invoice extends JFrame {
 		contentPane.add(btnPaymentAndPrint);
 		
 	}
+	
+	public static void exportInvoiceMarkToPdf(int ticketid, String invoiceId, String now,
+			Long totalMoney, double vat, long totalPayment, String targetFolder) {
+			Connection connection = null;
+			try {
+				String path = "..//FlightTicketManagementSoftware//src//main//java//commons//InvoiceA6.jrxml";
+				JasperReport jr = JasperCompileManager.compileReport(path);
+				
+				Map<String, Object> params = new HashMap<String, Object>();  
+				params.put("ticketid1", ticketid);
+				params.put("ticketid", ticketid);  
+				params.put("idinvoice", invoiceId);
+				params.put("Now", now);
+				params.put("totalMoney", totalMoney);
+				params.put("VAT", vat);
+				params.put("TotalPayment", totalPayment);
+				
+				connection = getConnection();  
+	            JasperPrint jp = JasperFillManager.fillReport(jr, params, connection);  
+	            OutputStream os = new FileOutputStream(targetFolder+"invoice" + ticketid+".pdf");  
+	            JasperExportManager.exportReportToPdfStream(jp, os);
+	            os.flush();  
+                os.close();  
+           } catch (Exception e) {  
+                e.printStackTrace();  
+           }finally{  
+                try{  
+                     if(connection != null && !connection.isClosed()){  
+                    	 connection.close();  
+                     }  
+                }catch(Exception e){  
+                     e.printStackTrace();  
+                }  
+           }  
+	}
+	
+	public static Connection getConnection(){  
+        Connection conn = null;  
+        try {  
+             Class.forName("com.mysql.jdbc.Driver");  
+             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sellticketdb","root", "");  
+        } catch (Exception e) {  
+             e.printStackTrace();  
+        }  
+        return conn;  
+   }  
 	
 	public void closeForm() {
 		this.dispose();

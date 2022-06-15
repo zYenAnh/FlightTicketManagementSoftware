@@ -60,6 +60,46 @@
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.36.jar"/>
 	<classpathentry kind="lib" path="lib/SparseBitSet-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/xmlbeans-5.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/bcmail-jdk14-1.38.jar"/>
+	<classpathentry kind="lib" path="lib/bcmail-jdk14-138.jar"/>
+	<classpathentry kind="lib" path="lib/bcprov-jdk14-1.38.jar"/>
+	<classpathentry kind="lib" path="lib/bcprov-jdk14-138.jar"/>
+	<classpathentry kind="lib" path="lib/bctsp-jdk14-1.38.jar"/>
+	<classpathentry kind="lib" path="lib/castor-core-1.3.3.jar"/>
+	<classpathentry kind="lib" path="lib/castor-xml-1.3.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils-1.9.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-digester-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/core-2.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/ecj-4.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/icu4j-57.1.jar"/>
+	<classpathentry kind="lib" path="lib/itext-2.1.7.js5.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-annotations-2.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-core-2.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-databind-2.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-regexp-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/jasperreports-6.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/javax.inject-1.jar"/>
+	<classpathentry kind="lib" path="lib/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="lib/lucene-analyzers-common-4.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/lucene-core-4.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/lucene-queries-4.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/lucene-queryparser-4.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/lucene-sandbox-4.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/olap4j-0.9.7.309-JS-3.jar"/>
+	<classpathentry kind="lib" path="lib/spring-aop-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-asm-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-beans-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-core-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-expression-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/stax-1.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/stax-api-1.0-2.jar"/>
 	<classpathentry kind="src" output="target/test-classes" path="target/generated-test-sources/test-annotations">
 		<attributes>
 			<attribute name="ignore_optional_problems" value="true"/>
