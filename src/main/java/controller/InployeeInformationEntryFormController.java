@@ -7,13 +7,13 @@ import javax.swing.JOptionPane;
 
 import entities.Account;
 import entities.Employee;
-import view.EmployeeInformationEntryForm;
+import view.FormStaffInformation;
 
 public class InployeeInformationEntryFormController implements ActionListener{
 
-	private EmployeeInformationEntryForm employeeInformationEntryForm;
+	private FormStaffInformation employeeInformationEntryForm;
 	
-	public InployeeInformationEntryFormController(EmployeeInformationEntryForm employeeInformationEntryForm) {
+	public InployeeInformationEntryFormController(FormStaffInformation employeeInformationEntryForm) {
 		this.employeeInformationEntryForm = employeeInformationEntryForm;
 	}
 	@Override

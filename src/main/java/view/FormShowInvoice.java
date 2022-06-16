@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
-public class InputInvoiceView extends JFrame {
+public class FormShowInvoice extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField inputEmployeeId;
@@ -26,7 +26,7 @@ public class InputInvoiceView extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					InputInvoiceView frame = new InputInvoiceView();
+					FormShowInvoice frame = new FormShowInvoice();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,7 +38,7 @@ public class InputInvoiceView extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public InputInvoiceView() {
+	public FormShowInvoice() {
 		int Location_jtx = 185;
 		Font font_LucidaFont_18 = new Font("Lucida Grande", Font.BOLD, 18);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

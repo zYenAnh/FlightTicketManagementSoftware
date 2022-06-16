@@ -74,21 +74,21 @@ public class FormTicketDetails extends JFrame {
 
 	private JPanel contentPane;
 	public int rowSelectedIndex;
-	private JLabel departureLbl;
-	private JLabel destinationLbl;
-	private JLabel departureDayLbl;
-	private JLabel departureTimeLbl;
-	private JLabel priceLbl;
+	private JLabel lblFrom;
+	private JLabel lblTo;
+	private JLabel lblDepartureDate;
+	private JLabel lblDepartureTime;
+	private JLabel lblPrice;
 	private JTable getTable;
 	private HomeView homeView;
 	private JLabel addressTxtF;
-	private JLabel phoneTxtF;
-	private JLabel citizenTxtF;
-	private JLabel genderTxtF;
-	private JLabel dateOfBirthTxtF;
-	private JLabel nameTxtF;
-	private JLabel ticketTypeLbl;
-	private JLabel LandingTimeLbl;
+	private JLabel lblPhone;
+	private JLabel lblCitizenidentify;
+	private JLabel lblGender;
+	private JLabel lblDateOfBirth;
+	private JLabel lblName;
+	private JLabel lblTicketType;
+	private JLabel lblLandingTime;
 	DecimalFormat formatter = new DecimalFormat("###,###,###");
 	
 	Font font_16 = new Font("Poppins", Font.BOLD, 16);
@@ -133,63 +133,63 @@ public class FormTicketDetails extends JFrame {
 		lblNewLabel_2.setFont(font_14_Thin);
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		departureLbl = new JLabel("");
-		departureLbl.setFont(font_JetBrains_14);
-		panel.add(departureLbl);
+		lblFrom = new JLabel("");
+		lblFrom.setFont(font_JetBrains_14);
+		panel.add(lblFrom);
 		
 		JLabel lblNewLabel_3 = new JLabel("To:");
 		panel.add(lblNewLabel_3);
 		lblNewLabel_3.setFont(font_14_Thin);
 		lblNewLabel_3.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		destinationLbl = new JLabel("");
-		destinationLbl.setFont(font_JetBrains_14);
-		panel.add(destinationLbl);
+		lblTo = new JLabel("");
+		lblTo.setFont(font_JetBrains_14);
+		panel.add(lblTo);
 		
 		JLabel lblNewLabel_4 = new JLabel("Departure Day: ");
 		panel.add(lblNewLabel_4);
 		lblNewLabel_4.setFont(font_14_Thin);
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		departureDayLbl = new JLabel("");
-		departureDayLbl.setFont(font_JetBrains_14);
-		panel.add(departureDayLbl);
+		lblDepartureDate = new JLabel("");
+		lblDepartureDate.setFont(font_JetBrains_14);
+		panel.add(lblDepartureDate);
 		
 		JLabel lblNewLabel_5 = new JLabel("Departure Time: ");
 		panel.add(lblNewLabel_5);
 		lblNewLabel_5.setFont(font_14_Thin);
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		departureTimeLbl = new JLabel("");
-		departureTimeLbl.setFont(font_JetBrains_14);
-		panel.add(departureTimeLbl);
+		lblDepartureTime = new JLabel("");
+		lblDepartureTime.setFont(font_JetBrains_14);
+		panel.add(lblDepartureTime);
 		
 		JLabel lblNewLabel_5_2 = new JLabel("Landing Time:");
 		lblNewLabel_5_2.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_5_2.setFont(new Font("Poppins", Font.PLAIN, 14));
 		panel.add(lblNewLabel_5_2);
 		
-		LandingTimeLbl = new JLabel();
-		LandingTimeLbl.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
-		panel.add(LandingTimeLbl);
+		lblLandingTime = new JLabel();
+		lblLandingTime.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
+		panel.add(lblLandingTime);
 		
 		JLabel lblNewLabel_6_1 = new JLabel("Ticket type:");
 		lblNewLabel_6_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_6_1.setFont(new Font("Poppins", Font.PLAIN, 14));
 		panel.add(lblNewLabel_6_1);
 		
-		ticketTypeLbl = new JLabel();
-		ticketTypeLbl.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
-		panel.add(ticketTypeLbl);
+		lblTicketType = new JLabel();
+		lblTicketType.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
+		panel.add(lblTicketType);
 		
 		JLabel lblNewLabel_6 = new JLabel("Price:");
 		panel.add(lblNewLabel_6);
 		lblNewLabel_6.setFont(font_14_Thin);
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		priceLbl = new JLabel("");
-		priceLbl.setFont(font_JetBrains_14);
-		panel.add(priceLbl);
+		lblPrice = new JLabel("");
+		lblPrice.setFont(font_JetBrains_14);
+		panel.add(lblPrice);
 		
 		JLabel ticketTypeTxtF = new JLabel((String) null);
 		ticketTypeTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
@@ -204,45 +204,45 @@ public class FormTicketDetails extends JFrame {
 		lblNewLabel_2_1.setFont(new Font("Poppins", Font.PLAIN, 14));
 		panel_1.add(lblNewLabel_2_1);
 		
-		nameTxtF = new JLabel("null");
-		nameTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
-		panel_1.add(nameTxtF);
+		lblName = new JLabel("null");
+		lblName.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
+		panel_1.add(lblName);
 		
 		JLabel lblNewLabel_3_1 = new JLabel("Date Of Birth:");
 		lblNewLabel_3_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_3_1.setFont(new Font("Poppins", Font.PLAIN, 14));
 		panel_1.add(lblNewLabel_3_1);
 		
-		dateOfBirthTxtF = new JLabel("null");
-		dateOfBirthTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
-		panel_1.add(dateOfBirthTxtF);
+		lblDateOfBirth = new JLabel("null");
+		lblDateOfBirth.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
+		panel_1.add(lblDateOfBirth);
 		
 		JLabel lblNewLabel_6_2_1 = new JLabel("Gender:");
 		lblNewLabel_6_2_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_6_2_1.setFont(new Font("Poppins", Font.PLAIN, 14));
 		panel_1.add(lblNewLabel_6_2_1);
 		
-		genderTxtF = new JLabel("null");
-		genderTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
-		panel_1.add(genderTxtF);
+		lblGender = new JLabel("null");
+		lblGender.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
+		panel_1.add(lblGender);
 		
 		JLabel lblNewLabel_4_1 = new JLabel("Citizenidentify:");
 		lblNewLabel_4_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_4_1.setFont(new Font("Poppins", Font.PLAIN, 14));
 		panel_1.add(lblNewLabel_4_1);
 		
-		citizenTxtF = new JLabel("null");
-		citizenTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
-		panel_1.add(citizenTxtF);
+		lblCitizenidentify = new JLabel("null");
+		lblCitizenidentify.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
+		panel_1.add(lblCitizenidentify);
 		
 		JLabel lblNewLabel_5_1 = new JLabel("Phone: ");
 		lblNewLabel_5_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_5_1.setFont(new Font("Poppins", Font.PLAIN, 14));
 		panel_1.add(lblNewLabel_5_1);
 		
-		phoneTxtF = new JLabel("null");
-		phoneTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
-		panel_1.add(phoneTxtF);
+		lblPhone = new JLabel("null");
+		lblPhone.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
+		panel_1.add(lblPhone);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(40, 110, 807, 2);
@@ -262,24 +262,24 @@ public class FormTicketDetails extends JFrame {
 		lblNewLabel_1_1.setBounds(40, 83, 132, 29);
 		contentPane.add(lblNewLabel_1_1);
 		
-		JButton exitBtn = new JButton("Exit");
-		exitBtn.setForeground(Color.RED);
-		exitBtn.addActionListener(new ActionListener() {
+		JButton btnExit = new JButton("Exit");
+		btnExit.setForeground(Color.RED);
+		btnExit.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				closeForm();
 			}
 		});
-		exitBtn.setFont(font_JetBrains_14);
-		exitBtn.setBounds(697, 540, 150, 43);
-		contentPane.add(exitBtn);
+		btnExit.setFont(font_JetBrains_14);
+		btnExit.setBounds(697, 540, 150, 43);
+		contentPane.add(btnExit);
 		
-		JLabel lblNewLabel_6_2 = new JLabel("Address:");
-		lblNewLabel_6_2.setBounds(40, 514, 201, 57);
-		contentPane.add(lblNewLabel_6_2);
-		lblNewLabel_6_2.setHorizontalAlignment(SwingConstants.LEFT);
-		lblNewLabel_6_2.setFont(new Font("Poppins", Font.PLAIN, 14));
+		JLabel lblAddress = new JLabel("Address:");
+		lblAddress.setBounds(40, 514, 201, 57);
+		contentPane.add(lblAddress);
+		lblAddress.setHorizontalAlignment(SwingConstants.LEFT);
+		lblAddress.setFont(new Font("Poppins", Font.PLAIN, 14));
 		
 		addressTxtF = new JLabel("<dynamic> VND");
 		addressTxtF.setBounds(150, 513, 406, 57);
@@ -300,19 +300,19 @@ public class FormTicketDetails extends JFrame {
 		for(Invoice i:invoices) {
 			invoice = i;
 		}
-		departureLbl.setText(flight.getAirportByDepartureId().getAirportName());
-		destinationLbl.setText(flight.getAirportByDestinationId().getAirportName());
-		departureTimeLbl.setText(flight.getTakeOffTime());
-		departureDayLbl.setText(flight.getFlightDate()+"");
-		LandingTimeLbl.setText(flight.getLandingTime());
-		ticketTypeLbl.setText(ticket.getTicketclass().getTicketClassType());
-		priceLbl.setText(formatter.format(Integer.parseInt(invoice.getTotal()))+" VND");
+		lblFrom.setText(flight.getAirportByDepartureId().getAirportName());
+		lblTo.setText(flight.getAirportByDestinationId().getAirportName());
+		lblDepartureTime.setText(flight.getTakeOffTime());
+		lblDepartureDate.setText(flight.getFlightDate()+"");
+		lblLandingTime.setText(flight.getLandingTime());
+		lblTicketType.setText(ticket.getTicketclass().getTicketClassType());
+		lblPrice.setText(formatter.format(Integer.parseInt(invoice.getTotal()))+" VND");
 		
-		nameTxtF.setText(customer.getCustomerName());
-		dateOfBirthTxtF.setText(customer.getDateOfBirth()+"");
-		genderTxtF.setText(customer.getGender());
-		citizenTxtF.setText(customer.getCitizenIdentify());
-		phoneTxtF.setText(customer.getPhone());
+		lblName.setText(customer.getCustomerName());
+		lblDateOfBirth.setText(customer.getDateOfBirth()+"");
+		lblGender.setText(customer.getGender());
+		lblCitizenidentify.setText(customer.getCitizenIdentify());
+		lblPhone.setText(customer.getPhone());
 		addressTxtF.setText(customer.getAddress());
 	}
 	

@@ -17,7 +17,7 @@ import dataAccessObject.FlightDAO;
 import entities.Aircraft;
 import entities.Flight;
 import view.HomeView;
-import view.InputFlightView;
+import view.FormCreateOrUpdateFlight;
 
 public class TabFlightManagementController implements ActionListener{
 
@@ -35,7 +35,7 @@ public class TabFlightManagementController implements ActionListener{
 		if(src.equals("Add")) {
 			try {
 				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-				InputFlightView frame = new InputFlightView(homeView);
+				FormCreateOrUpdateFlight frame = new FormCreateOrUpdateFlight(homeView);
 				frame.setVisible(true);
 			} catch (Exception e1) {
 				e1.printStackTrace();
@@ -51,7 +51,7 @@ public class TabFlightManagementController implements ActionListener{
 			if(this.homeView.getTableFlight().getSelectedRow()!=-1) {
 				try {
 					UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-					InputFlightView frame = new InputFlightView(homeView);
+					FormCreateOrUpdateFlight frame = new FormCreateOrUpdateFlight(homeView);
 					frame.setVisible(true);
 				} catch (Exception e1) {
 					e1.printStackTrace();

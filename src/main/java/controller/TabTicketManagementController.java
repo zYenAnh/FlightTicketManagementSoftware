@@ -7,7 +7,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-import view.FormUpdateInfoTicket;
+import view.FormUpdateTicket;
 import view.HomeView;
 
 public class TabTicketManagementController implements ActionListener {
@@ -33,13 +33,13 @@ public class TabTicketManagementController implements ActionListener {
 			} else {
 				try {
 					UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-					new FormUpdateInfoTicket(this.homeView.getTableTicket(), homeView);
+					new FormUpdateTicket(this.homeView.getTableTicket(), homeView);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}				
 			}
 		} else if(src.equals("Refresh")) {
-			this.homeView.loadDataTableTicket(this.homeView.getTicketModel().getTickets());
+			this.homeView.refreshTableTicket();
 		} else if(src.equals("Export")) {
 			int returnVal = fc.showSaveDialog(this.homeView);
 			if(returnVal== JFileChooser.APPROVE_OPTION) {

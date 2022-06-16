@@ -69,22 +69,20 @@ import com.toedter.calendar.JDateChooser;
 public class FormCreateTicket extends JFrame {
 
 	private JPanel contentPane;
-	private ActionListener empIEFController;
 	public int rowSelectedIndex;
-	private ActionListener acFlightInfoController;
-	private JDateChooser dateChooser;
+	private JDateChooser dateChooserCus;
 	private JLabel departureLbl;
 	private JLabel destinationLbl;
 	private JLabel departureDayLbl;
 	private JLabel departureTimeLbl;
 	private JLabel priceLbl;
 	private TicketClassModel ticketClassModel;
-	private JComboBox ticketTypeCbb;
+	private JComboBox cbbTypeTicket;
 	private JTable getTable;
 	private JComboBox addressCbb;
-	private JComboBox genderCbb;
+	private JComboBox cbbGender;
 	private HomeView homeView;
-	private JTextField addressTxtF;
+	private JTextField txtAddress;
 	private ActionListener acFormCreateTicket;
 	private Flight flight;
 	DecimalFormat format = new DecimalFormat("###,###,###");
@@ -94,10 +92,10 @@ public class FormCreateTicket extends JFrame {
 	Font font_14_Thin = new Font("Poppins", Font.PLAIN, 14);
 	Font font_JetBrains = new Font("JetBrains Mono", Font.BOLD, 12);
 	Font font_JetBrains_14 = new Font("JetBrains Mono", Font.BOLD, 14);
-	private JTextField nameTxtF;
+	private JTextField txtName;
 	private JTextField textField_1;
-	private JTextField citizenidentifyTxtF;
-	private JTextField phoneTxtF;
+	private JTextField txtCitizenidentify;
+	private JTextField txtPhone;
 	private SpringLayout springLayout;
 	/**
 	 * Launch the application.
@@ -106,7 +104,7 @@ public class FormCreateTicket extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FormCreateTicket(JTable table,HomeView homeView) {
+	public FormCreateTicket(JTable table,HomeView homeView, String src) {
 		acFormCreateTicket = new FormCreateTicketController(this);
 		getTable = table;
 		this.homeView =homeView;
@@ -120,9 +118,10 @@ public class FormCreateTicket extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Create Ticket");
+		JLabel lblNewLabel = new JLabel("Ticket");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Poppins", Font.BOLD | Font.ITALIC, 30));
-		lblNewLabel.setBounds(344, 10, 215, 51);
+		lblNewLabel.setBounds(10, 10, 866, 51);
 		contentPane.add(lblNewLabel);
 	
 		JPanel buttonPanel = new JPanel();
@@ -130,18 +129,16 @@ public class FormCreateTicket extends JFrame {
 		buttonPanel.setLayout(new GridLayout(1,2,30,0));
 		contentPane.add(buttonPanel);
 		
-		JButton cancelBtn = new JButton("Cancel");
-		cancelBtn.addActionListener(acFormCreateTicket);
-		cancelBtn.setFont(font_16);
-		cancelBtn.setForeground(Color.RED);
-		buttonPanel.add(cancelBtn);
+		JButton btnCancelTicket = new JButton("Cancel");
+		btnCancelTicket.addActionListener(acFormCreateTicket);
+		btnCancelTicket.setFont(font_16);
+		btnCancelTicket.setForeground(Color.RED);
+		buttonPanel.add(btnCancelTicket);
 		
-		JButton createBtn = new JButton("Create");
-		createBtn.addActionListener(acFormCreateTicket);
-		createBtn.addActionListener(acFlightInfoController);
-		createBtn.addActionListener(empIEFController);
-		createBtn.setFont(font_16);
-		buttonPanel.add(createBtn);
+		JButton btnSaveTicket = new JButton("Create");
+		btnSaveTicket.addActionListener(acFormCreateTicket);
+		btnSaveTicket.setFont(font_16);
+		buttonPanel.add(btnSaveTicket);
 		
 		JPanel infoCustomerPanel = new JPanel(new GridLayout(7,2,0,20));
 		infoCustomerPanel.setBounds(87, 231, 654, 340);
@@ -152,40 +149,41 @@ public class FormCreateTicket extends JFrame {
 		nameLbl.setFont(new Font("Poppins", Font.PLAIN, 14));
 		infoCustomerPanel.add(nameLbl);
 		
-		nameTxtF = new JTextField();
-		nameTxtF.addKeyListener(new CustomKeyListener(nameTxtF, 50));
-		nameTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		nameTxtF.setColumns(10);
-		nameTxtF.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		infoCustomerPanel.add(nameTxtF);
+		txtName = new JTextField();
+		txtName.addKeyListener(new CustomKeyListener(txtName, 50));
+		txtName.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		txtName.setColumns(10);
+		txtName.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		infoCustomerPanel.add(txtName);
 		
 		JLabel genderLbl = new JLabel("Gender");
 		genderLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		genderLbl.setFont(new Font("Poppins", Font.PLAIN, 14));
 		infoCustomerPanel.add(genderLbl);
 		
-		genderCbb = new JComboBox();
-		genderCbb.addItem("Male");
-		genderCbb.addItem("Female");
-		genderCbb.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		infoCustomerPanel.add(genderCbb);
+		cbbGender = new JComboBox();
+		cbbGender.addItem("Male");
+		cbbGender.addItem("Female");
+		cbbGender.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		infoCustomerPanel.add(cbbGender);
 		
 		JLabel addressLbl = new JLabel("Address");
 		addressLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		addressLbl.setFont(new Font("Poppins", Font.PLAIN, 14));
 		infoCustomerPanel.add(addressLbl);
 		
-		addressTxtF = new JTextField();
-		addressTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		infoCustomerPanel.add(addressTxtF);
+		txtAddress = new JTextField();
+		txtAddress.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		infoCustomerPanel.add(txtAddress);
 		
 		JLabel dateOfBirthLbl = new JLabel("Date Of Birth");
 		dateOfBirthLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		dateOfBirthLbl.setFont(new Font("Poppins", Font.PLAIN, 14));
 		infoCustomerPanel.add(dateOfBirthLbl);
 		
-		dateChooser = new JDateChooser();
-		infoCustomerPanel.add(dateChooser);
+		dateChooserCus = new JDateChooser();
+		dateChooserCus.getComponent(1).setFont(font_JetBrains);
+		infoCustomerPanel.add(dateChooserCus);
 //		infoCustomerPanel.add(dateDeparturePicker);
 			
 		JLabel citizenidentifyLbl = new JLabel("Citizenidentify");
@@ -193,23 +191,23 @@ public class FormCreateTicket extends JFrame {
 		citizenidentifyLbl.setFont(new Font("Poppins", Font.PLAIN, 14));
 		infoCustomerPanel.add(citizenidentifyLbl);
 		
-		citizenidentifyTxtF = new JTextField();
-		citizenidentifyTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		citizenidentifyTxtF.setColumns(10);
-		citizenidentifyTxtF.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		infoCustomerPanel.add(citizenidentifyTxtF);
+		txtCitizenidentify = new JTextField();
+		txtCitizenidentify.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		txtCitizenidentify.setColumns(10);
+		txtCitizenidentify.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		infoCustomerPanel.add(txtCitizenidentify);
 		
 		JLabel phoneLbl = new JLabel("Phone");
 		phoneLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		phoneLbl.setFont(new Font("Poppins", Font.PLAIN, 14));
 		infoCustomerPanel.add(phoneLbl);
 		
-		phoneTxtF = new JTextField();
-		phoneTxtF.addKeyListener(new CustomKeyListener(phoneTxtF,10));
-		phoneTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		phoneTxtF.setColumns(10);
-		phoneTxtF.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		infoCustomerPanel.add(phoneTxtF);
+		txtPhone = new JTextField();
+		txtPhone.addKeyListener(new CustomKeyListener(txtPhone,10));
+		txtPhone.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		txtPhone.setColumns(10);
+		txtPhone.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		infoCustomerPanel.add(txtPhone);
 		
 		JLabel typeTicketLbl = new JLabel("Select ticket type");
 		typeTicketLbl.setHorizontalAlignment(SwingConstants.CENTER);
@@ -217,11 +215,11 @@ public class FormCreateTicket extends JFrame {
 		infoCustomerPanel.add(typeTicketLbl);
 		
 		ticketClassModel = new TicketClassModel();
-		ticketTypeCbb = new JComboBox();
+		cbbTypeTicket = new JComboBox();
 		for(Ticketclass tc: ticketClassModel.getTicketclasses()) {
-			ticketTypeCbb.addItem(tc.getTicketClassType());
+			cbbTypeTicket.addItem(tc.getTicketClassType());
 		}
-		ticketTypeCbb.addItemListener(new ItemListener() {
+		cbbTypeTicket.addItemListener(new ItemListener() {
 			
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -232,8 +230,8 @@ public class FormCreateTicket extends JFrame {
 				}
 			}
 		});
-		ticketTypeCbb.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		infoCustomerPanel.add(ticketTypeCbb);
+		cbbTypeTicket.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		infoCustomerPanel.add(cbbTypeTicket);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(33, 207, 808, 2);
@@ -306,12 +304,12 @@ public class FormCreateTicket extends JFrame {
 	}
 
 	public Customer createCustomerFromInputCell() {
-		String name = this.nameTxtF.getText();
-		Date dateOfBirth = dateChooser.getDate();
-		String gender = this.genderCbb.getSelectedItem()+"";
-		String address = this.addressTxtF.getText();
-		String citizenidentify = this.citizenidentifyTxtF.getText();
-		String phone = this.phoneTxtF.getText();
+		String name = this.txtName.getText();
+		Date dateOfBirth = dateChooserCus.getDate();
+		String gender = this.cbbGender.getSelectedItem()+"";
+		String address = this.txtAddress.getText();
+		String citizenidentify = this.txtCitizenidentify.getText();
+		String phone = this.txtPhone.getText();
 		return new Customer(name, citizenidentify, dateOfBirth, gender, address, phone, 1, null, null);
 	}
 	public void closeForm() {
@@ -324,7 +322,7 @@ public class FormCreateTicket extends JFrame {
 		Date now = new Date();
 		Customer customer = createCustomerFromInputCell();
 		Employee employee = this.homeView.getLoginAccount().getEmployee();
-		Ticketclass ticketclass = ticketClassModel.searchByName(this.ticketTypeCbb.getSelectedItem()+"");
+		Ticketclass ticketclass = ticketClassModel.searchByName(this.cbbTypeTicket.getSelectedItem()+"");
 		String price = "";
 		if(ticketclass.getTicketClassId().equals("BC")) {
 			if (flight.getNumberOfBusinessSeats() == 0) {
@@ -355,9 +353,5 @@ public class FormCreateTicket extends JFrame {
 		this.homeView.getListFlightWaiting().insert(flight);
 		this.homeView.getListTicketWaiting().insert(ticket);
 		this.homeView.loadDataTableWaiting(this.homeView.getListTicketWaiting().getTickets());
-//		CustomerDAO.getInstance().presist(customer);
-//		FlightDAO.getInstance().update(flight);
-//		this.homeView.refreshTableFlight();
-//		this.homeView.refreshTableTicket();
 	}
 }

@@ -51,18 +51,18 @@ import net.bytebuddy.asm.Advice.This;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
-public class InputFlightView extends JFrame {
+public class FormCreateOrUpdateFlight extends JFrame {
 
 	private HomeView homeView;
 	private JPanel contentPane;
-	private JTextField FlightTextField;
+	private JTextField txtFlight;
 	private JTextField dateofbirth;
 	private JTextField phoneTextField;
 	private ActionListener empIEFController;
-	private JDateChooser dateChooser;
-	private JComboBox departureComboBox;
-	private JComboBox airCraftComboBox;
-	private JComboBox destinationComboBox;
+	private JDateChooser dateChooserFlight;
+	private JComboBox cbbDeparture;
+	private JComboBox cbbAircraft;
+	private JComboBox cbbDestination;
 	private AirCraftModel aircraftModel;
 	private AirportModel airportModel;
 	private FlightModel flightModel;
@@ -72,18 +72,18 @@ public class InputFlightView extends JFrame {
 	private TimePicker takeOfTimeTPK;
 	private TimePicker landingTimePicker;
 	private ActionListener acFlightInfoController;
-	private JTextField landingTimeTF;
-	private JTextField takeOfTimeInputLbl;
+	private JTextField tpLandingTIme;
+	private JTextField tpTakeOfTime;
 	
 	Font font_16 = new Font("Poppins", Font.BOLD, 16);
 	Font font_14_Thin = new Font("Poppins", Font.PLAIN, 14);
 	Font font_JetBrains = new Font("JetBrains Mono", Font.BOLD, 12);
-	private JTextField priceTextField;
+	private JTextField txtBasicPrice;
 	
 	/**
 	 * Create the frame.
 	 */
-	public InputFlightView(HomeView homeView) {
+	public FormCreateOrUpdateFlight(HomeView homeView) {
 		acFlightInfoController = new FlightInfomationEntryController(this);
 		this.homeView = homeView;
 		int Location_jtx = 185;
@@ -109,11 +109,11 @@ public class InputFlightView extends JFrame {
 		flightLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(flightLable);
 		
-		FlightTextField = new JTextField();
-		FlightTextField.setFont(font_JetBrains);
-		FlightTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		inputPanel.add(FlightTextField);
-		FlightTextField.setColumns(10);
+		txtFlight = new JTextField();
+		txtFlight.setFont(font_JetBrains);
+		txtFlight.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		inputPanel.add(txtFlight);
+		txtFlight.setColumns(10);
 		
 		JLabel roleLable = new JLabel("Aircraft");
 		roleLable.setFont(font_14_Thin);
@@ -121,14 +121,14 @@ public class InputFlightView extends JFrame {
 		inputPanel.add(roleLable);
 		
 		aircraftModel = new AirCraftModel();
-		airCraftComboBox = new JComboBox();
-		airCraftComboBox.setFont(font_JetBrains);
+		cbbAircraft = new JComboBox();
+		cbbAircraft.setFont(font_JetBrains);
 		aircrafts = this.aircraftModel.getAircrafts();
 		for(Aircraft a: aircrafts) {
-			airCraftComboBox.addItem(a.getAircraftId());
+			cbbAircraft.addItem(a.getAircraftId());
 		}
-		airCraftComboBox.setSelectedIndex(-1);
-		inputPanel.add(airCraftComboBox);
+		cbbAircraft.setSelectedIndex(-1);
+		inputPanel.add(cbbAircraft);
 		
 		JLabel depatureLable = new JLabel("Departure");
 		depatureLable.setFont(font_14_Thin);
@@ -136,35 +136,36 @@ public class InputFlightView extends JFrame {
 		inputPanel.add(depatureLable);
 		
 		airportModel = new AirportModel();
-		departureComboBox = new JComboBox();
-		departureComboBox.setFont(font_JetBrains);
+		cbbDeparture = new JComboBox();
+		cbbDeparture.setFont(font_JetBrains);
 		airports = airportModel.getAirports();
-		inputPanel.add(departureComboBox);
+		inputPanel.add(cbbDeparture);
 		
 		JLabel destinationLable = new JLabel("Destination");
 		destinationLable.setFont(font_14_Thin);
 		destinationLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(destinationLable);
 		
-		destinationComboBox = new JComboBox();
-		destinationComboBox.setFont(font_JetBrains);
+		cbbDestination = new JComboBox();
+		cbbDestination.setFont(font_JetBrains);
 		for(Airport a: airports) {
-			departureComboBox.addItem(a.getAirportName());
-			destinationComboBox.addItem(a.getAirportName());
+			cbbDeparture.addItem(a.getAirportName());
+			cbbDestination.addItem(a.getAirportName());
 		}
-		destinationComboBox.setSelectedIndex(-1);
-		departureComboBox.setSelectedIndex(-1);
-		inputPanel.add(destinationComboBox);
+		cbbDestination.setSelectedIndex(-1);
+		cbbDeparture.setSelectedIndex(-1);
+		inputPanel.add(cbbDestination);
 		
-		JLabel flightDateLable = new JLabel("flightDate");
+		JLabel flightDateLable = new JLabel("Flight Date");
 		flightDateLable.setFont(font_14_Thin);
 		flightDateLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(flightDateLable);
 		
-		dateChooser = new JDateChooser();
-		inputPanel.add(dateChooser);
+		dateChooserFlight = new JDateChooser();
+		dateChooserFlight.getComponent(1).setFont(font_JetBrains);
+		inputPanel.add(dateChooserFlight);
 		
-		JLabel takeOfTimeLable = new JLabel("TakeOfTime");
+		JLabel takeOfTimeLable = new JLabel("Take Off Time");
 		takeOfTimeLable.setFont(font_14_Thin);
 		takeOfTimeLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(takeOfTimeLable);
@@ -177,15 +178,15 @@ public class InputFlightView extends JFrame {
 		selectTimeTOT.setBounds(146, 0, 43, 28);
 		inputTakeOfTime.add(selectTimeTOT);
 		
-		takeOfTimeInputLbl = new JTextField("");
-		takeOfTimeInputLbl.setFont(font_JetBrains);
-		takeOfTimeInputLbl.setOpaque(true);
-		takeOfTimeInputLbl.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		takeOfTimeInputLbl.setBackground(Color.WHITE);
-		takeOfTimeInputLbl.setBounds(0, 0, 142, 28);
-		inputTakeOfTime.add(takeOfTimeInputLbl);
+		tpTakeOfTime = new JTextField("");
+		tpTakeOfTime.setFont(font_JetBrains);
+		tpTakeOfTime.setOpaque(true);
+		tpTakeOfTime.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		tpTakeOfTime.setBackground(Color.WHITE);
+		tpTakeOfTime.setBounds(0, 0, 142, 28);
+		inputTakeOfTime.add(tpTakeOfTime);
 		
-		takeOfTimeTPK.setDisplayText(takeOfTimeInputLbl);
+		takeOfTimeTPK.setDisplayText(tpTakeOfTime);
 		selectTimeTOT.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -195,7 +196,7 @@ public class InputFlightView extends JFrame {
 		
 		inputPanel.add(inputTakeOfTime);
 		
-		JLabel phoneLable = new JLabel("LandingTime");
+		JLabel phoneLable = new JLabel("Landing Time");
 		phoneLable.setFont(font_14_Thin);
 		phoneLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(phoneLable);
@@ -209,15 +210,15 @@ public class InputFlightView extends JFrame {
 		selectLandingTime.setBounds(146, 0, 43, 28);
 		inputLandingTime.add(selectLandingTime);
 		
-		landingTimeTF = new JTextField("");
-		landingTimeTF.setFont(font_JetBrains);
-		landingTimeTF.setOpaque(true);
-		landingTimeTF.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		landingTimeTF.setBackground(Color.WHITE);
-		landingTimeTF.setBounds(0, 0, 142, 28);
-		inputLandingTime.add(landingTimeTF);
+		tpLandingTIme = new JTextField("");
+		tpLandingTIme.setFont(font_JetBrains);
+		tpLandingTIme.setOpaque(true);
+		tpLandingTIme.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		tpLandingTIme.setBackground(Color.WHITE);
+		tpLandingTIme.setBounds(0, 0, 142, 28);
+		inputLandingTime.add(tpLandingTIme);
 		
-		landingTimePicker.setDisplayText(landingTimeTF);
+		landingTimePicker.setDisplayText(tpLandingTIme);
 		selectLandingTime.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -227,36 +228,36 @@ public class InputFlightView extends JFrame {
 		
 		inputPanel.add(inputLandingTime);
 		
-		JLabel lblPricebasic = new JLabel("PriceBasic");
+		JLabel lblPricebasic = new JLabel("Basic Price");
 		lblPricebasic.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPricebasic.setFont(new Font("Poppins", Font.PLAIN, 14));
 		inputPanel.add(lblPricebasic);
 		
-		priceTextField = new JTextField();
-		priceTextField.setFont(font_JetBrains);
-		priceTextField.setColumns(10);
-		priceTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		inputPanel.add(priceTextField);
+		txtBasicPrice = new JTextField();
+		txtBasicPrice.setFont(font_JetBrains);
+		txtBasicPrice.setColumns(10);
+		txtBasicPrice.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		inputPanel.add(txtBasicPrice);
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setBounds(72, 458, 304, 51);
 		buttonPanel.setLayout(new GridLayout(1,2,30,0));
 		contentPane.add(buttonPanel);
 		
-		JButton cancelBtn = new JButton("Cancel");
-		cancelBtn.addActionListener(empIEFController);
-		cancelBtn.setFont(font_16);
-		cancelBtn.setForeground(Color.RED);
-		buttonPanel.add(cancelBtn);
+		JButton btnCancelFlight = new JButton("Cancel");
+		btnCancelFlight.addActionListener(empIEFController);
+		btnCancelFlight.setFont(font_16);
+		btnCancelFlight.setForeground(Color.RED);
+		buttonPanel.add(btnCancelFlight);
 		
-		JButton saveBtn = new JButton("Save");
-		saveBtn.addActionListener(acFlightInfoController);
-		saveBtn.addActionListener(empIEFController);
-		saveBtn.setFont(font_16);
-		buttonPanel.add(saveBtn);
+		JButton btnSaveFlight = new JButton("Save");
+		btnSaveFlight.addActionListener(acFlightInfoController);
+		btnSaveFlight.addActionListener(empIEFController);
+		btnSaveFlight.setFont(font_16);
+		buttonPanel.add(btnSaveFlight);
 		if(this.homeView.selectedKey=="Modify") {
 		 	loadFlightToInputCell();
-		 	this.FlightTextField.disable();
+		 	this.txtFlight.disable();
 		 	}
 		rowSelectedIndex = this.homeView.getTableFlight().getSelectedRow();
 	}
@@ -287,19 +288,19 @@ public class InputFlightView extends JFrame {
 	}
 	
 	public Flight createFlightFromInputCell() {
-		String flightId = this.FlightTextField.getText();
-		String airCraftId = this.airCraftComboBox.getSelectedItem()+"";
+		String flightId = this.txtFlight.getText();
+		String airCraftId = this.cbbAircraft.getSelectedItem()+"";
 		Aircraft aircraftSelect = this.aircraftModel.search(airCraftId);
-		String departureName = this.departureComboBox.getSelectedItem()+"";
+		String departureName = this.cbbDeparture.getSelectedItem()+"";
 		Airport airportDeparture = this.airportModel.searchByName(departureName);
-		String destinationName = this.destinationComboBox.getSelectedItem()+"";
+		String destinationName = this.cbbDestination.getSelectedItem()+"";
 		Airport airportDestination = this.airportModel.searchByName(destinationName);
-		java.util.Date dateSelected = dateChooser.getDate();
+		java.util.Date dateSelected = dateChooserFlight.getDate();
 		String takeOfTime = takeOfTimeTPK.getSelectedTime();
 		String landingTime = landingTimePicker.getSelectedTime();
 		int numberBusinessSeats = aircraftSelect.getBusinessClassSeats();
 		int numberEconomySeats = aircraftSelect.getEconomyClassSeats();
-		String price = this.priceTextField.getText();
+		String price = this.txtBasicPrice.getText();
 		return new Flight(flightId, aircraftSelect, airportDeparture, airportDestination, takeOfTime
 				, landingTime, dateSelected, numberBusinessSeats, numberEconomySeats,"Waiting", price, 1, null);
 	}
@@ -310,13 +311,13 @@ public class InputFlightView extends JFrame {
 		DefaultTableModel tableModel = (DefaultTableModel) this.homeView.getTableFlight().getModel();
 		String flightId = tableModel.getValueAt(rowIndex, 0)+"";
 		Flight flight = FlightDAO.getInstance().selectById(flightId);
-		this.FlightTextField.setText(flight.getFlightId());
-		this.airCraftComboBox.setSelectedItem(flight.getAircraft().getAircraftId());
-		this.departureComboBox.setSelectedItem(flight.getAirportByDepartureId().getAirportName());
-		this.destinationComboBox.setSelectedItem(flight.getAirportByDestinationId().getAirportName());
-		this.takeOfTimeInputLbl.setText(flight.getTakeOffTime());
-		this.landingTimeTF.setText(flight.getLandingTime());
-		this.priceTextField.setText(flight.getBasicPrice());
-		this.dateChooser.setDate(flight.getFlightDate());
+		this.txtFlight.setText(flight.getFlightId());
+		this.cbbAircraft.setSelectedItem(flight.getAircraft().getAircraftId());
+		this.cbbDeparture.setSelectedItem(flight.getAirportByDepartureId().getAirportName());
+		this.cbbDestination.setSelectedItem(flight.getAirportByDestinationId().getAirportName());
+		this.tpTakeOfTime.setText(flight.getTakeOffTime());
+		this.tpLandingTIme.setText(flight.getLandingTime());
+		this.txtBasicPrice.setText(flight.getBasicPrice());
+		this.dateChooserFlight.setDate(flight.getFlightDate());
 	}
 }

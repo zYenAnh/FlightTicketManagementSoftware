@@ -5,13 +5,13 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
-import view.FormUpdateInfoTicket;
+import view.FormUpdateTicket;
 
 public class FormInfoTicketController implements ActionListener{
 
-	private FormUpdateInfoTicket formInfoTicket;
+	private FormUpdateTicket formInfoTicket;
 	
-	public FormInfoTicketController(FormUpdateInfoTicket formInfoTicket) {
+	public FormInfoTicketController(FormUpdateTicket formInfoTicket) {
 		this.formInfoTicket = formInfoTicket;
 	}
 	

@@ -71,7 +71,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
 
-public class FormUpdateInfoTicket extends JFrame {
+public class FormUpdateTicket extends JFrame {
 
 	private JPanel contentPane;
 	public int rowSelectedIndex;
@@ -81,12 +81,12 @@ public class FormUpdateInfoTicket extends JFrame {
 	private JLabel departureTimeLbl;
 	private JLabel priceLbl;
 	private TicketClassModel ticketClassModel;
-	private JComboBox ticketTypeCbb;
+	private JComboBox cbbTicketTypePay;
 	private JTable getTable;
-	private JTextField addressTxtF;
-	private JComboBox genderCbb;
+	private JTextField txtAddressCus;
+	private JComboBox cbbGenderCus;
 	private HomeView homeView;
-	private JDateChooser dateChooser;
+	private JDateChooser dateChooserCus;
 	private ActionListener acFormInfoTicket;
 	DecimalFormat format = new DecimalFormat("###,###,###");
 	
@@ -95,10 +95,10 @@ public class FormUpdateInfoTicket extends JFrame {
 	Font font_14_Thin = new Font("Poppins", Font.PLAIN, 14);
 	Font font_JetBrains = new Font("JetBrains Mono", Font.BOLD, 12);
 	Font font_JetBrains_14 = new Font("JetBrains Mono", Font.BOLD, 14);
-	private JTextField nameTxtF;
+	private JTextField txtNameCus;
 	private JTextField textField_1;
-	private JTextField citizenidentifyTxtF;
-	private JTextField phoneTxtF;
+	private JTextField txtCitizenidentifyCus;
+	private JTextField txtPhoneCus;
 	private SpringLayout springLayout;
 	/**
 	 * Launch the application.
@@ -107,7 +107,7 @@ public class FormUpdateInfoTicket extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FormUpdateInfoTicket(JTable table,HomeView homeView) {
+	public FormUpdateTicket(JTable table,HomeView homeView) {
 		acFormInfoTicket = new FormInfoTicketController(this);
 		getTable = table;
 		this.homeView =homeView;
@@ -118,7 +118,7 @@ public class FormUpdateInfoTicket extends JFrame {
 		contentPane.setLayout(null);
 		this.setVisible(true);
 		
-		JLabel lblNewLabel = new JLabel("Create Ticket");
+		JLabel lblNewLabel = new JLabel("Update Ticket");
 		lblNewLabel.setFont(new Font("Poppins", Font.BOLD | Font.ITALIC, 30));
 		lblNewLabel.setBounds(344, 10, 215, 51);
 		contentPane.add(lblNewLabel);
@@ -128,16 +128,16 @@ public class FormUpdateInfoTicket extends JFrame {
 		buttonPanel.setLayout(new GridLayout(1,2,30,0));
 		contentPane.add(buttonPanel);
 		
-		JButton cancelBtn = new JButton("Cancel");
-		cancelBtn.addActionListener(acFormInfoTicket);
-		cancelBtn.setFont(font_16);
-		cancelBtn.setForeground(Color.RED);
-		buttonPanel.add(cancelBtn);
+		JButton btnCancelTicketPay = new JButton("Cancel");
+		btnCancelTicketPay.addActionListener(acFormInfoTicket);
+		btnCancelTicketPay.setFont(font_16);
+		btnCancelTicketPay.setForeground(Color.RED);
+		buttonPanel.add(btnCancelTicketPay);
 		
-		JButton createBtn = new JButton("Save");
-		createBtn.addActionListener(acFormInfoTicket);
-		createBtn.setFont(font_16);
-		buttonPanel.add(createBtn);
+		JButton btnSaveTicketPay = new JButton("Save");
+		btnSaveTicketPay.addActionListener(acFormInfoTicket);
+		btnSaveTicketPay.setFont(font_16);
+		buttonPanel.add(btnSaveTicketPay);
 		
 		JPanel infoCustomerPanel = new JPanel(new GridLayout(7,2,0,20));
 		infoCustomerPanel.setBounds(87, 231, 654, 340);
@@ -148,63 +148,64 @@ public class FormUpdateInfoTicket extends JFrame {
 		nameLbl.setFont(new Font("Poppins", Font.PLAIN, 14));
 		infoCustomerPanel.add(nameLbl);
 		
-		nameTxtF = new JTextField();
-		nameTxtF.addKeyListener(new CustomKeyListener(nameTxtF, 50));
-		nameTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		nameTxtF.setColumns(10);
-		nameTxtF.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		infoCustomerPanel.add(nameTxtF);
+		txtNameCus = new JTextField();
+		txtNameCus.addKeyListener(new CustomKeyListener(txtNameCus, 50));
+		txtNameCus.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		txtNameCus.setColumns(10);
+		txtNameCus.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		infoCustomerPanel.add(txtNameCus);
 		
 		JLabel genderLbl = new JLabel("Gender");
 		genderLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		genderLbl.setFont(new Font("Poppins", Font.PLAIN, 14));
 		infoCustomerPanel.add(genderLbl);
 		
-		genderCbb = new JComboBox();
-		genderCbb.addItem("Male");
-		genderCbb.addItem("Female");
-		genderCbb.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		infoCustomerPanel.add(genderCbb);
+		cbbGenderCus = new JComboBox();
+		cbbGenderCus.addItem("Male");
+		cbbGenderCus.addItem("Female");
+		cbbGenderCus.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		infoCustomerPanel.add(cbbGenderCus);
 		
 		JLabel addressLbl = new JLabel("Address");
 		addressLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		addressLbl.setFont(new Font("Poppins", Font.PLAIN, 14));
 		infoCustomerPanel.add(addressLbl);
 		
-		addressTxtF = new JTextField();
-		addressTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		infoCustomerPanel.add(addressTxtF);
+		txtAddressCus = new JTextField();
+		txtAddressCus.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		infoCustomerPanel.add(txtAddressCus);
 		
 		JLabel dateOfBirthLbl = new JLabel("Date Of Birth");
 		dateOfBirthLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		dateOfBirthLbl.setFont(new Font("Poppins", Font.PLAIN, 14));
 		infoCustomerPanel.add(dateOfBirthLbl);
 		
-		dateChooser = new JDateChooser();
-		infoCustomerPanel.add(dateChooser);
+		dateChooserCus = new JDateChooser();
+		dateChooserCus.getComponent(1).setFont(font_JetBrains);
+		infoCustomerPanel.add(dateChooserCus);
 			
 		JLabel citizenidentifyLbl = new JLabel("Citizenidentify");
 		citizenidentifyLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		citizenidentifyLbl.setFont(new Font("Poppins", Font.PLAIN, 14));
 		infoCustomerPanel.add(citizenidentifyLbl);
 		
-		citizenidentifyTxtF = new JTextField();
-		citizenidentifyTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		citizenidentifyTxtF.setColumns(10);
-		citizenidentifyTxtF.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		infoCustomerPanel.add(citizenidentifyTxtF);
+		txtCitizenidentifyCus = new JTextField();
+		txtCitizenidentifyCus.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		txtCitizenidentifyCus.setColumns(10);
+		txtCitizenidentifyCus.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		infoCustomerPanel.add(txtCitizenidentifyCus);
 		
 		JLabel phoneLbl = new JLabel("Phone");
 		phoneLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		phoneLbl.setFont(new Font("Poppins", Font.PLAIN, 14));
 		infoCustomerPanel.add(phoneLbl);
 		
-		phoneTxtF = new JTextField();
-		phoneTxtF.addKeyListener(new CustomKeyListener(phoneTxtF,10));
-		phoneTxtF.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		phoneTxtF.setColumns(10);
-		phoneTxtF.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		infoCustomerPanel.add(phoneTxtF);
+		txtPhoneCus = new JTextField();
+		txtPhoneCus.addKeyListener(new CustomKeyListener(txtPhoneCus,10));
+		txtPhoneCus.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		txtPhoneCus.setColumns(10);
+		txtPhoneCus.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		infoCustomerPanel.add(txtPhoneCus);
 		
 		JLabel typeTicketLbl = new JLabel("Select ticket type");
 		typeTicketLbl.setHorizontalAlignment(SwingConstants.CENTER);
@@ -212,12 +213,12 @@ public class FormUpdateInfoTicket extends JFrame {
 		infoCustomerPanel.add(typeTicketLbl);
 		
 		ticketClassModel = new TicketClassModel();
-		ticketTypeCbb = new JComboBox();
+		cbbTicketTypePay = new JComboBox();
 		for(Ticketclass tc: ticketClassModel.getTicketclasses()) {
-			ticketTypeCbb.addItem(tc.getTicketClassType());
+			cbbTicketTypePay.addItem(tc.getTicketClassType());
 		}
-		ticketTypeCbb.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		infoCustomerPanel.add(ticketTypeCbb);
+		cbbTicketTypePay.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		infoCustomerPanel.add(cbbTicketTypePay);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(33, 207, 808, 2);
@@ -291,23 +292,23 @@ public class FormUpdateInfoTicket extends JFrame {
 		departureDayLbl.setText(flight.getFlightDate()+"");
 		departureTimeLbl.setText(flight.getTakeOffTime());
 		priceLbl.setText(flight.getBasicPrice()+" VND");
-		this.ticketTypeCbb.setSelectedItem(ticket.getTicketclass().getTicketClassType());
-		this.dateChooser.setDate(customer.getDateOfBirth());
-		this.nameTxtF.setText(customer.getCustomerName());
-		this.genderCbb.setSelectedItem(customer.getGender());
-		this.addressTxtF.setText(customer.getAddress());
-		this.citizenidentifyTxtF.setText(customer.getCitizenIdentify());
-		this.phoneTxtF.setText(customer.getPhone());
+		this.cbbTicketTypePay.setSelectedItem(ticket.getTicketclass().getTicketClassType());
+		this.dateChooserCus.setDate(customer.getDateOfBirth());
+		this.txtNameCus.setText(customer.getCustomerName());
+		this.cbbGenderCus.setSelectedItem(customer.getGender());
+		this.txtAddressCus.setText(customer.getAddress());
+		this.txtCitizenidentifyCus.setText(customer.getCitizenIdentify());
+		this.txtPhoneCus.setText(customer.getPhone());
 	}
 
 	public Customer getInfoCustomerFromCell() {
 		Customer customer = new Customer();
-		customer.setCustomerName(this.nameTxtF.getText());
-		customer.setDateOfBirth((Date)this.dateChooser.getDate());
-		customer.setGender(this.genderCbb.getSelectedItem()+"");
-		customer.setAddress(this.addressTxtF.getText());
-		customer.setCitizenIdentify(this.citizenidentifyTxtF.getText());
-		customer.setPhone(this.phoneTxtF.getText());
+		customer.setCustomerName(this.txtNameCus.getText());
+		customer.setDateOfBirth((Date)this.dateChooserCus.getDate());
+		customer.setGender(this.cbbGenderCus.getSelectedItem()+"");
+		customer.setAddress(this.txtAddressCus.getText());
+		customer.setCitizenIdentify(this.txtCitizenidentifyCus.getText());
+		customer.setPhone(this.txtPhoneCus.getText());
 		customer.setIsActive(1);
 		return customer;
 	}
@@ -325,7 +326,7 @@ public class FormUpdateInfoTicket extends JFrame {
 		Customer customer = getInfoCustomerFromCell();
 		customer.setCustomerId(ticket.getCustomer().getCustomerId());
 		ticket.setPassengerName(customer.getCustomerName());
-		Ticketclass ticketclass = ticketClassModel.searchByName(this.ticketTypeCbb.getSelectedItem()+"");
+		Ticketclass ticketclass = ticketClassModel.searchByName(this.cbbTicketTypePay.getSelectedItem()+"");
 		Set<Invoice> invoices = ticket.getInvoices();
 		Invoice invoice = new Invoice();
 		for(Invoice i:invoices) {

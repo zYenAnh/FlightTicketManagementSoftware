@@ -44,7 +44,7 @@ import javax.swing.JButton;
 public class Invoice extends JFrame {
 
 	private JPanel contentPane;
-	private JTable tableShowTicket;
+	private JTable tbShowTicket;
 	private HomeView homeView;
 	Font font_JetBrains = new Font("JetBrains Mono", Font.BOLD, 12);
 	Font font_JetBrains_14 = new Font("JetBrains Mono", Font.BOLD, 14);
@@ -85,60 +85,63 @@ public class Invoice extends JFrame {
 		lblDateCreateInvoice.setBounds(10, 161, 214, 19);
 		contentPane.add(lblDateCreateInvoice);
 		
-		tableShowTicket = new JTable();
-		tableShowTicket.setDefaultEditor(Object.class, null);
-		tableShowTicket.setFont(font_JetBrains);
-		tableShowTicket.setBounds(23, 0, 933, 597);
-		tableShowTicket.setModel(new DefaultTableModel(
+		tbShowTicket = new JTable();
+		tbShowTicket.setDefaultEditor(Object.class, null);
+		tbShowTicket.setFont(font_JetBrains);
+		tbShowTicket.setBounds(23, 0, 933, 597);
+		tbShowTicket.setModel(new DefaultTableModel(
 				new Object [][] {},
 				new String[] { 
 						"STT", "Flight", "Flight Date", "Passeger's Name" ,"Price"
 				}));
 		
-		JScrollPane tableTicketBeingBooked = new JScrollPane(tableShowTicket);
+		JScrollPane tableTicketBeingBooked = new JScrollPane(tbShowTicket);
 		tableTicketBeingBooked.setBounds(10, 190, 446, 195);
-		JTableHeader tableWaitingHeader = tableShowTicket.getTableHeader();
+		JTableHeader tableWaitingHeader = tbShowTicket.getTableHeader();
 		tableWaitingHeader.setFont(font_12_Thin);
-		tableShowTicket.setRowHeight(30);
+		tbShowTicket.setRowHeight(30);
 		contentPane.add(tableTicketBeingBooked);																																									Random genarator = new Random(); int idHd = genarator.nextInt(300)+1;	String hdId = "HD " + idHd;	
-		JLabel lblDateCreateInvoice_1 = new JLabel(hdId);
-		lblDateCreateInvoice_1.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		lblDateCreateInvoice_1.setBounds(10, 135, 214, 19);
-		contentPane.add(lblDateCreateInvoice_1);
+		JLabel lblCreateInvoice = new JLabel(hdId);
+		lblCreateInvoice.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		lblCreateInvoice.setBounds(10, 135, 214, 19);
+		contentPane.add(lblCreateInvoice);
 		
 		loadDataTableTicket(this.homeView.getListTicketWaiting().getTickets());
 		
-		JLabel lblTotalMoney = new JLabel("Total money: ");
-		lblTotalMoney.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		lblTotalMoney.setBounds(10, 412, 94, 19);
-		contentPane.add(lblTotalMoney);
+		JLabel lblTotalMoney_1 = new JLabel("Total money: ");
+		lblTotalMoney_1.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		lblTotalMoney_1.setBounds(10, 412, 94, 19);
+		contentPane.add(lblTotalMoney_1);
 		
-		JLabel lblVat = new JLabel("VAT(5%): ");
-		lblVat.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		lblVat.setBounds(10, 441, 214, 19);
-		contentPane.add(lblVat);
+		JLabel lblVat_1 = new JLabel("VAT(5%): ");
+		lblVat_1.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		lblVat_1.setBounds(10, 441, 214, 19);
+		contentPane.add(lblVat_1);
 		
 		JLabel lblDateCreateInvoice_3_1 = new JLabel("Total payment:");
 		lblDateCreateInvoice_3_1.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
 		lblDateCreateInvoice_3_1.setBounds(10, 470, 101, 19);
 		contentPane.add(lblDateCreateInvoice_3_1);
 		
-		JLabel totalMoney = new JLabel(total+"");
-		totalMoney.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		totalMoney.setBounds(352, 412, 94, 19);
-		contentPane.add(totalMoney);
+		JLabel lblTotalMoney = new JLabel(total+"");
+		lblTotalMoney.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblTotalMoney.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		lblTotalMoney.setBounds(313, 412, 94, 19);
+		contentPane.add(lblTotalMoney);
 		
 		Double vatDouble = total*0.05;
-		JLabel vat = new JLabel(vatDouble+"");
-		vat.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		vat.setBounds(352, 441, 94, 19);
-		contentPane.add(vat);
+		JLabel lblVat = new JLabel(vatDouble+"");
+		lblVat.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblVat.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		lblVat.setBounds(313, 441, 94, 19);
+		contentPane.add(lblVat);
 		
 		Long totalPaymentLong = (long) (total + total*0.05);
-		JLabel totalPayment = new JLabel(totalPaymentLong+"");
-		totalPayment.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		totalPayment.setBounds(352, 470, 94, 19);
-		contentPane.add(totalPayment);
+		JLabel lblTotalPayment = new JLabel(totalPaymentLong+"");
+		lblTotalPayment.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblTotalPayment.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		lblTotalPayment.setBounds(313, 470, 94, 19);
+		contentPane.add(lblTotalPayment);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(10, 395, 446, 10);
@@ -150,7 +153,7 @@ public class Invoice extends JFrame {
 		
 		JButton btnPaymentAndPrint = new JButton("Payment and Invoice Printing");
 		btnPaymentAndPrint.setFont(font_JetBrains_14);
-		btnPaymentAndPrint.setBounds(86, 519, 279, 34);
+		btnPaymentAndPrint.setBounds(86, 519, 285, 34);
 		Invoice view = this;
 		btnPaymentAndPrint.addActionListener(new ActionListener() {
 			
@@ -186,6 +189,21 @@ public class Invoice extends JFrame {
 			}
 		});
 		contentPane.add(btnPaymentAndPrint);
+		
+		JLabel lblTotalMoney_1_1 = new JLabel("VND");
+		lblTotalMoney_1_1.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		lblTotalMoney_1_1.setBounds(417, 412, 39, 19);
+		contentPane.add(lblTotalMoney_1_1);
+		
+		JLabel lblTotalMoney_1_1_1 = new JLabel("VND");
+		lblTotalMoney_1_1_1.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		lblTotalMoney_1_1_1.setBounds(417, 441, 39, 19);
+		contentPane.add(lblTotalMoney_1_1_1);
+		
+		JLabel lblTotalMoney_1_1_1_1 = new JLabel("VND");
+		lblTotalMoney_1_1_1_1.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		lblTotalMoney_1_1_1_1.setBounds(417, 470, 39, 19);
+		contentPane.add(lblTotalMoney_1_1_1_1);
 		
 	}
 	
@@ -240,7 +258,7 @@ public class Invoice extends JFrame {
 	}
 
 	public void loadDataTableTicket(ArrayList<Ticket> tickets) {
-		DefaultTableModel tableModel = (DefaultTableModel) tableShowTicket.getModel();
+		DefaultTableModel tableModel = (DefaultTableModel) tbShowTicket.getModel();
 		tableModel.getDataVector().removeAllElements();
 		if(tickets.isEmpty())
 			return;

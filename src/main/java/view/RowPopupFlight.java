@@ -22,7 +22,7 @@ public class RowPopupFlight extends JPopupMenu{
 			public void actionPerformed(ActionEvent e) {
 				try {
 					UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-					FormCreateTicket frame = new FormCreateTicket(table,homeView);
+					FormCreateTicket frame = new FormCreateTicket(table,homeView, "Create");
 					frame.setVisible(true);
 				} catch (Exception e1) {
 					e1.printStackTrace();

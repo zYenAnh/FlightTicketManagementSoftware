@@ -13,7 +13,7 @@ import javax.swing.UIManager;
 
 import entities.Employee;
 import view.HomeView;
-import view.EmployeeInformationEntryForm;
+import view.FormStaffInformation;
 
 public class TabEmployeeManagementController implements ActionListener {
 
@@ -30,7 +30,7 @@ public class TabEmployeeManagementController implements ActionListener {
 		if(src.equals("Add")) {
 			try {
 				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-				EmployeeInformationEntryForm frame = new EmployeeInformationEntryForm(homeView);
+				FormStaffInformation frame = new FormStaffInformation(homeView);
 				frame.setVisible(true);
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -45,7 +45,7 @@ public class TabEmployeeManagementController implements ActionListener {
 			if(this.homeView.getTableEmployee().getSelectedRow()!=-1) {
 				try {
 					UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-					EmployeeInformationEntryForm frame = new EmployeeInformationEntryForm(homeView);
+					FormStaffInformation frame = new FormStaffInformation(homeView);
 					frame.setVisible(true);
 				} catch (Exception ex) {
 					ex.printStackTrace();

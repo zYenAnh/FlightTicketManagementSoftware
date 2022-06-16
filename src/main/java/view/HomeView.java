@@ -124,12 +124,12 @@ public class HomeView extends JFrame {
 	private FlightModel flightModel;
 	private AirCraftModel airCraftModel;
 	private JPanel mainPanel;
-	private JTextField searchTextField;
-	private JTextField searchEmpTextField;
-	private JTable tableTicket;
-	private JTable tableFlight;
-	private JTable tableEmployee;
-	private JTable tableWaiting;
+	private JTextField txtEnterNameOrPhone;
+	private JTextField txtEnterPhoneOrName;
+	private JTable tbTicket;
+	private JTable tbFlight;
+	private JTable tbEmployee;
+	private JTable tbWaiting;
 	private JPanel FlightManagement;
 	private JPanel ticketManagementPanel;
 	private JPanel employeeManagerPanel;
@@ -140,26 +140,27 @@ public class HomeView extends JFrame {
 	public JButton btnFlightMNM;
 	public JButton btnEmployeeMNM;
 	public JButton btnPayment;
-	public JButton searchTicketBtn;
+	public JButton btnSearchTicket;
 	public JButton btnAccount;
-	private JComboBox departureComboBox;
-	private JComboBox destinationComboBox;
+	private JComboBox cbbDeparture;
+	private JComboBox cbbDestination;
 	private JLabel message;
 	JDatePickerImpl dateDeparturePicker;
+	private JDateChooser toDateChooser;
 	private JDateChooser fromDateChooser;
-	private JDateChooser toDateChoose;
 	private boolean checkChangePassword;
-	private JTextField TxtFCitizenidentifyValue;
-	private JTextField TxtFRoleValue;
-	private JTextField TxtFPhoneValue;
-	private JTextField TxtFAddressValue;
+	private JTextField txtCitizenidentifyValue;
+	private JTextField txtRoleValue;
+	private JTextField txtPhoneValue;
+	private JTextField txtAddressValue;
 	private JTextField TxtFGenderValue;
-	private JTextField TxtFNameValue;
+	private JTextField txtNameValue;
 	private JLabel lblMessageRePass;
 	private JLabel lblMessageCurrentPass;
 	private JLabel lblMessageNewPassword;
 	private JDateChooser dateChooserDateOfBirth;
 	private JComboBox genderComboBox;
+	private JComboBox cbbGenderValue;
 	DecimalFormat format = new DecimalFormat("###,###,###");
 
 	public JButton PREBUTTON;
@@ -180,11 +181,11 @@ public class HomeView extends JFrame {
 	Font font_12_Thin = new Font("Poppins", Font.PLAIN, 12);
 	Font font_8_Thin = new Font("Poppins", Font.PLAIN, 8);
 	Font font_10 = new Font("Poppins", Font.BOLD, 10);
-	private JTextField idExportFlight;
-	private JPasswordField pfCurrentPassword;
-	private JPasswordField pfNewPassword;
-	private JPasswordField pfReNewPassword;
-	private JButton btnPaymentTicket;
+	private JTextField txtEnterFlight;
+	private JPasswordField txtCurrentPassword;
+	private JPasswordField txtNewPassword;
+	private JPasswordField txtReNewPassword;
+	private JButton btnPaymentInvoice;
 
 	public HomeView(Account account,LoginView loginView) {
 		this.loginAccount = account;
@@ -245,10 +246,30 @@ public class HomeView extends JFrame {
 		this.setVisible(true);
 	}
 	
-	public void setEmptyAllList() {
-		listCustomerWaiting.clearList();
-		listFlightWaiting.clearList();
-		listTicketWaiting.clearList();
+	public void setEmptyOrRemoveList(int i) {
+		if(i!=-1) {
+			listCustomerWaiting.getCustomers().remove(i);
+			listFlightWaiting.getFlights().remove(i);
+			listTicketWaiting.getTickets().remove(i);
+		} else {
+			listCustomerWaiting.clearList();
+			listFlightWaiting.clearList();
+			listTicketWaiting.clearList();			
+		}
+		
+	}
+	
+	public void clearOrRemoveTableWaiting(int row) {
+		DefaultTableModel tableModel = (DefaultTableModel) tbWaiting.getModel();
+		if(row ==-1) {
+			setEmptyOrRemoveList(-1);
+			for(int i=0;i<tbWaiting.getRowCount();i++) {
+				tableModel.removeRow(i);
+			}
+		} else {
+			setEmptyOrRemoveList(row);
+			tableModel.removeRow(row);
+		}
 	}
 	
 	public void handleDecentralization(Account account) {
@@ -270,11 +291,11 @@ public class HomeView extends JFrame {
 		mainPanel.add(panelTabPayment);
 		panelTabPayment.setLayout(null);
 		
-		btnPaymentTicket = new JButton("Payment");
-		btnPaymentTicket.addActionListener(acTabPayment);
-		btnPaymentTicket.setBounds(860, 639, 123, 39);
-		btnPaymentTicket.setFont(font_JetBrains);
-		panelTabPayment.add(btnPaymentTicket);
+		btnPaymentInvoice = new JButton("Payment");
+		btnPaymentInvoice.addActionListener(acTabPayment);
+		btnPaymentInvoice.setBounds(860, 639, 123, 39);
+		btnPaymentInvoice.setFont(font_JetBrains);
+		panelTabPayment.add(btnPaymentInvoice);
 		
 		ImageIcon iconAdd = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//addIcon.png");
 		Image addImg = iconAdd.getImage();
@@ -298,39 +319,39 @@ public class HomeView extends JFrame {
 		panelTabPayment.add(panel);
 		
 // Create button Delete
-		JButton deleteBtn = new JButton("Cancel ticket");
-		panel.add(deleteBtn);
-		deleteBtn.addActionListener(acTabTicket);
-		deleteBtn.setFont(font_12_Thin);
-		deleteBtn.setIcon(scaledIconDelete);
+		JButton btnCancel = new JButton("Cancel ticket");
+		panel.add(btnCancel);
+		btnCancel.addActionListener(acTabPayment);
+		btnCancel.setFont(font_12_Thin);
+		btnCancel.setIcon(scaledIconDelete);
 		
 // Create button Modify
-		JButton modifyBtn = new JButton("Modify");
-		panel.add(modifyBtn);
-		modifyBtn.setFont(font_12_Thin);
-		modifyBtn.addActionListener(acTabTicket);
-		modifyBtn.setIcon(scaledIconModify);
+		JButton btnModify = new JButton("Modify");
+		panel.add(btnModify);
+		btnModify.setFont(font_12_Thin);
+		btnModify.addActionListener(acTabPayment);
+		btnModify.setIcon(scaledIconModify);
 		
 // Create button reload 		
-		JButton refreshBtn = new JButton("Refresh");
-		panel.add(refreshBtn);
-		refreshBtn.addActionListener(acTabTicket);
-		refreshBtn.setFont(font_12_Thin);
-		refreshBtn.setIcon(scaleIconRefresh);
+		JButton btnRefresh = new JButton("Clear Ticket");
+		panel.add(btnRefresh);
+		btnRefresh.addActionListener(acTabPayment);
+		btnRefresh.setFont(font_12_Thin);
+		btnRefresh.setIcon(scaleIconRefresh);
 		
-		tableWaiting = new JTable();
-		tableWaiting.setDefaultEditor(Object.class, null);
-		tableWaiting.setFont(font_JetBrains);
-		tableWaiting.setBounds(23, 0, 933, 597);
-		tableWaiting.setModel(new DefaultTableModel(
+		tbWaiting = new JTable();
+		tbWaiting.setDefaultEditor(Object.class, null);
+		tbWaiting.setFont(font_JetBrains);
+		tbWaiting.setBounds(23, 0, 933, 597);
+		tbWaiting.setModel(new DefaultTableModel(
 				new Object [][] {},
 				new String[] { 
 						"STT", "Flight", "Passenger's Name","Phone", "Creator", "Ticket Type", "Boarding Time", "Flight Date"
 				}));
 		
-		final RowPopupTableWaiting popupTableWaiting =new RowPopupTableWaiting(tableWaiting,this);
+		final RowPopupTableWaiting popupTableWaiting =new RowPopupTableWaiting(tbWaiting,this);
 		
-		tableWaiting.addMouseListener(new MouseAdapter() {
+		tbWaiting.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if(SwingUtilities.isRightMouseButton(e)) {
 					popupTableWaiting.show(e.getComponent(),e.getX(),e.getY());
@@ -338,17 +359,17 @@ public class HomeView extends JFrame {
 			}
 		});
 		
-		tableWaiting.addMouseListener(new MouseAdapter() {
+		tbWaiting.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseReleased(MouseEvent e) {
-		        int r = tableWaiting.rowAtPoint(e.getPoint());
-		        if (r >= 0 && r < tableWaiting.getRowCount()) {
-		        	tableWaiting.setRowSelectionInterval(r, r);
+		        int r = tbWaiting.rowAtPoint(e.getPoint());
+		        if (r >= 0 && r < tbWaiting.getRowCount()) {
+		        	tbWaiting.setRowSelectionInterval(r, r);
 		        } else {
-		        	tableWaiting.clearSelection();
+		        	tbWaiting.clearSelection();
 		        }
 
-		        int rowindex = tableWaiting.getSelectedRow();
+		        int rowindex = tbWaiting.getSelectedRow();
 		        if (rowindex < 0)
 		            return;
 		        if (e.isPopupTrigger() && e.getComponent() instanceof JTable ) {
@@ -358,17 +379,17 @@ public class HomeView extends JFrame {
 		    }
 		});
 		
-		JScrollPane tableTicketBeingBooked = new JScrollPane(tableWaiting);
+		JScrollPane tableTicketBeingBooked = new JScrollPane(tbWaiting);
 		tableTicketBeingBooked.setBounds(0, 117, 993, 512);
-		JTableHeader tableWaitingHeader = tableTicket.getTableHeader();
+		JTableHeader tableWaitingHeader = tbWaiting.getTableHeader();
 		tableWaitingHeader.setFont(font_12_Thin);
-		tableWaiting.setRowHeight(30);
+		tbWaiting.setRowHeight(30);
 		panelTabPayment.add(tableTicketBeingBooked);
 		
-		JLabel lblNewLabel_5 = new JLabel("Ticket list waiting for payment");
+		JLabel lblNewLabel_5 = new JLabel("TICKET LIST WAITING FOR PAYMENT");
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_5.setFont(new Font("JetBrains Mono Medium", Font.BOLD, 20));
-		lblNewLabel_5.setBounds(239, -11, 539, 70);
+		lblNewLabel_5.setFont(new Font("Poppins", Font.BOLD, 22));
+		lblNewLabel_5.setBounds(239, 0, 539, 59);
 		panelTabPayment.add(lblNewLabel_5);
 		
 		panelTabPayment.setVisible(false);
@@ -401,10 +422,10 @@ public class HomeView extends JFrame {
 		panel.add(lblName);
 		lblName.setFont(font_JetBrains_14);
 		
-		TxtFNameValue = new JTextField("New label");
-		TxtFNameValue.setBounds(437, 1, 255, 36);
-		panel.add(TxtFNameValue);
-		TxtFNameValue.setFont(font_JetBrains_14);
+		txtNameValue = new JTextField("New label");
+		txtNameValue.setBounds(437, 1, 255, 36);
+		panel.add(txtNameValue);
+		txtNameValue.setFont(font_JetBrains_14);
 		
 		JLabel lblDateOfBirth = new JLabel("Date of birth");
 		lblDateOfBirth.setBounds(0, 57, 472, 36);
@@ -431,10 +452,10 @@ public class HomeView extends JFrame {
 		panel.add(lblAddress);
 		lblAddress.setFont(font_JetBrains_14);
 		
-		TxtFAddressValue = new JTextField("New label");
-		TxtFAddressValue.setBounds(437, 169, 255, 36);
-		panel.add(TxtFAddressValue);
-		TxtFAddressValue.setFont(font_JetBrains_14);
+		txtAddressValue = new JTextField("New label");
+		txtAddressValue.setBounds(437, 169, 255, 36);
+		panel.add(txtAddressValue);
+		txtAddressValue.setFont(font_JetBrains_14);
 		
 		JLabel lblPhone = new JLabel("Phone");
 		lblPhone.setBounds(0, 225, 472, 36);
@@ -442,10 +463,10 @@ public class HomeView extends JFrame {
 		panel.add(lblPhone);
 		lblPhone.setFont(font_JetBrains_14);
 		
-		TxtFPhoneValue = new JTextField("New label");
-		TxtFPhoneValue.setBounds(437, 225, 255, 36);
-		TxtFPhoneValue.setFont(font_JetBrains_14);
-		panel.add(TxtFPhoneValue);
+		txtPhoneValue = new JTextField("New label");
+		txtPhoneValue.setBounds(437, 225, 255, 36);
+		txtPhoneValue.setFont(font_JetBrains_14);
+		panel.add(txtPhoneValue);
 		
 		JLabel lblRole = new JLabel("Role");
 		lblRole.setBounds(0, 281, 472, 36);
@@ -453,10 +474,10 @@ public class HomeView extends JFrame {
 		panel.add(lblRole);
 		lblRole.setFont(font_JetBrains_14);
 		
-		TxtFRoleValue = new JTextField("New label");
-		TxtFRoleValue.setBounds(437, 281, 255, 36);
-		panel.add(TxtFRoleValue);
-		TxtFRoleValue.setFont(font_JetBrains_14);
+		txtRoleValue = new JTextField("New label");
+		txtRoleValue.setBounds(437, 281, 255, 36);
+		panel.add(txtRoleValue);
+		txtRoleValue.setFont(font_JetBrains_14);
 		
 		JLabel lblCitizenidentify = new JLabel("Citizenidentify");
 		lblCitizenidentify.setBounds(0, 337, 472, 36);
@@ -464,44 +485,44 @@ public class HomeView extends JFrame {
 		panel.add(lblCitizenidentify);
 		lblCitizenidentify.setFont(font_JetBrains_14);
 		
-		TxtFCitizenidentifyValue = new JTextField("New label");
-		TxtFCitizenidentifyValue.setBounds(437, 337, 255, 36);
-		panel.add(TxtFCitizenidentifyValue);
-		TxtFCitizenidentifyValue.setFont(font_JetBrains_14);
+		txtCitizenidentifyValue = new JTextField("New label");
+		txtCitizenidentifyValue.setBounds(437, 337, 255, 36);
+		panel.add(txtCitizenidentifyValue);
+		txtCitizenidentifyValue.setFont(font_JetBrains_14);
 		
-		JButton changeBtn = new JButton("Change info");
-		changeBtn.setFont(font_JetBrains);
-		changeBtn.setBounds(733, 340, 241, 32);
-		panel.add(changeBtn);
+		JButton btnChangeOrSave = new JButton("Change info");
+		btnChangeOrSave.setFont(font_JetBrains);
+		btnChangeOrSave.setBounds(733, 340, 241, 32);
+		panel.add(btnChangeOrSave);
 		
 		dateChooserDateOfBirth = new JDateChooser();
 		dateChooserDateOfBirth.getComponent(1).setFont(font_JetBrains_14);
 		dateChooserDateOfBirth.setBounds(437, 57, 255, 36);
 		panel.add(dateChooserDateOfBirth);
 		
-		genderComboBox = new JComboBox();
-		genderComboBox.addItem("Male");
-		genderComboBox.addItem("Female");
-		genderComboBox.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		genderComboBox.setBounds(437, 114, 255, 37);
-		panel.add(genderComboBox);
+		cbbGenderValue = new JComboBox();
+		cbbGenderValue.addItem("Male");
+		cbbGenderValue.addItem("Female");
+		cbbGenderValue.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		cbbGenderValue.setBounds(437, 114, 255, 37);
+		panel.add(cbbGenderValue);
 		
-		changeBtn.addActionListener(new ActionListener() {
+		btnChangeOrSave.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(changeBtn.getText().equals("Change info")) {
+				if(btnChangeOrSave.getText().equals("Change info")) {
 					dateChooserDateOfBirth.setEnabled(true);;
 					genderComboBox.enable();
-					TxtFAddressValue.setEditable(true);
-					TxtFPhoneValue.setEditable(true);
-					changeBtn.setText("Save");
+					txtAddressValue.setEditable(true);
+					txtPhoneValue.setEditable(true);
+					btnChangeOrSave.setText("Save");
 				} else {
 					int choose = JOptionPane.showConfirmDialog(panelTabAccount, "Are you sure save this info?");
 					if(choose==0)
 					{
 						saveInfoAccount();
-						changeBtn.setText("Change info");
+						btnChangeOrSave.setText("Change info");
 					}
 				}
 			}
@@ -518,9 +539,10 @@ public class HomeView extends JFrame {
 		lblCurrentPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_1.add(lblCurrentPassword);
 		
-		pfCurrentPassword = new JPasswordField();
-		pfCurrentPassword.setBounds(258, 1, 258, 37);
-		panel_1.add(pfCurrentPassword);
+		txtCurrentPassword = new JPasswordField();
+		txtCurrentPassword.setFont(font_JetBrains);
+		txtCurrentPassword.setBounds(258, 1, 258, 37);
+		panel_1.add(txtCurrentPassword);
 		
 		JLabel lblNewPassword = new JLabel("New password");
 		lblNewPassword.setBounds(0, 42, 258, 37);
@@ -528,9 +550,10 @@ public class HomeView extends JFrame {
 		lblNewPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_1.add(lblNewPassword);
 		
-		pfNewPassword = new JPasswordField();
-		pfNewPassword.setBounds(258, 42, 258, 37);
-		panel_1.add(pfNewPassword);
+		txtNewPassword = new JPasswordField();
+		txtNewPassword.setFont(font_JetBrains);
+		txtNewPassword.setBounds(258, 42, 258, 37);
+		panel_1.add(txtNewPassword);
 		
 		JLabel lblReNewPassword = new JLabel("Re-enter new password");
 		lblReNewPassword.setBounds(0, 83, 258, 37);
@@ -538,9 +561,10 @@ public class HomeView extends JFrame {
 		lblReNewPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_1.add(lblReNewPassword);
 		
-		pfReNewPassword = new JPasswordField();
-		pfReNewPassword.setBounds(258, 83, 258, 37);
-		panel_1.add(pfReNewPassword);
+		txtReNewPassword = new JPasswordField();
+		txtReNewPassword.setFont(font_JetBrains);
+		txtReNewPassword.setBounds(258, 83, 258, 37);
+		panel_1.add(txtReNewPassword);
 		
 		JButton btnSaveChange = new JButton("Save change");
 		btnSaveChange.setFont(font_JetBrains);
@@ -585,20 +609,20 @@ public class HomeView extends JFrame {
 	public void saveInfoAccount() {
 		Employee employee = loginAccount.getEmployee();
 		employee.setDateOfBirth(dateChooserDateOfBirth.getDate());
-		employee.setGender(genderComboBox.getSelectedItem()+"");
-		employee.setAddress(TxtFAddressValue.getText());
-		employee.setPhone(TxtFPhoneValue.getText());
+		employee.setGender(cbbGenderValue.getSelectedItem()+"");
+		employee.setAddress(txtAddressValue.getText());
+		employee.setPhone(txtPhoneValue.getText());
 		EmployeeDAO.getInstance().update(employee);
 		dateChooserDateOfBirth.setEnabled(false);;
-		genderComboBox.disable();
-		TxtFAddressValue.setEditable(false);
-		TxtFPhoneValue.setEditable(false);
+		cbbGenderValue.disable();
+		txtAddressValue.setEditable(false);
+		txtPhoneValue.setEditable(false);
 	}
 	
 	public void changePassword() {
-		String currentPassword = this.pfCurrentPassword.getText();
-		String newPassword = this.pfNewPassword.getText();
-		String reNewPassword = this.pfReNewPassword.getText();
+		String currentPassword = this.txtCurrentPassword.getText();
+		String newPassword = this.txtNewPassword.getText();
+		String reNewPassword = this.txtReNewPassword.getText();
 		lblMessageCurrentPass.setText("");
 		lblMessageRePass.setText("");
 		if(!currentPassword.equals(loginAccount.getPassword())) {
@@ -612,9 +636,9 @@ public class HomeView extends JFrame {
 					loginAccount.setPassword(reNewPassword);
 					AccountDAO.getInstance().update(loginAccount);
 					JOptionPane.showMessageDialog(null, "Change success");
-					this.pfCurrentPassword.setText("");
-					this.pfNewPassword.setText("");
-					this.pfReNewPassword.setText("");
+					this.txtCurrentPassword.setText("");
+					this.txtNewPassword.setText("");
+					this.txtReNewPassword.setText("");
 				}
 			}
 		}
@@ -622,20 +646,20 @@ public class HomeView extends JFrame {
 	
 	public void loadInfoUserToCell() {
 		Employee employeeLogin = loginAccount.getEmployee();
-		TxtFNameValue.setText(employeeLogin.getEmployeeName());
-		TxtFNameValue.setEditable(false);
+		txtNameValue.setText(employeeLogin.getEmployeeName());
+		txtNameValue.setEditable(false);
 		dateChooserDateOfBirth.setDate(employeeLogin.getDateOfBirth());
 		dateChooserDateOfBirth.setEnabled(false);
-		genderComboBox.setSelectedItem(employeeLogin.getGender());
-		genderComboBox.disable();
-		TxtFAddressValue.setText(employeeLogin.getAddress());
-		TxtFAddressValue.setEditable(false);
-		TxtFPhoneValue.setText(employeeLogin.getPhone());
-		TxtFPhoneValue.setEditable(false);
-		TxtFRoleValue.setText(employeeLogin.getRole());
-		TxtFRoleValue.setEditable(false);
-		TxtFCitizenidentifyValue.setText(employeeLogin.getCitizenIdentify());
-		TxtFCitizenidentifyValue.setEditable(false);
+		cbbGenderValue.setSelectedItem(employeeLogin.getGender());
+		cbbGenderValue.disable();
+		txtAddressValue.setText(employeeLogin.getAddress());
+		txtAddressValue.setEditable(false);
+		txtPhoneValue.setText(employeeLogin.getPhone());
+		txtPhoneValue.setEditable(false);
+		txtRoleValue.setText(employeeLogin.getRole());
+		txtRoleValue.setEditable(false);
+		txtCitizenidentifyValue.setText(employeeLogin.getCitizenIdentify());
+		txtCitizenidentifyValue.setEditable(false);
 	}
 	
 	public void createTabFlightManagement() {
@@ -672,42 +696,42 @@ public class HomeView extends JFrame {
 		lblDepartureDay.setBounds(618, 6, 97, 26);
 		toolFlightPanel.add(lblDepartureDay);
 		
-		fromDateChooser = new JDateChooser();
-		fromDateChooser.getComponent(1).setFont(font_14);
-		fromDateChooser.setSize(243, 31);
-		fromDateChooser.setLocation(764, 43);
-		toolFlightPanel.add(fromDateChooser);
+		toDateChooser = new JDateChooser();
+		toDateChooser.getComponent(1).setFont(font_14);
+		toDateChooser.setSize(243, 31);
+		toDateChooser.setLocation(764, 43);
+		toolFlightPanel.add(toDateChooser);
 		
 		//Create Button Search
-		JButton searchFlightBtn = new JButton("Search");
-		searchFlightBtn.addActionListener(acTabFlight);
-		searchFlightBtn.setBounds(770, 79, 237, 31);
-		searchFlightBtn.setFont(font_JetBrains);
-		toolFlightPanel.add(searchFlightBtn);
+		JButton btnSearchFlight = new JButton("Search");
+		btnSearchFlight.addActionListener(acTabFlight);
+		btnSearchFlight.setBounds(770, 79, 237, 31);
+		btnSearchFlight.setFont(font_JetBrains);
+		toolFlightPanel.add(btnSearchFlight);
 		ImageIcon iconSearch = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//searchIcon.png");
 		Image imgSearch = iconSearch.getImage();
         Image imgSearchScale = imgSearch.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         ImageIcon scaledIconSearch = new ImageIcon(imgSearchScale);
-        searchFlightBtn.setIcon(scaledIconSearch);
+        btnSearchFlight.setIcon(scaledIconSearch);
 		
-		tableFlight = new JTable();
-		tableFlight.setDefaultEditor(Object.class, null);
-		tableFlight.setFont(font_JetBrains);
-		tableFlight.setBounds(23, 0, 933, 597);
-		tableFlight.setModel(new DefaultTableModel(
+		tbFlight = new JTable();
+		tbFlight.setDefaultEditor(Object.class, null);
+		tbFlight.setFont(font_JetBrains);
+		tbFlight.setBounds(23, 0, 933, 597);
+		tbFlight.setModel(new DefaultTableModel(
 				new Object [][] {},
 				new String[] { 
 						"Flight ID", " AirCraft ", "Departure", "Destination", "Business ticket", "General ticket", "Take-Off Time", "Landing Time", "Date", "Price"
 				}));
-		JScrollPane scrollTableFight = new JScrollPane(tableFlight);
+		JScrollPane scrollTableFight = new JScrollPane(tbFlight);
 		scrollTableFight.setBounds(30, 127, 985, 511);
-		JTableHeader tableFlightHeader = tableFlight.getTableHeader();
+		JTableHeader tableFlightHeader = tbFlight.getTableHeader();
 		tableFlightHeader.setFont(font_12_Thin);
-		tableFlight.setRowHeight(30);
+		tbFlight.setRowHeight(30);
 		
-		final RowPopupFlight popTableFlight =new RowPopupFlight(tableFlight,this);
+		final RowPopupFlight popTableFlight =new RowPopupFlight(tbFlight,this);
 		
-		tableFlight.addMouseListener(new MouseAdapter() {
+		tbFlight.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if(SwingUtilities.isRightMouseButton(e)) {
 					popTableFlight.show(e.getComponent(),e.getX(),e.getY());
@@ -715,17 +739,17 @@ public class HomeView extends JFrame {
 			}
 		});
 		
-		tableFlight.addMouseListener(new MouseAdapter() {
+		tbFlight.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseReleased(MouseEvent e) {
-		        int r = tableFlight.rowAtPoint(e.getPoint());
-		        if (r >= 0 && r < tableFlight.getRowCount()) {
-		        	tableFlight.setRowSelectionInterval(r, r);
+		        int r = tbFlight.rowAtPoint(e.getPoint());
+		        if (r >= 0 && r < tbFlight.getRowCount()) {
+		        	tbFlight.setRowSelectionInterval(r, r);
 		        } else {
-		        	tableFlight.clearSelection();
+		        	tbFlight.clearSelection();
 		        }
 
-		        int rowindex = tableFlight.getSelectedRow();
+		        int rowindex = tbFlight.getSelectedRow();
 		        if (rowindex < 0)
 		            return;
 		        if (e.isPopupTrigger() && e.getComponent() instanceof JTable ) {
@@ -743,10 +767,10 @@ public class HomeView extends JFrame {
 			toolFlightPanel.add(departureLable);
 			departureLable.setFont(font_16);
 			
-			departureComboBox = new JComboBox();
-			departureComboBox.setBounds(125, 79, 198, 31);
-			toolFlightPanel.add(departureComboBox);
-			departureComboBox.setFont(font_JetBrains);
+			cbbDeparture = new JComboBox();
+			cbbDeparture.setBounds(125, 79, 198, 31);
+			toolFlightPanel.add(cbbDeparture);
+			cbbDeparture.setFont(font_JetBrains);
 			
 	// Destination
 			JLabel destinationLable = new JLabel("Destination:");
@@ -754,23 +778,23 @@ public class HomeView extends JFrame {
 			toolFlightPanel.add(destinationLable);
 			destinationLable.setFont(font_16);
 			
-			destinationComboBox = new JComboBox();
-			destinationComboBox.setBounds(562, 79, 198, 31);
-			toolFlightPanel.add(destinationComboBox);
-			destinationComboBox.setFont(font_JetBrains);
+			cbbDestination = new JComboBox();
+			cbbDestination.setBounds(562, 79, 198, 31);
+			toolFlightPanel.add(cbbDestination);
+			cbbDestination.setFont(font_JetBrains);
 		
 	        ArrayList<Airport> airports = this.airportModel.getAirports();
 			
 			
 			for(Airport a:airports) {
-				departureComboBox.addItem(a.getAirportName());
-				destinationComboBox.addItem(a.getAirportName());
+				cbbDeparture.addItem(a.getAirportName());
+				cbbDestination.addItem(a.getAirportName());
 			}
 			
-			toDateChoose = new JDateChooser();
-			toDateChoose.getComponent(1).setFont(font_14);
-			toDateChoose.setBounds(764, 6, 243, 31);
-			toolFlightPanel.add(toDateChoose);
+			fromDateChooser = new JDateChooser();
+			fromDateChooser.getComponent(1).setFont(font_14);
+			fromDateChooser.setBounds(764, 6, 243, 31);
+			toolFlightPanel.add(fromDateChooser);
 			
 			JLabel lblTo = new JLabel("To:");
 			lblTo.setFont(font_16);
@@ -782,33 +806,33 @@ public class HomeView extends JFrame {
 			toolFlightPanel.add(panelControlBtn);
 			
 	// Add
-			JButton addFlightBtn = new JButton();
-			panelControlBtn.add(addFlightBtn);
-			addFlightBtn.addActionListener(acTabFlight);
-			addFlightBtn.setFont(font_12_Thin);
-			addFlightBtn.setText("Add");
-			addFlightBtn.setIcon(scaledIconAdd);
+			JButton btnAddFlight = new JButton();
+			panelControlBtn.add(btnAddFlight);
+			btnAddFlight.addActionListener(acTabFlight);
+			btnAddFlight.setFont(font_12_Thin);
+			btnAddFlight.setText("Add");
+			btnAddFlight.setIcon(scaledIconAdd);
 			
 	// Modify
-			JButton modifyFlightBtn = new JButton("Modify");
-			panelControlBtn.add(modifyFlightBtn);
-			modifyFlightBtn.addActionListener(acTabFlight);
-			modifyFlightBtn.setFont(font_12_Thin);
-			modifyFlightBtn.setIcon(scaledIconModify);
+			JButton btnModifyFlight = new JButton("Modify");
+			panelControlBtn.add(btnModifyFlight);
+			btnModifyFlight.addActionListener(acTabFlight);
+			btnModifyFlight.setFont(font_12_Thin);
+			btnModifyFlight.setIcon(scaledIconModify);
 			
 	// Delete
-			JButton deleteFlightBtn = new JButton("Delete");
-			panelControlBtn.add(deleteFlightBtn);
-			deleteFlightBtn.addActionListener(acTabFlight);
-			deleteFlightBtn.setFont(font_12_Thin);
-			deleteFlightBtn.setIcon(scaledIconDelete);
+			JButton btnDeleteFlight = new JButton("Delete");
+			panelControlBtn.add(btnDeleteFlight);
+			btnDeleteFlight.addActionListener(acTabFlight);
+			btnDeleteFlight.setFont(font_12_Thin);
+			btnDeleteFlight.setIcon(scaledIconDelete);
 			
 	// Refresh
-			JButton refreshFlightBtn = new JButton("Refresh");
-			panelControlBtn.add(refreshFlightBtn);
-			refreshFlightBtn.addActionListener(acTabFlight);
-			refreshFlightBtn.setFont(font_12_Thin);
-			refreshFlightBtn.setIcon(scaleIconRefresh);
+			JButton btnRefreshFlight = new JButton("Refresh");
+			panelControlBtn.add(btnRefreshFlight);
+			btnRefreshFlight.addActionListener(acTabFlight);
+			btnRefreshFlight.setFont(font_12_Thin);
+			btnRefreshFlight.setIcon(scaleIconRefresh);
 			
 			JButton btnReverse = new JButton("Reverse");
 			btnReverse.addActionListener(acTabFlight);
@@ -816,17 +840,17 @@ public class HomeView extends JFrame {
 			toolFlightPanel.add(btnReverse);
 		FlightManagement.add(scrollTableFight);
 		
-		JButton importBtn = new JButton("Import");
-		importBtn.addActionListener(acTabFlight);
-		importBtn.setFont(font_JetBrains);
-		importBtn.setBounds(764, 645, 110, 35);
-		FlightManagement.add(importBtn);
+		JButton btnImport = new JButton("Import");
+		btnImport.addActionListener(acTabFlight);
+		btnImport.setFont(font_JetBrains);
+		btnImport.setBounds(764, 645, 110, 35);
+		FlightManagement.add(btnImport);
 		
-		JButton exportBtn = new JButton("Export");
-		exportBtn.addActionListener(acTabFlight);
-		exportBtn.setFont(font_JetBrains);
-		exportBtn.setBounds(905, 645, 110, 35);
-		FlightManagement.add(exportBtn);
+		JButton btnExport = new JButton("Export");
+		btnExport.addActionListener(acTabFlight);
+		btnExport.setFont(font_JetBrains);
+		btnExport.setBounds(905, 645, 110, 35);
+		FlightManagement.add(btnExport);
 		
 		FlightManagement.setVisible(false);
 	}
@@ -841,31 +865,31 @@ public class HomeView extends JFrame {
 		toolTabTicketPanel.setBounds(10, 11, 1017, 117);
 		toolTabTicketPanel.setLayout(null);
 		
-		searchTextField = new JTextField();
-		searchTextField.setMargin(new Insets(0,12,0,0));
-		searchTextField.setBackground(Color.WHITE);
-		searchTextField.setFont(font_JetBrains);
-		searchTextField.setBounds(583, 36, 424, 33);
-		toolTabTicketPanel.add(searchTextField);
-		searchTextField.setColumns(10);
+		txtEnterNameOrPhone = new JTextField();
+		txtEnterNameOrPhone.setMargin(new Insets(0,12,0,0));
+		txtEnterNameOrPhone.setBackground(Color.WHITE);
+		txtEnterNameOrPhone.setFont(font_JetBrains);
+		txtEnterNameOrPhone.setBounds(583, 36, 424, 33);
+		toolTabTicketPanel.add(txtEnterNameOrPhone);
+		txtEnterNameOrPhone.setColumns(10);
 		
-		searchTicketBtn = new JButton("Search");
-		searchTicketBtn.setFont(font_JetBrains);
-		searchTicketBtn.addActionListener(new ActionListener() {
+		btnSearchTicket = new JButton("Search");
+		btnSearchTicket.setFont(font_JetBrains);
+		btnSearchTicket.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				searchTicket();
 			}
 		});
-		searchTicketBtn.setBounds(770, 79, 237, 31);
-		toolTabTicketPanel.add(searchTicketBtn);
+		btnSearchTicket.setBounds(770, 79, 237, 31);
+		toolTabTicketPanel.add(btnSearchTicket);
 		ImageIcon searchIcon = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//searchIcon.png");
 		Image searchImg = searchIcon.getImage();
         Image imgSearchScale = searchImg.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         ImageIcon scaledSearchIcon = new ImageIcon(imgSearchScale);
-        searchTicketBtn.setIcon(scaledSearchIcon);
+        btnSearchTicket.setIcon(scaledSearchIcon);
         
-        toolTabTicketPanel.add(searchTicketBtn);
+        toolTabTicketPanel.add(btnSearchTicket);
 		ImageIcon iconAdd = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//addIcon.png");
 		Image addImg = iconAdd.getImage();
         Image imgAddScale = addImg.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
@@ -884,19 +908,19 @@ public class HomeView extends JFrame {
         ImageIcon scaleIconRefresh = new ImageIcon(imgRefreshScale);
 		
 // Create Table
-		tableTicket = new JTable();
-		tableTicket.setDefaultEditor(Object.class, null);
-		tableTicket.setFont(font_JetBrains);
-		tableTicket.setBounds(23, 0, 933, 597);
-		tableTicket.setModel(new DefaultTableModel(
+		tbTicket = new JTable();
+		tbTicket.setDefaultEditor(Object.class, null);
+		tbTicket.setFont(font_JetBrains);
+		tbTicket.setBounds(23, 0, 933, 597);
+		tbTicket.setModel(new DefaultTableModel(
 				new Object [][] {},
 				new String[] { 
 						"Ticket ID", "Flight", "Passenger's Name","Phone", "Creator", "Ticket Type", "Boarding Time", "Flight Date"
 				}));
 		
-		final RowPopupTicket popTableTicket =new RowPopupTicket(tableTicket,this);
+		final RowPopupTicket popTableTicket =new RowPopupTicket(tbTicket,this);
 		
-		tableTicket.addMouseListener(new MouseAdapter() {
+		tbTicket.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if(SwingUtilities.isRightMouseButton(e)) {
 					popTableTicket.show(e.getComponent(),e.getX(),e.getY());
@@ -904,17 +928,17 @@ public class HomeView extends JFrame {
 			}
 		});
 		
-		tableTicket.addMouseListener(new MouseAdapter() {
+		tbTicket.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseReleased(MouseEvent e) {
-		        int r = tableTicket.rowAtPoint(e.getPoint());
-		        if (r >= 0 && r < tableTicket.getRowCount()) {
-		        	tableTicket.setRowSelectionInterval(r, r);
+		        int r = tbTicket.rowAtPoint(e.getPoint());
+		        if (r >= 0 && r < tbTicket.getRowCount()) {
+		        	tbTicket.setRowSelectionInterval(r, r);
 		        } else {
-		        	tableTicket.clearSelection();
+		        	tbTicket.clearSelection();
 		        }
 
-		        int rowindex = tableTicket.getSelectedRow();
+		        int rowindex = tbTicket.getSelectedRow();
 		        if (rowindex < 0)
 		            return;
 		        if (e.isPopupTrigger() && e.getComponent() instanceof JTable ) {
@@ -924,11 +948,11 @@ public class HomeView extends JFrame {
 		    }
 		});
 		
-		JScrollPane tableTicketScrollPane = new JScrollPane(tableTicket);
+		JScrollPane tableTicketScrollPane = new JScrollPane(tbTicket);
 		tableTicketScrollPane.setBounds(30, 127, 985, 511);
-		JTableHeader tableTicketHeader = tableTicket.getTableHeader();
+		JTableHeader tableTicketHeader = tbTicket.getTableHeader();
 		tableTicketHeader.setFont(font_12_Thin);
-		tableTicket.setRowHeight(30);
+		tbTicket.setRowHeight(30);
 		refreshTableTicket();
 		
 		ticketManagementPanel.add(toolTabTicketPanel,BorderLayout.NORTH);
@@ -943,38 +967,40 @@ public class HomeView extends JFrame {
 		toolTabTicketPanel.add(panel);
 		
 // Create button Delete
-		JButton deleteBtn = new JButton("Cancel ticket");
-		panel.add(deleteBtn);
-		deleteBtn.addActionListener(acTabTicket);
-		deleteBtn.setFont(font_12_Thin);
-		deleteBtn.setIcon(scaledIconDelete);
+		JButton btnCancelTicket = new JButton("Cancel ticket");
+		panel.add(btnCancelTicket);
+		btnCancelTicket.addActionListener(acTabTicket);
+		btnCancelTicket.setFont(font_12_Thin);
+		btnCancelTicket.setIcon(scaledIconDelete);
 		
 // Create button Modify
-		JButton modifyBtn = new JButton("Modify");
-		panel.add(modifyBtn);
-		modifyBtn.setFont(font_12_Thin);
-		modifyBtn.addActionListener(acTabTicket);
-		modifyBtn.setIcon(scaledIconModify);
+		JButton btnModifyTicket = new JButton("Modify");
+		panel.add(btnModifyTicket);
+		btnModifyTicket.setFont(font_12_Thin);
+		btnModifyTicket.addActionListener(acTabTicket);
+		btnModifyTicket.setIcon(scaledIconModify);
 		
 // Create button reload 		
-		JButton refreshBtn = new JButton("Refresh");
-		panel.add(refreshBtn);
-		refreshBtn.addActionListener(acTabTicket);
-		refreshBtn.setFont(font_12_Thin);
-		refreshBtn.setIcon(scaleIconRefresh);
+		JButton btnRefreshTicket = new JButton("Refresh");
+		panel.add(btnRefreshTicket);
+		btnRefreshTicket.addActionListener(acTabTicket);
+		btnRefreshTicket.setFont(font_12_Thin);
+		btnRefreshTicket.setIcon(scaleIconRefresh);
 		
 		JLabel lblNewLabel_2 = new JLabel("Enter flight: ");
 		lblNewLabel_2.setBounds(18, 78, 101, 32);
 		toolTabTicketPanel.add(lblNewLabel_2);
 		lblNewLabel_2.setFont(font_JetBrains);
 		
-		idExportFlight = new JTextField();
+		txtEnterFlight = new JTextField();
+		txtEnterFlight.setFont(font_JetBrains);
+		txtEnterFlight.setMargin(new Insets(0, 12, 0, 0));
 		ArrayList<Ticket> tickets = TicketDAO.getInstance().selectAll();
-		idExportFlight.addKeyListener(new KeyListener() {
+		txtEnterFlight.addKeyListener(new KeyListener() {
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
-				String condition = idExportFlight.getText() +e.getKeyChar();
+				String condition = txtEnterFlight.getText() +e.getKeyChar();
 				ArrayList<Ticket> show = new ArrayList<>();
 				try {
 					for(Ticket ticket :tickets) {
@@ -1003,18 +1029,18 @@ public class HomeView extends JFrame {
 				
 			}
 		});
-		idExportFlight.setBounds(140, 80, 222, 32);
-		toolTabTicketPanel.add(idExportFlight);
-		idExportFlight.setColumns(10);
+		txtEnterFlight.setBounds(140, 80, 222, 32);
+		toolTabTicketPanel.add(txtEnterFlight);
+		txtEnterFlight.setColumns(10);
 		ticketManagementPanel.add(tableTicketScrollPane, BorderLayout.CENTER);
 		
 		mainPanel.add(ticketManagementPanel);
 		
-		JButton exportBtn = new JButton("Export");
-		exportBtn.addActionListener(acTabTicket);
-		exportBtn.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		exportBtn.setBounds(905, 645, 110, 35);
-		ticketManagementPanel.add(exportBtn);
+		JButton btnExport = new JButton("Export");
+		btnExport.addActionListener(acTabTicket);
+		btnExport.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		btnExport.setBounds(905, 645, 110, 35);
+		ticketManagementPanel.add(btnExport);
 		
 		message = new JLabel("");
 		message.setBounds(30, 648, 683, 25);
@@ -1033,24 +1059,24 @@ public class HomeView extends JFrame {
 		toolTabEmployeePanel.setBounds(10, 11, 1017, 113);
 		toolTabEmployeePanel.setLayout(null);
 		
-		searchEmpTextField = new JTextField();
-		searchEmpTextField.setMargin(new Insets(0,12,0,0));
-		searchEmpTextField.setFont(font_JetBrains);
-		searchEmpTextField.setBackground(Color.WHITE);
-		searchEmpTextField.setBounds(583, 36, 424, 33);
-		toolTabEmployeePanel.add(searchEmpTextField);
-		searchEmpTextField.setColumns(10);
+		txtEnterPhoneOrName = new JTextField();
+		txtEnterPhoneOrName.setMargin(new Insets(0,12,0,0));
+		txtEnterPhoneOrName.setFont(font_JetBrains);
+		txtEnterPhoneOrName.setBackground(Color.WHITE);
+		txtEnterPhoneOrName.setBounds(583, 36, 424, 33);
+		toolTabEmployeePanel.add(txtEnterPhoneOrName);
+		txtEnterPhoneOrName.setColumns(10);
 		
-		JButton searchEmpBtn = new JButton("Search");
-		searchEmpBtn.addActionListener(acTabEmployee);
-		searchEmpBtn.setFont(font_JetBrains);
-		searchEmpBtn.setBounds(770, 79, 237, 31);
-		toolTabEmployeePanel.add(searchEmpBtn);
+		JButton btnSearchEmp = new JButton("Search");
+		btnSearchEmp.addActionListener(acTabEmployee);
+		btnSearchEmp.setFont(font_JetBrains);
+		btnSearchEmp.setBounds(770, 79, 237, 31);
+		toolTabEmployeePanel.add(btnSearchEmp);
 		ImageIcon searchIcon = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//searchIcon.png");
 		Image searchImg = searchIcon.getImage();
         Image imgSearchScale = searchImg.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         ImageIcon scaledSearchIcon = new ImageIcon(imgSearchScale);
-        searchEmpBtn.setIcon(scaledSearchIcon);
+        btnSearchEmp.setIcon(scaledSearchIcon);
 		ImageIcon iconAdd = new ImageIcon("..//FlightTicketManagementSoftware//src//main//resources//Icon//addIcon.png");
 		Image addImg = iconAdd.getImage();
         Image imgAddScale = addImg.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
@@ -1071,19 +1097,19 @@ public class HomeView extends JFrame {
 // Create Table
 		DefaultTableCellRenderer centeRenderer = new DefaultTableCellRenderer();
 		centeRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-		tableEmployee = new JTable();
-		tableEmployee.setFont(font_JetBrains);
-		tableEmployee.setDefaultEditor(Object.class, null);
-		tableEmployee.setBounds(23, 0, 933, 597);
-		tableEmployee.setModel(new DefaultTableModel(
+		tbEmployee = new JTable();
+		tbEmployee.setFont(font_JetBrains);
+		tbEmployee.setDefaultEditor(Object.class, null);
+		tbEmployee.setBounds(23, 0, 933, 597);
+		tbEmployee.setModel(new DefaultTableModel(
 				new Object [][] {},
 				new String[] { 
 						"ID", "Name", "Role", "Gender", "Date of birth", "Phone", "Address", "CitizenIdentify","isActive"
 				}));
 		
-		final RowPopupEmp popTableEmp =new RowPopupEmp(tableEmployee,this);
+		final RowPopupEmp popTableEmp =new RowPopupEmp(tbEmployee,this);
 		
-		tableEmployee.addMouseListener(new MouseAdapter() {
+		tbEmployee.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if(SwingUtilities.isRightMouseButton(e)) {
 					popTableEmp.show(e.getComponent(),e.getX(),e.getY());
@@ -1091,17 +1117,17 @@ public class HomeView extends JFrame {
 			}
 		});
 		
-		tableEmployee.addMouseListener(new MouseAdapter() {
+		tbEmployee.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseReleased(MouseEvent e) {
-		        int r = tableEmployee.rowAtPoint(e.getPoint());
-		        if (r >= 0 && r < tableEmployee.getRowCount()) {
-		        	tableEmployee.setRowSelectionInterval(r, r);
+		        int r = tbEmployee.rowAtPoint(e.getPoint());
+		        if (r >= 0 && r < tbEmployee.getRowCount()) {
+		        	tbEmployee.setRowSelectionInterval(r, r);
 		        } else {
-		        	tableEmployee.clearSelection();
+		        	tbEmployee.clearSelection();
 		        }
 
-		        int rowindex = tableEmployee.getSelectedRow();
+		        int rowindex = tbEmployee.getSelectedRow();
 		        if (rowindex < 0)
 		            return;
 		        if (e.isPopupTrigger() && e.getComponent() instanceof JTable ) {
@@ -1111,15 +1137,15 @@ public class HomeView extends JFrame {
 		    }
 		});
 		
-		tableEmployee.setRowHeight(30);
+		tbEmployee.setRowHeight(30);
 		
-		JScrollPane tableEmpScrollPane = new JScrollPane(tableEmployee);
+		JScrollPane tableEmpScrollPane = new JScrollPane(tbEmployee);
 		tableEmpScrollPane.setBounds(30, 127, 985, 511);
-		JTableHeader tableEmpHeader = tableEmployee.getTableHeader();
+		JTableHeader tableEmpHeader = tbEmployee.getTableHeader();
 		tableEmpHeader.setFont(font_12_Thin);
 		
 		refreshTableEmployee();
-		tableEmployee.setDefaultRenderer(String.class, centeRenderer);
+		tbEmployee.setDefaultRenderer(String.class, centeRenderer);
 		
 		
 		employeeManagerPanel.add(toolTabEmployeePanel,BorderLayout.NORTH);
@@ -1134,33 +1160,33 @@ public class HomeView extends JFrame {
 		toolTabEmployeePanel.add(panel);
 		
 // Create button Add
-		JButton addEmpBtn = new JButton("Add");
-		panel.add(addEmpBtn);
-		addEmpBtn.setFont(font_12_Thin);
-		addEmpBtn.setHideActionText(true);
-		addEmpBtn.addActionListener(acTabEmployee);
-		addEmpBtn.setIcon(scaledIconAdd);
+		JButton btnAddEmp = new JButton("Add");
+		panel.add(btnAddEmp);
+		btnAddEmp.setFont(font_12_Thin);
+		btnAddEmp.setHideActionText(true);
+		btnAddEmp.addActionListener(acTabEmployee);
+		btnAddEmp.setIcon(scaledIconAdd);
 		
 // Create button Delete
-		JButton deleteEmpBtn = new JButton("Lock");
-		panel.add(deleteEmpBtn);
-		deleteEmpBtn.setFont(font_12_Thin);
-		deleteEmpBtn.addActionListener(acTabEmployee);
-		deleteEmpBtn.setIcon(scaledIconDelete);
+		JButton btnLockEmp = new JButton("Lock");
+		panel.add(btnLockEmp);
+		btnLockEmp.setFont(font_12_Thin);
+		btnLockEmp.addActionListener(acTabEmployee);
+		btnLockEmp.setIcon(scaledIconDelete);
 		
 // Create button Modify
-		JButton modifyEmpBtn = new JButton("Modify");
-		panel.add(modifyEmpBtn);
-		modifyEmpBtn.setFont(font_12_Thin);
-		modifyEmpBtn.addActionListener(acTabEmployee);
-		modifyEmpBtn.setIcon(scaledIconModify);
+		JButton btnModifyEmp = new JButton("Modify");
+		panel.add(btnModifyEmp);
+		btnModifyEmp.setFont(font_12_Thin);
+		btnModifyEmp.addActionListener(acTabEmployee);
+		btnModifyEmp.setIcon(scaledIconModify);
 		
 // Create button reload 		
-		JButton refreshEmpTableBtn = new JButton("Refresh");
-		panel.add(refreshEmpTableBtn);
-		refreshEmpTableBtn.setFont(font_12_Thin);
-		refreshEmpTableBtn.addActionListener(acTabEmployee);
-		refreshEmpTableBtn.setIcon(scaleIconRefresh);
+		JButton btnRefreshEmp = new JButton("Refresh");
+		panel.add(btnRefreshEmp);
+		btnRefreshEmp.setFont(font_12_Thin);
+		btnRefreshEmp.addActionListener(acTabEmployee);
+		btnRefreshEmp.setIcon(scaleIconRefresh);
 		employeeManagerPanel.add(tableEmpScrollPane, BorderLayout.CENTER);
 		
 		mainPanel.add(employeeManagerPanel);
@@ -1311,6 +1337,14 @@ public class HomeView extends JFrame {
 	
 	
 	
+	public JTable getTableWaiting() {
+		return tbWaiting;
+	}
+
+	public void setTableWaiting(JTable tableWaiting) {
+		this.tbWaiting = tableWaiting;
+	}
+
 	public TicketModel getListTicketWaiting() {
 		return listTicketWaiting;
 	}
@@ -1360,27 +1394,27 @@ public class HomeView extends JFrame {
 	}
 	
 	public JTable getTableTicket() {
-		return tableTicket;
+		return tbTicket;
 	}
 
 	public void setTableTicket(JTable tableTicket) {
-		this.tableTicket = tableTicket;
+		this.tbTicket = tableTicket;
 	}
 
 	public JTable getTableFlight() {
-		return tableFlight;
+		return tbFlight;
 	}
 
 	public void setTableFlight(JTable tableFlight) {
-		this.tableFlight = tableFlight;
+		this.tbFlight = tableFlight;
 	}
 
 	public JTable getTableEmployee() {
-		return tableEmployee;
+		return tbEmployee;
 	}
 
 	public void setTableEmployee(JTable tableEmployee) {
-		this.tableEmployee = tableEmployee;
+		this.tbEmployee = tableEmployee;
 	}
 	
 	public EmployeeModel getEmployeeModel() {
@@ -1451,14 +1485,14 @@ public class HomeView extends JFrame {
 	}
 	
 	public void reverseLocation() {
-		String departure = departureComboBox.getSelectedItem() +"";
-		String destination = destinationComboBox.getSelectedItem() +"";
-		departureComboBox.setSelectedItem(destination);
-		destinationComboBox.setSelectedItem(departure);
+		String departure = cbbDeparture.getSelectedItem() +"";
+		String destination = cbbDestination.getSelectedItem() +"";
+		cbbDeparture.setSelectedItem(destination);
+		cbbDestination.setSelectedItem(departure);
 	}
 	
 	public void loadDataTableEmployee(ArrayList<Employee> employees) {
-		DefaultTableModel tableModel = (DefaultTableModel) tableEmployee.getModel();
+		DefaultTableModel tableModel = (DefaultTableModel) tbEmployee.getModel();
 		tableModel.getDataVector().removeAllElements();
 		if(employees.isEmpty())
 			return;
@@ -1494,10 +1528,10 @@ public class HomeView extends JFrame {
 	
 	public void searchFlight() {
 		ArrayList<Flight> listFlightSearch = new ArrayList<Flight>();
-		String departure = this.departureComboBox.getSelectedItem()+"";
-		String destination = this.destinationComboBox.getSelectedItem()+"";
-		java.util.Date fromDate = this.fromDateChooser.getDate();
-		java.util.Date toDate = this.toDateChoose.getDate();
+		String departure = this.cbbDeparture.getSelectedItem()+"";
+		String destination = this.cbbDestination.getSelectedItem()+"";
+		java.util.Date fromDate = this.toDateChooser.getDate();
+		java.util.Date toDate = this.fromDateChooser.getDate();
 		if(departure.equals(destination)) {
 			JOptionPane.showMessageDialog(null,"Departure and destination cannot be the same");
 			return;
@@ -1523,7 +1557,7 @@ public class HomeView extends JFrame {
 	}
 	
 	public void loadDataTableFlight(ArrayList<Flight> flights) {
-		DefaultTableModel tableModel = (DefaultTableModel) tableFlight.getModel();
+		DefaultTableModel tableModel = (DefaultTableModel) tbFlight.getModel();
 		tableModel.getDataVector().removeAllElements();
 		if(flights.isEmpty())
 			return;
@@ -1550,8 +1584,8 @@ public class HomeView extends JFrame {
 	}
 	
 	public void deleteFlight() {
-		int rowIndex = tableFlight.getSelectedRow();
-		DefaultTableModel tableModel = (DefaultTableModel) tableFlight.getModel();
+		int rowIndex = tbFlight.getSelectedRow();
+		DefaultTableModel tableModel = (DefaultTableModel) tbFlight.getModel();
 		String flightId = tableModel.getValueAt(rowIndex, 0)+"";
 		Flight flight = FlightDAO.getInstance().selectById(flightId);
 		flight.setIsActive(0);
@@ -1560,7 +1594,7 @@ public class HomeView extends JFrame {
 	}
 	
 	public void loadDataTableTicket(ArrayList<Ticket> tickets) {
-		DefaultTableModel tableModel = (DefaultTableModel) tableTicket.getModel();
+		DefaultTableModel tableModel = (DefaultTableModel) tbTicket.getModel();
 		tableModel.getDataVector().removeAllElements();
 		if(tickets.isEmpty())
 			return;
@@ -1579,7 +1613,7 @@ public class HomeView extends JFrame {
 	}
 	
 	public void loadDataTableWaiting(ArrayList<Ticket> tickets) {
-		DefaultTableModel tableModel = (DefaultTableModel) tableWaiting.getModel();
+		DefaultTableModel tableModel = (DefaultTableModel) tbWaiting.getModel();
 		tableModel.getDataVector().removeAllElements();
 		if(tickets.isEmpty())
 			return;
@@ -1600,8 +1634,8 @@ public class HomeView extends JFrame {
 	}
 	
 	public void cancelTicket() {
-		DefaultTableModel tableModel = (DefaultTableModel) tableTicket.getModel();
-		int rowSelect = tableTicket.getSelectedRow();
+		DefaultTableModel tableModel = (DefaultTableModel) tbTicket.getModel();
+		int rowSelect = tbTicket.getSelectedRow();
 		int ticketId = Integer.valueOf(tableModel.getValueAt(rowSelect, 0)+"");
 		Ticket ticket = TicketDAO.getInstance().selectById(ticketId);
 		Flight flight = ticket.getFlight();
@@ -1653,9 +1687,14 @@ public class HomeView extends JFrame {
 	}
 	
 	public void exportTicketByIdFlight(java.io.File file) {
-		String flightId = idExportFlight.getText();
-		String condition = "Flight_ID = '" + flightId +"'";
-		ArrayList<Ticket> tickets = TicketDAO.getInstance().selectByCondition(condition);
+		String flightId = txtEnterFlight.getText();
+		ArrayList<Ticket> tickets;
+		if(!flightId.equals("")) {
+			String condition = "Flight_ID = '" + flightId +"'";
+			tickets = TicketDAO.getInstance().selectByCondition(condition);			
+		} else {
+			tickets = TicketDAO.getInstance().selectAll();
+		}
 		handleExportTicket(tickets, file);
 	}
 	
@@ -1725,9 +1764,10 @@ public class HomeView extends JFrame {
 	}
 	
 	public void searchTicket() {
-		String search = searchTextField.getText().toLowerCase();
+		String search = txtEnterNameOrPhone.getText().toLowerCase();
+		ArrayList<Ticket> tickets = TicketDAO.getInstance().selectAll();
 		ArrayList<Ticket> ticketsSearch = new ArrayList<Ticket>();
-		for(Ticket ticket: ticketModel.getTickets()) {
+		for(Ticket ticket: tickets) {
 			String name = ticket.getCustomer().getCustomerName().toLowerCase();
 			String phone = ticket.getCustomer().getPhone();
 			if(name.contains(search) || phone.contains(search)) { 
@@ -1742,7 +1782,7 @@ public class HomeView extends JFrame {
 	}
 	
 	public void searchEmployee() {
-		String search = searchEmpTextField.getText().toLowerCase();
+		String search = txtEnterPhoneOrName.getText().toLowerCase();
 		ArrayList<Employee> employees = EmployeeDAO.getInstance().selectAll();
 		ArrayList<Employee> listResultSearch = new ArrayList<Employee>();
 		for(Employee e: employees) {

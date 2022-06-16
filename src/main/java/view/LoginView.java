@@ -41,8 +41,8 @@ import javax.swing.border.EtchedBorder;
 public class LoginView extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField usernameTextField;
-	private JPasswordField passwordTextField;
+	private JTextField txtUsername;
+	private JPasswordField txtPassword;
 	private ActionListener acLoginController;
 	private JLabel messageLogin;
 	
@@ -53,7 +53,7 @@ public class LoginView extends JFrame {
 	Font font_16_Thin = new Font("Poppins", Font.PLAIN, 16);
 	Font font_20_Thin = new Font("Poppins", Font.PLAIN, 20);
 	Font font_32_Thin = new Font("Poppins", Font.PLAIN, 32);
-	public JButton loginBtn;
+	public JButton btnLogin;
 
 	/**
 	 * Create the frame.
@@ -74,26 +74,26 @@ public class LoginView extends JFrame {
 		getContentPane().add(centerJPanel);
 		centerJPanel.setLayout(null);
 		
-		usernameTextField = new JTextField();
-		usernameTextField.setFont(font_JetBrains);
-		usernameTextField.setMargin(new Insets(0,12,0,0));
-		usernameTextField.setForeground(Color.BLACK);
-		usernameTextField.setBounds(157, 200, 357, 38);
-		centerJPanel.add(usernameTextField);
-		usernameTextField.setColumns(10);
+		txtUsername = new JTextField();
+		txtUsername.setFont(font_JetBrains);
+		txtUsername.setMargin(new Insets(0,12,0,0));
+		txtUsername.setForeground(Color.BLACK);
+		txtUsername.setBounds(157, 200, 357, 38);
+		centerJPanel.add(txtUsername);
+		txtUsername.setColumns(10);
 		
-		passwordTextField = new JPasswordField();
-		passwordTextField.setFont(font_JetBrains);
-		passwordTextField.setMargin(new Insets(0,12,0,0));
-		passwordTextField.setToolTipText("");
-		passwordTextField.setBounds(157, 284, 357, 38);
-		centerJPanel.add(passwordTextField);
+		txtPassword = new JPasswordField();
+		txtPassword.setFont(font_JetBrains);
+		txtPassword.setMargin(new Insets(0,12,0,0));
+		txtPassword.setToolTipText("");
+		txtPassword.setBounds(157, 284, 357, 38);
+		centerJPanel.add(txtPassword);
 		        
-        loginBtn = new JButton("LOGIN");
-        loginBtn.setFont(font_20_Thin);
-        loginBtn.setBounds(214, 361, 263, 49);
-        centerJPanel.add(loginBtn);
-        loginBtn.addActionListener(acLoginController);
+        btnLogin = new JButton("LOGIN");
+        btnLogin.setFont(font_20_Thin);
+        btnLogin.setBounds(214, 361, 263, 49);
+        centerJPanel.add(btnLogin);
+        btnLogin.addActionListener(acLoginController);
           
         JLabel titleLable = new JLabel("AIRCRAFT TICKET MANAGEMENT SYSTEM");
         titleLable.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -126,14 +126,14 @@ public class LoginView extends JFrame {
         centerJPanel.add(messageLogin);
         
         //
-        usernameTextField.setText("admin");
-        passwordTextField.setText("1");
+        txtUsername.setText("admin");
+        txtPassword.setText("1");
 	}
 	
 	public void handleLogin() 
 	{
-		String username = this.usernameTextField.getText();
-		String password = this.passwordTextField.getText();
+		String username = this.txtUsername.getText();
+		String password = this.txtPassword.getText();
 		if(username.equals("") || password.equals("")) {
 			JOptionPane.showMessageDialog(contentPane, "You have not entered your username or password! Please re-enter!");
 		} else {

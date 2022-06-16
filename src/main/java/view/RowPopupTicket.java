@@ -14,12 +14,12 @@ public class RowPopupTicket extends JPopupMenu {
 
 	Font font_JetBrains = new Font("JetBrains Mono", Font.BOLD, 12);
 	public RowPopupTicket(JTable table,HomeView homeView) {
-		JMenuItem cancelTicket  = new JMenuItem("Cancel Ticket");
-		JMenuItem detailsTicket  = new JMenuItem("Ticket Details");
-		cancelTicket.setFont(font_JetBrains);
-		detailsTicket.setFont(font_JetBrains);
+		JMenuItem jmnCancelTicket  = new JMenuItem("Cancel Ticket");
+		JMenuItem jmnTicketDetails  = new JMenuItem("Ticket Details");
+		jmnCancelTicket.setFont(font_JetBrains);
+		jmnTicketDetails.setFont(font_JetBrains);
 		
-		cancelTicket.addActionListener(new ActionListener() {
+		jmnCancelTicket.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -29,7 +29,7 @@ public class RowPopupTicket extends JPopupMenu {
 			}
 		});
 		
-		detailsTicket.addActionListener(new ActionListener() {
+		jmnTicketDetails.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -42,7 +42,7 @@ public class RowPopupTicket extends JPopupMenu {
 			}
 		});
 		
-		this.add(cancelTicket);
-		this.add(detailsTicket);
+		this.add(jmnCancelTicket);
+		this.add(jmnTicketDetails);
 	}
 }

@@ -44,19 +44,19 @@ import entities.Account;
 import entities.Employee;
 import model.Province;
 
-public class EmployeeInformationEntryForm extends JFrame {
+public class FormStaffInformation extends JFrame {
 
 	private HomeView homeView;
 	private JPanel contentPane;
-	private JTextField nameTextField;
+	private JTextField txtNameEmp;
 	private JTextField dateofbirth;
-	private JTextField citizenidentifyTextField;
-	private JTextField phoneTextField;
+	private JTextField txtCitizenidentifyEmp;
+	private JTextField txtPhoneEmp;
 	private ActionListener empIEFController;
-	private JComboBox genderComboBox;
-	private JComboBox roleComboBox;
-	private JTextField address;
-	private JDateChooser dateChooser;
+	private JComboBox cbbGenderEmp;
+	private JComboBox cbbRoleEmp;
+	private JTextField txtAddressEmp;
+	private JDateChooser dateChooserEmp;
 	
 	public int rowSelectedIndex;
 	
@@ -67,7 +67,7 @@ public class EmployeeInformationEntryForm extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public EmployeeInformationEntryForm(HomeView homeView) {
+	public FormStaffInformation(HomeView homeView) {
 		empIEFController = new InployeeInformationEntryFormController(this);
 		this.homeView = homeView;
 		rowSelectedIndex = homeView.getTableEmployee().getSelectedRow();
@@ -89,75 +89,76 @@ public class EmployeeInformationEntryForm extends JFrame {
 		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(nameLabel);
 		
-		nameTextField = new JTextField();
-		nameTextField.addKeyListener(new CustomKeyListener(nameTextField,50));
-		nameTextField.setFont(font_JetBrains);
-		nameTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		inputPanel.add(nameTextField);
-		nameTextField.setColumns(10);
+		txtNameEmp = new JTextField();
+		txtNameEmp.addKeyListener(new CustomKeyListener(txtNameEmp,50));
+		txtNameEmp.setFont(font_JetBrains);
+		txtNameEmp.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		inputPanel.add(txtNameEmp);
+		txtNameEmp.setColumns(10);
 		
 		JLabel roleLable = new JLabel("Role");
 		roleLable.setFont(font_14_Thin);
 		roleLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(roleLable);
 		
-		roleComboBox = new JComboBox();
-		roleComboBox.setFont(font_JetBrains);
-		roleComboBox.addItem("Management Staff");
-		roleComboBox.addItem("Ticket Seller");
-		inputPanel.add(roleComboBox);
+		cbbRoleEmp = new JComboBox();
+		cbbRoleEmp.setFont(font_JetBrains);
+		cbbRoleEmp.addItem("Management Staff");
+		cbbRoleEmp.addItem("Ticket Seller");
+		inputPanel.add(cbbRoleEmp);
 		
 		JLabel genderLable = new JLabel("Gender");
 		genderLable.setFont(font_14_Thin);
 		genderLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(genderLable);
 		
-		genderComboBox = new JComboBox();
-		genderComboBox.setFont(font_JetBrains);
-		genderComboBox.addItem("Male");
-		genderComboBox.addItem("Female");
-		inputPanel.add(genderComboBox);
+		cbbGenderEmp = new JComboBox();
+		cbbGenderEmp.setFont(font_JetBrains);
+		cbbGenderEmp.addItem("Male");
+		cbbGenderEmp.addItem("Female");
+		inputPanel.add(cbbGenderEmp);
 		
 		JLabel dateOfBirthLable = new JLabel("Date Of Birth");
 		dateOfBirthLable.setFont(font_14_Thin);
 		dateOfBirthLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(dateOfBirthLable);
 		
-		dateChooser = new JDateChooser();
-		inputPanel.add(dateChooser);
+		dateChooserEmp = new JDateChooser();
+		dateChooserEmp.getComponent(1).setFont(font_JetBrains);
+		inputPanel.add(dateChooserEmp);
 				
 		JLabel addressLable = new JLabel("Address");
 		addressLable.setFont(font_14_Thin);
 		addressLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(addressLable);
 					
-		address = new JTextField();
-		address.setFont(font_JetBrains);
-		inputPanel.add(address);
+		txtAddressEmp = new JTextField();
+		txtAddressEmp.setFont(font_JetBrains);
+		inputPanel.add(txtAddressEmp);
 		
 		JLabel citizenIdentifyLable = new JLabel("CitizenIdentify");
 		citizenIdentifyLable.setFont(font_14_Thin);
 		citizenIdentifyLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(citizenIdentifyLable);
 		
-		citizenidentifyTextField = new JTextField();
-		citizenidentifyTextField.addKeyListener(new CustomKeyListener(citizenidentifyTextField,50));
-		citizenidentifyTextField.setFont(font_JetBrains);
-		citizenidentifyTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		inputPanel.add(citizenidentifyTextField);
-		citizenidentifyTextField.setColumns(10);
+		txtCitizenidentifyEmp = new JTextField();
+		txtCitizenidentifyEmp.addKeyListener(new CustomKeyListener(txtCitizenidentifyEmp,50));
+		txtCitizenidentifyEmp.setFont(font_JetBrains);
+		txtCitizenidentifyEmp.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		inputPanel.add(txtCitizenidentifyEmp);
+		txtCitizenidentifyEmp.setColumns(10);
 		
 		JLabel phoneLable = new JLabel("Phone");
 		phoneLable.setFont(font_14_Thin);
 		phoneLable.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPanel.add(phoneLable);
 		
-		phoneTextField = new JTextField();
-		phoneTextField.addKeyListener(new CustomKeyListener(phoneTextField, 10));
-		phoneTextField.setFont(font_JetBrains);
-		phoneTextField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		inputPanel.add(phoneTextField);
-		phoneTextField.setColumns(10);
+		txtPhoneEmp = new JTextField();
+		txtPhoneEmp.addKeyListener(new CustomKeyListener(txtPhoneEmp, 10));
+		txtPhoneEmp.setFont(font_JetBrains);
+		txtPhoneEmp.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		inputPanel.add(txtPhoneEmp);
+		txtPhoneEmp.setColumns(10);
 		
 		JLabel Tiltle = new JLabel("Staff Infomation");
 		Tiltle.setFont(new Font("Poppins", Font.BOLD | Font.ITALIC, 30));
@@ -170,16 +171,16 @@ public class EmployeeInformationEntryForm extends JFrame {
 		buttonPanel.setLayout(new GridLayout(1,2,30,0));
 		contentPane.add(buttonPanel);
 		
-		JButton cancelBtn = new JButton("Cancel");
-		cancelBtn.addActionListener(empIEFController);
-		cancelBtn.setFont(font_16);
-		cancelBtn.setForeground(Color.RED);
-		buttonPanel.add(cancelBtn);
+		JButton btnCancelEmp = new JButton("Cancel");
+		btnCancelEmp.addActionListener(empIEFController);
+		btnCancelEmp.setFont(font_16);
+		btnCancelEmp.setForeground(Color.RED);
+		buttonPanel.add(btnCancelEmp);
 		
-		JButton saveBtn = new JButton("Save");
-		saveBtn.addActionListener(empIEFController);
-		saveBtn.setFont(font_16);
-		buttonPanel.add(saveBtn);
+		JButton btnSaveEmp = new JButton("Save");
+		btnSaveEmp.addActionListener(empIEFController);
+		btnSaveEmp.setFont(font_16);
+		buttonPanel.add(btnSaveEmp);
 		if(this.homeView.selectedKey=="Modify")
 			loadInfoEmployeeToInputCell();
 	}
@@ -216,13 +217,13 @@ public class EmployeeInformationEntryForm extends JFrame {
 	}
 	
 	public Employee createEmployeeFromInputCell() {
-		String name = this.nameTextField.getText();
-		String address = this.address.getText();
-		String citizenidentify = this.citizenidentifyTextField.getText();
-		java.util.Date dateSelected = this.dateChooser.getDate();
-		String phone = this.phoneTextField.getText();
-		String gender = this.genderComboBox.getSelectedItem()+"";
-		String role = this.roleComboBox.getSelectedItem()+"";
+		String name = this.txtNameEmp.getText();
+		String address = this.txtAddressEmp.getText();
+		String citizenidentify = this.txtCitizenidentifyEmp.getText();
+		java.util.Date dateSelected = this.dateChooserEmp.getDate();
+		String phone = this.txtPhoneEmp.getText();
+		String gender = this.cbbGenderEmp.getSelectedItem()+"";
+		String role = this.cbbRoleEmp.getSelectedItem()+"";
 		return new Employee(name, citizenidentify, dateSelected, gender, address, phone, role, 1, null, null, null);
 	}
 	
@@ -231,12 +232,12 @@ public class EmployeeInformationEntryForm extends JFrame {
 		DefaultTableModel tableModel = (DefaultTableModel) this.homeView.getTableEmployee().getModel();
 		int employeeId = Integer.valueOf(tableModel.getValueAt(rowIndex, 0)+"");
 		Employee employee = EmployeeDAO.getInstance().selectById(employeeId);
-		this.nameTextField.setText(employee.getEmployeeName());
-		this.roleComboBox.setSelectedItem(tableModel.getValueAt(rowIndex, 2));
-		this.genderComboBox.setSelectedItem(employee.getGender());
-		this.dateChooser.setDate(employee.getDateOfBirth());
-		this.phoneTextField.setText(employee.getPhone());
-		this.address.setText(employee.getAddress());
-		this.citizenidentifyTextField.setText(employee.getCitizenIdentify());
+		this.txtNameEmp.setText(employee.getEmployeeName());
+		this.cbbRoleEmp.setSelectedItem(tableModel.getValueAt(rowIndex, 2));
+		this.cbbGenderEmp.setSelectedItem(employee.getGender());
+		this.dateChooserEmp.setDate(employee.getDateOfBirth());
+		this.txtPhoneEmp.setText(employee.getPhone());
+		this.txtAddressEmp.setText(employee.getAddress());
+		this.txtCitizenidentifyEmp.setText(employee.getCitizenIdentify());
 	}
 }

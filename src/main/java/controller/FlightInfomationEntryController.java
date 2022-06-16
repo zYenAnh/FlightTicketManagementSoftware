@@ -8,13 +8,13 @@ import javax.swing.JOptionPane;
 import entities.Employee;
 import entities.Flight;
 import view.HomeView;
-import view.InputFlightView;
+import view.FormCreateOrUpdateFlight;
 
 public class FlightInfomationEntryController implements ActionListener{
 
-	private InputFlightView inputFlightView;
+	private FormCreateOrUpdateFlight inputFlightView;
 	
-	public FlightInfomationEntryController(InputFlightView inputFlightView) {
+	public FlightInfomationEntryController(FormCreateOrUpdateFlight inputFlightView) {
 		this.inputFlightView= inputFlightView;
 	}
 	

@@ -61,7 +61,8 @@ public class NavigationController implements ActionListener{
 	}
 	
 	public void changeColor(JButton jb) {
-		this.viewHome.PREBUTTON.setBackground(Color.WHITE);
+		Color bg = new Color(240, 240, 240);
+		this.viewHome.PREBUTTON.setBackground(bg);
 		this.viewHome.PREBUTTON = jb;
 		jb.setBackground(Color.LIGHT_GRAY);
 	}

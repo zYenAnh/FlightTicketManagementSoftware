@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import com.mysql.cj.xdevapi.Table;
 
 import dataAccessObject.AccountDAO;
+import dataAccessObject.EmployeeDAO;
 import entities.Account;
 import entities.Employee;
 
@@ -32,13 +33,14 @@ import javax.swing.JButton;
 public class FormCreateAccount extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField usernameTxtF;
-	private JPasswordField passwordTxtF;
-	private JPasswordField rePasswordTxtF;
-	private JComboBox authorCbb;
+	private JTextField txtUsernameAccount;
+	private JPasswordField txtPasswordAccount;
+	private JPasswordField txtRePasswordAccount;
+	private JComboBox vbbAuthority;
 	private JTable getTable;
 	private HomeView homeView;
-	
+	Font font_14_Thin = new Font("Poppins", Font.PLAIN, 14);
+	Font font_JetBrains = new Font("JetBrains Mono", Font.BOLD, 12);
 
 	public FormCreateAccount(JTable table,HomeView homeView) {
 		this.getTable = table;
@@ -49,7 +51,7 @@ public class FormCreateAccount extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Create Ticket");
+		JLabel lblNewLabel = new JLabel("Create Account");
 		lblNewLabel.setBounds(5, 5, 602, 46);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Poppins", Font.BOLD | Font.ITALIC, 30));
@@ -60,47 +62,56 @@ public class FormCreateAccount extends JFrame {
 		contentPane.add(panel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Username:");
+		lblNewLabel_1.setFont(font_14_Thin);
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(lblNewLabel_1);
 		
-		usernameTxtF = new JTextField();
-		panel.add(usernameTxtF);
-		usernameTxtF.setColumns(10);
+		txtUsernameAccount = new JTextField();
+		txtUsernameAccount.setFont(font_JetBrains);
+		panel.add(txtUsernameAccount);
+		txtUsernameAccount.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("Password:");
+		lblNewLabel_2.setFont(font_14_Thin);
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(lblNewLabel_2);
 		
-		passwordTxtF = new JPasswordField();
-		panel.add(passwordTxtF);
+		txtPasswordAccount = new JPasswordField();
+		txtPasswordAccount.setFont(font_JetBrains);
+		panel.add(txtPasswordAccount);
 		
 		JLabel lblNewLabel_2_1 = new JLabel("Re-enter password:");
+		lblNewLabel_2_1.setFont(font_14_Thin);
 		lblNewLabel_2_1.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(lblNewLabel_2_1);
 		
-		rePasswordTxtF = new JPasswordField();
-		panel.add(rePasswordTxtF);
+		txtRePasswordAccount = new JPasswordField();
+		txtRePasswordAccount.setFont(font_JetBrains);
+		panel.add(txtRePasswordAccount);
 		
 		JLabel lblNewLabel_3 = new JLabel("Authorities:");
+		lblNewLabel_3.setFont(font_14_Thin);
 		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(lblNewLabel_3);
 		
-		authorCbb = new JComboBox();
-		authorCbb.addItem("Management Staff");
-		authorCbb.addItem("Ticket Seller");
-		authorCbb.setSelectedIndex(-1);
-		panel.add(authorCbb);
+		vbbAuthority = new JComboBox();
+		vbbAuthority.setFont(font_JetBrains);
+		vbbAuthority.addItem("Management Staff");
+		vbbAuthority.addItem("Ticket Seller");
+		vbbAuthority.setSelectedIndex(-1);
+		panel.add(vbbAuthority);
 		FormCreateAccount form = this;
 		
-		JButton saveBtn = new JButton("Save");
-		saveBtn.addActionListener(new ActionListener() {
+		JButton btnSaveAccount = new JButton("Save");
+		btnSaveAccount.setFont(font_JetBrains);
+		btnSaveAccount.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(usernameTxtF.getText().equals("") || passwordTxtF.getText().equals("") || authorCbb.getSelectedIndex()==-1) {
+				if(txtUsernameAccount.getText().equals("") || txtPasswordAccount.getText().equals("") || vbbAuthority.getSelectedIndex()==-1) {
 					JOptionPane.showMessageDialog(form, "Please enter full information!");
 				} else {
-					if(passwordTxtF.getText().equals(rePasswordTxtF.getText())) {
+					if(txtPasswordAccount.getText().equals(txtRePasswordAccount.getText())) {
 						int choose = JOptionPane.showConfirmDialog(form, "Are you sure create account?");
 						if(choose ==0) {
 							createAccount(getInfoAccountFromCell());
@@ -113,8 +124,8 @@ public class FormCreateAccount extends JFrame {
 				}
 			}
 		});
-		saveBtn.setBounds(261, 268, 121, 32);
-		contentPane.add(saveBtn);
+		btnSaveAccount.setBounds(261, 268, 121, 32);
+		contentPane.add(btnSaveAccount);
 	}
 	
 	public void closeForm() {
@@ -128,10 +139,11 @@ public class FormCreateAccount extends JFrame {
 	public Account getInfoAccountFromCell() {
 		int rowSelect = getTable.getSelectedRow();
 		DefaultTableModel tableModel = (DefaultTableModel) getTable.getModel();
-		Employee employee = this.homeView.getEmployeeModel().searchEmployeeById(Integer.valueOf((tableModel.getValueAt(rowSelect, 0)+"")));
-		String username = usernameTxtF.getText();
-		String password = passwordTxtF.getText();
-		String role = authorCbb.getSelectedItem()+"";
+		int employeeId = Integer.valueOf((tableModel.getValueAt(rowSelect, 0)+""));
+		Employee employee = EmployeeDAO.getInstance().selectById(employeeId);
+		String username = txtUsernameAccount.getText();
+		String password = txtPasswordAccount.getText();
+		String role = vbbAuthority.getSelectedItem()+"";
 		return new Account(username, employee, password, role, 1);
 	}
 }

@@ -24,13 +24,13 @@ class RowPopupEmp extends JPopupMenu {
 	public RowPopupEmp(JTable table,HomeView homeView) {
 		this.getTable = table;
 		this.homeView = homeView;
-		JMenuItem createAccount  = new JMenuItem("Create Account");
-		createAccount.setFont(font_JetBrains);
-		JMenuItem active = new JMenuItem("Active");
-		active.setFont(font_JetBrains);
+		JMenuItem jmnCreateAccount  = new JMenuItem("Create Account");
+		jmnCreateAccount.setFont(font_JetBrains);
+		JMenuItem jmnActive = new JMenuItem("Active");
+		jmnActive.setFont(font_JetBrains);
 		
 		
-		createAccount.addActionListener(new ActionListener() {
+		jmnCreateAccount.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int rowSelect = getTable.getSelectedRow();
@@ -52,7 +52,7 @@ class RowPopupEmp extends JPopupMenu {
 			}
 		});
 		
-		active.addActionListener(new ActionListener() {	
+		jmnActive.addActionListener(new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int rowSelect = getTable.getSelectedRow();
@@ -69,7 +69,7 @@ class RowPopupEmp extends JPopupMenu {
 			}
 		});
 		
-		this.add(createAccount);
-		this.add(active);
+		this.add(jmnCreateAccount);
+		this.add(jmnActive);
 	}
 }
